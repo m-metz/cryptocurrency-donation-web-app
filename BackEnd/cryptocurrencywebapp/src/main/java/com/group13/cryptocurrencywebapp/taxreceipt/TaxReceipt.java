@@ -1,4 +1,4 @@
-package main.java.com.group13.cryptocurrencywebapp.taxreceipt;
+package com.group13.cryptocurrencywebapp.taxreceipt;
 
 public class TaxReceipt {
     

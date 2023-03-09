@@ -1,4 +1,4 @@
-package main.java.com.group13.cryptocurrencywebapp.transaction;
+package com.group13.cryptocurrencywebapp.transaction;
 
 public class Transaction {
     

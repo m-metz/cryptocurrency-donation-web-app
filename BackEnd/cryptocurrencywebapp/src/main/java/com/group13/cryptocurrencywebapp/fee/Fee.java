@@ -1,4 +1,4 @@
-package main.java.com.group13.cryptocurrencywebapp.fee;
+package com.group13.cryptocurrencywebapp.fee;
 
 public class Fee {
     
