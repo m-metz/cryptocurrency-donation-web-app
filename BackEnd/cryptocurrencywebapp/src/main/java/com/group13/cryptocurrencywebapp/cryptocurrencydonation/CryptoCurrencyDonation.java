@@ -1,5 +1,5 @@
 package com.group13.cryptocurrencywebapp.cryptocurrencydonation;
 
-public class CryptoCurrencydDonation {
+public class CryptoCurrencyDonation {
     
 }
