@@ -32,6 +32,4 @@ public class Trade extends Transaction {
         this.convertedAmount = convertedAmount;
     }
 
-
-    
 }

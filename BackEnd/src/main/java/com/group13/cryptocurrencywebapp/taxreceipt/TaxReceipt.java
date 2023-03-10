@@ -66,8 +66,6 @@ public class TaxReceipt {
         this.zipPostalCode = zipPostalCode;
     }
 
-    
-
     public int getTaxReceiptId() {
         return taxReceiptId;
     }

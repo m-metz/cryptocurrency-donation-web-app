@@ -39,10 +39,6 @@ public class Transaction {
         this.amount = amount;
         this.time = time;
         this.final_amount = final_amount;
-    }
-
-    
-
-    
+    }   
 
 }
