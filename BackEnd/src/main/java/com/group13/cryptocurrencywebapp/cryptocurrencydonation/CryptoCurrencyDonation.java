@@ -22,6 +22,27 @@ public class CryptoCurrencyDonation {
     private String toCryptoAddress;
     private String fromCryptoAddress;
 
+
+    public CryptoCurrencyDonation(int donationId, int nonProfitId, int donorUserId,
+    int cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress) {
+        this.donationId = donationId;
+        this.nonProfitId = nonProfitId;
+        this.donorUserId = donorUserId;
+        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+        this.toCryptoAddress = toCryptoAddress;
+        this.fromCryptoAddress = fromCryptoAddress;
+    }
+
+
+    public CryptoCurrencyDonation(int nonProfitId, int donorUserId, int cryptocurrencyTransactionId,
+    String toCryptoAddress, String fromCryptoAddress) {
+        this.nonProfitId = nonProfitId;
+        this.donorUserId = donorUserId;
+        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+        this.toCryptoAddress = toCryptoAddress;
+        this.fromCryptoAddress = fromCryptoAddress;
+    }
+
     public int getDonationId() {
         return donationId;
     }
@@ -69,28 +90,5 @@ public class CryptoCurrencyDonation {
     public void setFromCryptoAddress(String fromCryptoAddress) {
         this.fromCryptoAddress = fromCryptoAddress;
     }
-
-    public CryptoCurrencyDonation(int donationId, int nonProfitId, int donorUserId,
-            int cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress) {
-        this.donationId = donationId;
-        this.nonProfitId = nonProfitId;
-        this.donorUserId = donorUserId;
-        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
-        this.toCryptoAddress = toCryptoAddress;
-        this.fromCryptoAddress = fromCryptoAddress;
-    }
-
-
-    public CryptoCurrencyDonation(int nonProfitId, int donorUserId, int cryptocurrencyTransactionId,
-            String toCryptoAddress, String fromCryptoAddress) {
-        this.nonProfitId = nonProfitId;
-        this.donorUserId = donorUserId;
-        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
-        this.toCryptoAddress = toCryptoAddress;
-        this.fromCryptoAddress = fromCryptoAddress;
-    }
-
-    
-
 
 }

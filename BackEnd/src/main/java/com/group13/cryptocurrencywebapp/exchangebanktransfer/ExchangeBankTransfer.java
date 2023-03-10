@@ -21,11 +21,7 @@ public class ExchangeBankTransfer extends Transaction {
             float final_amount, int exchangeReferenceId) {
         super(currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
-    }
-
-    
-
-    
+    }    
 
     public int getExchangeReferenceId() {
         return exchangeReferenceId;
