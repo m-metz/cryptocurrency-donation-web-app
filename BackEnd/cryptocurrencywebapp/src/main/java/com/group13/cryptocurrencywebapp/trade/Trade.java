@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tax_receipt")
+@Table(name = "trade")
 public class Trade extends Transaction {
 
     private String exchangeReferenceId;
