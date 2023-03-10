@@ -1,4 +1,4 @@
-package com.group13.cryptocurrencywebapp.cryptocurrencydonation;    
+package com.group13.cryptocurrencywebapp.cryptocurrencydonation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +21,5 @@ public class CryptoCurrencyDonation {
 
     private String toCryptoAddress;
     private String fromCryptoAddress;
-
 
 }
