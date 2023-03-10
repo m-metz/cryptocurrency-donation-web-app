@@ -12,9 +12,9 @@ import jakarta.persistence.Table;
 public class CryptoCurrencyDonation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crypto_currency_donation")
-
+    @Column(name = "donation_id")
     private int donationId;
+
     private int nonProfitId;
     private int donorUserId;
     private int cryptocurrencyTransactionId;
