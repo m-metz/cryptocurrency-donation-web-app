@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "crypto_transfer")
-public class CryptoTransfer extends Transaction {
+public class CryptoTransfer extends Transaction{
 
     private int exchangeReferenceId;
     private String transactionType;
@@ -22,7 +22,9 @@ public class CryptoTransfer extends Transaction {
     public String getTransactionType() {
         return transactionType;
     }
-
+    
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
+
+}
