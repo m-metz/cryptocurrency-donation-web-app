@@ -10,12 +10,4 @@ public class ExchangeBankTransfer extends Transaction{
 
     private int exchangeReferenceId;
 
-    public int getExchangeReferenceId() {
-        return exchangeReferenceId;
-    }
-
-    public void setExchangeReferenceId(int exchangeReferenceId) {
-        this.exchangeReferenceId = exchangeReferenceId;
-    }
-
 }

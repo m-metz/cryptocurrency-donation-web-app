@@ -26,3 +26,5 @@ public class CryptoTransfer extends Transaction {
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
+
+}
