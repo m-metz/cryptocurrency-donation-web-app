@@ -1,7 +1,8 @@
 package com.group13.cryptocurrencywebapp.transaction;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
+import com.group13.cryptocurrencywebapp.fee.Fee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +25,8 @@ public class Transaction {
     private LocalDateTime time;
 
     private float final_amount;
+
+    private List<Fee> fees;
 
     public Transaction(int id, String currency, float amount, LocalDateTime time,
             float final_amount) {
