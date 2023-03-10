@@ -1,5 +1,7 @@
 package com.group13.cryptocurrencywebapp.taxreceipt;
 
+import com.group13.cryptocurrencywebapp.cryptocurrencydonation.CryptoCurrencyDonation;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
