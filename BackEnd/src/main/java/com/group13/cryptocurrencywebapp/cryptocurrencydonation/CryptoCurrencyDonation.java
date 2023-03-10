@@ -1,4 +1,4 @@
-package com.group13.cryptocurrencywebapp.cryptocurrencydonation;    
+package com.group13.cryptocurrencywebapp.cryptocurrencydonation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,6 +22,53 @@ public class CryptoCurrencyDonation {
     private String toCryptoAddress;
     private String fromCryptoAddress;
 
+    public int getDonationId() {
+        return donationId;
+    }
+
+    public void setDonationId(int donationId) {
+        this.donationId = donationId;
+    }
+
+    public int getNonProfitId() {
+        return nonProfitId;
+    }
+
+    public void setNonProfitId(int nonProfitId) {
+        this.nonProfitId = nonProfitId;
+    }
+
+    public int getDonorUserId() {
+        return donorUserId;
+    }
+
+    public void setDonorUserId(int donorUserId) {
+        this.donorUserId = donorUserId;
+    }
+
+    public int getCryptocurrencyTransactionId() {
+        return cryptocurrencyTransactionId;
+    }
+
+    public void setCryptocurrencyTransactionId(int cryptocurrencyTransactionId) {
+        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+    }
+
+    public String getToCryptoAddress() {
+        return toCryptoAddress;
+    }
+
+    public void setToCryptoAddress(String toCryptoAddress) {
+        this.toCryptoAddress = toCryptoAddress;
+    }
+
+    public String getFromCryptoAddress() {
+        return fromCryptoAddress;
+    }
+
+    public void setFromCryptoAddress(String fromCryptoAddress) {
+        this.fromCryptoAddress = fromCryptoAddress;
+    }
 
     public CryptoCurrencyDonation(int donationId, int nonProfitId, int donorUserId,
             int cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress) {
