@@ -25,4 +25,44 @@ public class Transaction {
 
     private float final_amount;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
+    public float getFinal_amount() {
+        return final_amount;
+    }
+
+    public void setFinal_amount(float final_amount) {
+        this.final_amount = final_amount;
+    }
+
 }
