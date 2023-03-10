@@ -35,4 +35,37 @@ public class TaxReceipt {
 
     private String zipPostalCode;
 
+    public TaxReceipt(int taxReceiptId, float amount, String givenNames, String lastName,
+            String email, String address1, String address2, String city, String country,
+            String stateProvinceRegion, String zipPostalCode) {
+        this.taxReceiptId = taxReceiptId;
+        this.amount = amount;
+        this.givenNames = givenNames;
+        this.lastName = lastName;
+        this.email = email;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.city = city;
+        this.country = country;
+        this.stateProvinceRegion = stateProvinceRegion;
+        this.zipPostalCode = zipPostalCode;
+    }
+
+    public TaxReceipt(float amount, String givenNames, String lastName, String email,
+            String address1, String address2, String city, String country,
+            String stateProvinceRegion, String zipPostalCode) {
+        this.amount = amount;
+        this.givenNames = givenNames;
+        this.lastName = lastName;
+        this.email = email;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.city = city;
+        this.country = country;
+        this.stateProvinceRegion = stateProvinceRegion;
+        this.zipPostalCode = zipPostalCode;
+    }
+
+    
+
 }

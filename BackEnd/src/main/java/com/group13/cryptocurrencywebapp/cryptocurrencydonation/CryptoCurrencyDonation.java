@@ -23,4 +23,27 @@ public class CryptoCurrencyDonation {
     private String fromCryptoAddress;
 
 
+    public CryptoCurrencyDonation(int donationId, int nonProfitId, int donorUserId,
+            int cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress) {
+        this.donationId = donationId;
+        this.nonProfitId = nonProfitId;
+        this.donorUserId = donorUserId;
+        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+        this.toCryptoAddress = toCryptoAddress;
+        this.fromCryptoAddress = fromCryptoAddress;
+    }
+
+
+    public CryptoCurrencyDonation(int nonProfitId, int donorUserId, int cryptocurrencyTransactionId,
+            String toCryptoAddress, String fromCryptoAddress) {
+        this.nonProfitId = nonProfitId;
+        this.donorUserId = donorUserId;
+        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+        this.toCryptoAddress = toCryptoAddress;
+        this.fromCryptoAddress = fromCryptoAddress;
+    }
+
+    
+
+
 }

@@ -25,4 +25,24 @@ public class Transaction {
 
     private float final_amount;
 
+    public Transaction(int id, String currency, float amount, LocalDateTime time,
+            float final_amount) {
+        this.id = id;
+        this.currency = currency;
+        this.amount = amount;
+        this.time = time;
+        this.final_amount = final_amount;
+    }
+
+    public Transaction(String currency, float amount, LocalDateTime time, float final_amount) {
+        this.currency = currency;
+        this.amount = amount;
+        this.time = time;
+        this.final_amount = final_amount;
+    }
+
+    
+
+    
+
 }

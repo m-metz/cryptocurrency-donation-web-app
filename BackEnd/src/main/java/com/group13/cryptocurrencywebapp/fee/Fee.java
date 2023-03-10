@@ -17,4 +17,14 @@ public class Fee{
     private int feeId;
     private float amount;
 
+    public Fee(int feeId, float amount) {
+        this.feeId = feeId;
+        this.amount = amount;
+    }
+
+    public Fee(float amount) {
+        this.amount = amount;
+    }
+    
+    
 }
