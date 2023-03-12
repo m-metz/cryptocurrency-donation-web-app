@@ -1,12 +1,14 @@
 package com.group13.cryptocurrencywebapp.taxreceipt;
 
 import com.group13.cryptocurrencywebapp.cryptocurrencydonation.CryptoCurrencyDonation;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,27 +17,21 @@ public class TaxReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tax_receipt_id")
+    
     private int taxReceiptId;
-
     private float amount;
-
     private String givenNames;
-
     private String lastName;
-
     private String email;
-
     private String address1;
-
     private String address2;
-
     private String city;
-
     private String country;
-
     private String stateProvinceRegion;
-
     private String zipPostalCode;
+
+    @OneToOne(mappedBy = "tax_receipt")
+    private CryptoCurrencyDonation cryptoCurrencyDonation;
 
     public TaxReceipt(int taxReceiptId, float amount, String givenNames, String lastName,
             String email, String address1, String address2, String city, String country,
