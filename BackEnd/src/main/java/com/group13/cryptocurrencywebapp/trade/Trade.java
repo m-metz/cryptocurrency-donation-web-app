@@ -1,11 +1,9 @@
 package com.group13.cryptocurrencywebapp.trade;
 
 import java.time.LocalDateTime;
-import com.group13.cryptocurrencywebapp.cryptocurrencydonation.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.transaction.Transaction;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
