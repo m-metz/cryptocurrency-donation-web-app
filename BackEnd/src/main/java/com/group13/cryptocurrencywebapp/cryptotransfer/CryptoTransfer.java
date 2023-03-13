@@ -12,6 +12,10 @@ public class CryptoTransfer extends Transaction {
     private int exchangeReferenceId;
     private String transactionType;
 
+    public CryptoTransfer() {
+        super();
+    }
+
     public CryptoTransfer(int id, String currency, float amount, LocalDateTime time,
             float final_amount, int exchangeReferenceId, String transactionType) {
         super(id, currency, amount, time, final_amount);

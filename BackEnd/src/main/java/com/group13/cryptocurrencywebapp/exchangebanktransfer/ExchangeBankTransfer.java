@@ -11,6 +11,10 @@ public class ExchangeBankTransfer extends Transaction {
 
     private int exchangeReferenceId;
 
+    public ExchangeBankTransfer() {
+        super();
+    }
+
     public ExchangeBankTransfer(int id, String currency, float amount, LocalDateTime time,
             float final_amount, int exchangeReferenceId) {
         super(id, currency, amount, time, final_amount);

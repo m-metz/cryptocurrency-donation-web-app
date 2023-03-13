@@ -47,6 +47,9 @@ public class CryptoCurrencyDonation {
     @JoinColumn(name = "exchange_bank_transfer_id")
     private ExchangeBankTransfer exchangeBankTransfer;
 
+    public CryptoCurrencyDonation() {
+    }
+
     public CryptoCurrencyDonation(int donationId, String nonProfitId, String donorUserId,
             String cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress, String status,
             TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,

@@ -26,8 +26,8 @@ public class TaxReceipt {
     private String stateProvinceRegion;
     private String zipPostalCode;
 
-    // @OneToOne(mappedBy = "tax_receipt")
-    // private CryptoCurrencyDonation cryptoCurrencyDonation;
+    public TaxReceipt() {
+    }
 
     public TaxReceipt(int taxReceiptId, float amount, String givenNames, String lastName,
             String email, String address1, String address2, String city, String country,

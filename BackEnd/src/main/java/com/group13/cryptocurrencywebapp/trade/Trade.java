@@ -14,6 +14,10 @@ public class Trade extends Transaction {
     private String toCurrency;
     private float convertedAmount;
 
+    public Trade() {
+        super();
+    }
+
     public Trade(int id, String currency, float amount, LocalDateTime time, float final_amount,
             String exchangeReferenceId, String toCurrency, float convertedAmount) {
         super(id, currency, amount, time, final_amount);
@@ -53,7 +57,5 @@ public class Trade extends Transaction {
     public void setConvertedAmount(float convertedAmount) {
         this.convertedAmount = convertedAmount;
     }
-
-    
 
 }

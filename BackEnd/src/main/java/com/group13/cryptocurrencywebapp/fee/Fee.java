@@ -24,6 +24,9 @@ public class Fee {
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
+    public Fee() {
+    }
+
     public Fee(int feeId, float amount) {
         this.feeId = feeId;
         this.amount = amount;
