@@ -29,11 +29,9 @@ public class Transaction {
 
     private float final_amount;
 
-    private List<Fee> fees;
-
     @JsonIgnore
     @OneToMany(mappedBy = "transaction")
-    private List<Fee> baseMoonResearchers = new ArrayList<>();
+    private List<Fee> fees = new ArrayList<>();
 
     public Transaction(int id, String currency, float amount, LocalDateTime time,
             float final_amount) {
@@ -49,6 +47,6 @@ public class Transaction {
         this.amount = amount;
         this.time = time;
         this.final_amount = final_amount;
-    }   
+    }
 
 }
