@@ -9,29 +9,29 @@ import jakarta.persistence.Table;
 @Table(name = "exchange_bank_transfer")
 public class ExchangeBankTransfer extends Transaction {
 
-    private int exchangeReferenceId;
+    private String exchangeReferenceId;
 
     public ExchangeBankTransfer() {
         super();
     }
 
     public ExchangeBankTransfer(int id, String currency, float amount, LocalDateTime time,
-            float final_amount, int exchangeReferenceId) {
+            float final_amount, String exchangeReferenceId) {
         super(id, currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
     }
 
     public ExchangeBankTransfer(String currency, float amount, LocalDateTime time,
-            float final_amount, int exchangeReferenceId) {
+            float final_amount, String exchangeReferenceId) {
         super(currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
     }
 
-    public int getExchangeReferenceId() {
+    public String getExchangeReferenceId() {
         return exchangeReferenceId;
     }
 
-    public void setExchangeReferenceId(int exchangeReferenceId) {
+    public void setExchangeReferenceId(String exchangeReferenceId) {
         this.exchangeReferenceId = exchangeReferenceId;
     }
 

@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 @Table(name = "crypto_transfer")
 public class CryptoTransfer extends Transaction {
 
-    private int exchangeReferenceId;
+    private String exchangeReferenceId;
     private String transactionType;
 
     public CryptoTransfer() {
@@ -17,24 +17,24 @@ public class CryptoTransfer extends Transaction {
     }
 
     public CryptoTransfer(int id, String currency, float amount, LocalDateTime time,
-            float final_amount, int exchangeReferenceId, String transactionType) {
+            float final_amount, String exchangeReferenceId, String transactionType) {
         super(id, currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
         this.transactionType = transactionType;
     }
 
     public CryptoTransfer(String currency, float amount, LocalDateTime time, float final_amount,
-            int exchangeReferenceId, String transactionType) {
+            String exchangeReferenceId, String transactionType) {
         super(currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
         this.transactionType = transactionType;
     }
 
-    public int getExchangeReferenceId() {
+    public String getExchangeReferenceId() {
         return exchangeReferenceId;
     }
 
-    public void setExchangeReferenceId(int exchangeReferenceId) {
+    public void setExchangeReferenceId(String exchangeReferenceId) {
         this.exchangeReferenceId = exchangeReferenceId;
     }
 

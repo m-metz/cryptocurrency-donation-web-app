@@ -25,7 +25,7 @@ public class CryptoCurrencyDonation {
 
     private String nonProfitId;
     private String donorUserId;
-    private String cryptocurrencyTransactionId;
+    private String cryptocurrencyTxId;
 
     private String toCryptoAddress;
     private String fromCryptoAddress;
@@ -36,15 +36,15 @@ public class CryptoCurrencyDonation {
     private TaxReceipt taxReceipt;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "trade_id")
+    @JoinColumn(name = "trade_id", referencedColumnName = "id")
     private Trade trade;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "crypto_transfer_id")
+    @JoinColumn(name = "crypto_transfer_id", referencedColumnName = "id")
     private CryptoTransfer cryptoTransfer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "exchange_bank_transfer_id")
+    @JoinColumn(name = "exchange_bank_transfer_id", referencedColumnName = "id")
     private ExchangeBankTransfer exchangeBankTransfer;
 
     public CryptoCurrencyDonation() {
@@ -57,7 +57,7 @@ public class CryptoCurrencyDonation {
         this.donationId = donationId;
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
-        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+        this.cryptocurrencyTxId = cryptocurrencyTxId;
         this.toCryptoAddress = toCryptoAddress;
         this.fromCryptoAddress = fromCryptoAddress;
         this.status = status;
@@ -72,7 +72,7 @@ public class CryptoCurrencyDonation {
             CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer) {
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
-        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+        this.cryptocurrencyTxId = cryptocurrencyTxId;
         this.toCryptoAddress = toCryptoAddress;
         this.fromCryptoAddress = fromCryptoAddress;
         this.status = status;
@@ -106,12 +106,12 @@ public class CryptoCurrencyDonation {
         this.donorUserId = donorUserId;
     }
 
-    public String getCryptocurrencyTransactionId() {
-        return cryptocurrencyTransactionId;
+    public String getCryptocurrencyTxId() {
+        return cryptocurrencyTxId;
     }
 
-    public void setCryptocurrencyTransactionId(String cryptocurrencyTransactionId) {
-        this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
+    public void setCryptocurrencyTransactionId(String cryptocurrencyTxId) {
+        this.cryptocurrencyTxId = cryptocurrencyTxId;
     }
 
     public String getToCryptoAddress() {
