@@ -16,7 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "crypto_currency_donation")
+@Table(name = "currency_donation")
 public class CryptoCurrencyDonation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
