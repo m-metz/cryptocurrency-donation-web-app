@@ -31,21 +31,21 @@ public class CryptoCurrencyDonation {
     private String fromCryptoAddress;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tax_receipt_id", referencedColumnName = "tax_receipt_id")
+    @JoinColumn(name = "tax_receipt_id")
     private TaxReceipt taxReceipt;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "trade_id", referencedColumnName = "trade_id")
+    @JoinColumn(name = "trade_id")
     private Trade trade;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "crypto_transfer_id", referencedColumnName = "crypto_transfer_id")
+    @JoinColumn(name = "crypto_transfer_id")
     private CryptoTransfer cryptoTransfer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "exchange_bank_transfer_id", referencedColumnName = "exchange_bank_transfer_id")
+    @JoinColumn(name = "exchange_bank_transfer_id")
     private ExchangeBankTransfer exchangeBankTransfer;
- 
+
     public CryptoCurrencyDonation(int donationId, int nonProfitId, int donorUserId,
             int cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress) {
         this.donationId = donationId;

@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tax_receipt_id")
+    @Column(name = "transaction_id")
     private int id;
 
     private String currency;

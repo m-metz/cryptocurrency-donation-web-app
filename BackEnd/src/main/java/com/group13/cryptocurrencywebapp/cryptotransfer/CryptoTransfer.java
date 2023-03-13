@@ -13,10 +13,10 @@ public class CryptoTransfer extends Transaction {
 
     private int exchangeReferenceId;
     private String transactionType;
-    
-    @OneToOne(mappedBy = "crypto_transfer")
-    private CryptoCurrencyDonation cryptoCurrencyDonation;
-    
+
+    // @OneToOne(mappedBy = "crypto_transfer")
+    // private CryptoCurrencyDonation cryptoCurrencyDonation;
+
     public CryptoTransfer(int id, String currency, float amount, LocalDateTime time,
             float final_amount, int exchangeReferenceId, String transactionType) {
         super(id, currency, amount, time, final_amount);
@@ -48,4 +48,3 @@ public class CryptoTransfer extends Transaction {
     }
 
 }
-

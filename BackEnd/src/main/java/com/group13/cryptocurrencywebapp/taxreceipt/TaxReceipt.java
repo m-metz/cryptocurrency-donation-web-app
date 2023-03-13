@@ -17,7 +17,7 @@ public class TaxReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tax_receipt_id")
-    
+
     private int taxReceiptId;
     private float amount;
     private String givenNames;
@@ -30,8 +30,8 @@ public class TaxReceipt {
     private String stateProvinceRegion;
     private String zipPostalCode;
 
-    @OneToOne(mappedBy = "tax_receipt")
-    private CryptoCurrencyDonation cryptoCurrencyDonation;
+    // @OneToOne(mappedBy = "tax_receipt")
+    // private CryptoCurrencyDonation cryptoCurrencyDonation;
 
     public TaxReceipt(int taxReceiptId, float amount, String givenNames, String lastName,
             String email, String address1, String address2, String city, String country,

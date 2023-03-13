@@ -13,9 +13,9 @@ public class ExchangeBankTransfer extends Transaction {
 
     private int exchangeReferenceId;
 
-    @OneToOne(mappedBy = "exchange_bank_transfer")
-    private CryptoCurrencyDonation cryptoCurrencyDonation;
-    
+    // @OneToOne(mappedBy = "exchange_bank_transfer")
+    // private CryptoCurrencyDonation cryptoCurrencyDonation;
+
     public ExchangeBankTransfer(int id, String currency, float amount, LocalDateTime time,
             float final_amount, int exchangeReferenceId) {
         super(id, currency, amount, time, final_amount);
@@ -26,7 +26,7 @@ public class ExchangeBankTransfer extends Transaction {
             float final_amount, int exchangeReferenceId) {
         super(currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
-    }    
+    }
 
     public int getExchangeReferenceId() {
         return exchangeReferenceId;
@@ -37,5 +37,3 @@ public class ExchangeBankTransfer extends Transaction {
     }
 
 }
-
-

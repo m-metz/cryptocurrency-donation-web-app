@@ -23,9 +23,9 @@ public class Fee {
     private float amount;
 
     @ManyToOne
-    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
+    @JoinColumn(name = "transaction_id")
     private Transaction transaction;
-    
+
     public Fee(int feeId, float amount) {
         this.feeId = feeId;
         this.amount = amount;
@@ -34,8 +34,7 @@ public class Fee {
     public Fee(float amount) {
         this.amount = amount;
     }
-    
-    
+
     public int getFeeId() {
         return feeId;
     }
