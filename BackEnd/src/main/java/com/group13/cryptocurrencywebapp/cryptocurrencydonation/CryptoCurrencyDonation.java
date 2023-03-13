@@ -23,12 +23,13 @@ public class CryptoCurrencyDonation {
     @Column(name = "donation_id")
     private int donationId;
 
-    private int nonProfitId;
-    private int donorUserId;
-    private int cryptocurrencyTransactionId;
+    private String nonProfitId;
+    private String donorUserId;
+    private String cryptocurrencyTransactionId;
 
     private String toCryptoAddress;
     private String fromCryptoAddress;
+    private String status;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tax_receipt_id")
@@ -46,23 +47,36 @@ public class CryptoCurrencyDonation {
     @JoinColumn(name = "exchange_bank_transfer_id")
     private ExchangeBankTransfer exchangeBankTransfer;
 
-    public CryptoCurrencyDonation(int donationId, int nonProfitId, int donorUserId,
-            int cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress) {
+    public CryptoCurrencyDonation(int donationId, String nonProfitId, String donorUserId,
+            String cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress, String status,
+            TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,
+            ExchangeBankTransfer exchangeBankTransfer) {
         this.donationId = donationId;
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
         this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
         this.toCryptoAddress = toCryptoAddress;
         this.fromCryptoAddress = fromCryptoAddress;
+        this.status = status;
+        this.taxReceipt = taxReceipt;
+        this.trade = trade;
+        this.cryptoTransfer = cryptoTransfer;
+        this.exchangeBankTransfer = exchangeBankTransfer;
     }
 
-    public CryptoCurrencyDonation(int nonProfitId, int donorUserId, int cryptocurrencyTransactionId,
-            String toCryptoAddress, String fromCryptoAddress) {
+    public CryptoCurrencyDonation(String nonProfitId, String donorUserId, String cryptocurrencyTransactionId,
+            String toCryptoAddress, String fromCryptoAddress, String status, TaxReceipt taxReceipt, Trade trade,
+            CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer) {
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
         this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
         this.toCryptoAddress = toCryptoAddress;
         this.fromCryptoAddress = fromCryptoAddress;
+        this.status = status;
+        this.taxReceipt = taxReceipt;
+        this.trade = trade;
+        this.cryptoTransfer = cryptoTransfer;
+        this.exchangeBankTransfer = exchangeBankTransfer;
     }
 
     public int getDonationId() {
@@ -73,27 +87,27 @@ public class CryptoCurrencyDonation {
         this.donationId = donationId;
     }
 
-    public int getNonProfitId() {
+    public String getNonProfitId() {
         return nonProfitId;
     }
 
-    public void setNonProfitId(int nonProfitId) {
+    public void setNonProfitId(String nonProfitId) {
         this.nonProfitId = nonProfitId;
     }
 
-    public int getDonorUserId() {
+    public String getDonorUserId() {
         return donorUserId;
     }
 
-    public void setDonorUserId(int donorUserId) {
+    public void setDonorUserId(String donorUserId) {
         this.donorUserId = donorUserId;
     }
 
-    public int getCryptocurrencyTransactionId() {
+    public String getCryptocurrencyTransactionId() {
         return cryptocurrencyTransactionId;
     }
 
-    public void setCryptocurrencyTransactionId(int cryptocurrencyTransactionId) {
+    public void setCryptocurrencyTransactionId(String cryptocurrencyTransactionId) {
         this.cryptocurrencyTransactionId = cryptocurrencyTransactionId;
     }
 
@@ -111,6 +125,46 @@ public class CryptoCurrencyDonation {
 
     public void setFromCryptoAddress(String fromCryptoAddress) {
         this.fromCryptoAddress = fromCryptoAddress;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public TaxReceipt getTaxReceipt() {
+        return taxReceipt;
+    }
+
+    public void setTaxReceipt(TaxReceipt taxReceipt) {
+        this.taxReceipt = taxReceipt;
+    }
+
+    public Trade getTrade() {
+        return trade;
+    }
+
+    public void setTrade(Trade trade) {
+        this.trade = trade;
+    }
+
+    public CryptoTransfer getCryptoTransfer() {
+        return cryptoTransfer;
+    }
+
+    public void setCryptoTransfer(CryptoTransfer cryptoTransfer) {
+        this.cryptoTransfer = cryptoTransfer;
+    }
+
+    public ExchangeBankTransfer getExchangeBankTransfer() {
+        return exchangeBankTransfer;
+    }
+
+    public void setExchangeBankTransfer(ExchangeBankTransfer exchangeBankTransfer) {
+        this.exchangeBankTransfer = exchangeBankTransfer;
     }
 
 }

@@ -141,5 +141,5 @@ CREATE TABLE CURRENCY_DONATION (
 
 INSERT INTO CURRENCY_DONATION (from_crypto_address, to_crypto_address, tax_receipt_id, non_profit_id, donor_user_id, cryptocurrency_tx_id, crypto_transfer_id, trade_id, exchange_bank_transfer_id, status)
 VALUES
-('a5Fhsl3jgwSWghjdhfSdj94nFhls0jlsjk9gdj', 'jhgfsd839nhflk9SDF930hf990SDfhkjh93gAhf', 1, 'NP_000123', 'DR_00101', 'kjds983hkjds', 1, 1, 1, 'Complete');
+('a5Fhsl3jgwSWghjdhfSdj94nFhls0jlsjk9gdj', 'jhgfsd839nhflk9SDF930hf990SDfhkjh93gAhf', 1, 'NP_000123', 'DR_00101', 'kjds983hkjds', 1, 3, 5, 'Complete');
 
