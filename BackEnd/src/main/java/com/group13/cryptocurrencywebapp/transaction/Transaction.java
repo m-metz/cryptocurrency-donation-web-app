@@ -33,6 +33,8 @@ public class Transaction {
     @OneToMany(mappedBy = "transaction")
     private List<Fee> fees = new ArrayList<>();
 
+    public Transaction() {}
+    
     public Transaction(int id, String currency, float amount, LocalDateTime time,
             float final_amount) {
         this.id = id;
