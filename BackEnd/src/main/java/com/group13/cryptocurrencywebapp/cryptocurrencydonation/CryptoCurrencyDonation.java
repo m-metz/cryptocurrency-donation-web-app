@@ -36,22 +36,22 @@ public class CryptoCurrencyDonation {
     private TaxReceipt taxReceipt;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "trade_id", referencedColumnName = "id")
+    @JoinColumn(name = "trade_id")
     private Trade trade;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "crypto_transfer_id", referencedColumnName = "id")
+    @JoinColumn(name = "crypto_transfer_id")
     private CryptoTransfer cryptoTransfer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "exchange_bank_transfer_id", referencedColumnName = "id")
+    @JoinColumn(name = "exchange_bank_transfer_id")
     private ExchangeBankTransfer exchangeBankTransfer;
 
     public CryptoCurrencyDonation() {
     }
 
     public CryptoCurrencyDonation(int donationId, String nonProfitId, String donorUserId,
-            String cryptocurrencyTransactionId, String toCryptoAddress, String fromCryptoAddress, String status,
+            String cryptocurrencyTxId, String toCryptoAddress, String fromCryptoAddress, String status,
             TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,
             ExchangeBankTransfer exchangeBankTransfer) {
         this.donationId = donationId;
@@ -67,7 +67,7 @@ public class CryptoCurrencyDonation {
         this.exchangeBankTransfer = exchangeBankTransfer;
     }
 
-    public CryptoCurrencyDonation(String nonProfitId, String donorUserId, String cryptocurrencyTransactionId,
+    public CryptoCurrencyDonation(String nonProfitId, String donorUserId, String cryptocurrencyTxId,
             String toCryptoAddress, String fromCryptoAddress, String status, TaxReceipt taxReceipt, Trade trade,
             CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer) {
         this.nonProfitId = nonProfitId;

@@ -10,16 +10,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "transaction")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    @Column(name = "transaction_id")
+    private int transactionId;
 
     private String currency;
 
@@ -36,9 +39,9 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(int id, String currency, float amount, LocalDateTime time,
+    public Transaction(int transactionId, String currency, float amount, LocalDateTime time,
             float final_amount) {
-        this.id = id;
+        this.transactionId = transactionId;
         this.currency = currency;
         this.amount = amount;
         this.time = time;
@@ -52,12 +55,12 @@ public class Transaction {
         this.final_amount = final_amount;
     }
 
-    public int getId() {
-        return id;
+    public int getTransactionId() {
+        return transactionId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
     }
 
     public String getCurrency() {

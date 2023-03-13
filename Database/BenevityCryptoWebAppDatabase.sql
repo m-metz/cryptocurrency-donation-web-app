@@ -36,14 +36,14 @@ VALUES
 (420.69, 'Johnny', 'Cool', 'Coolguy@swag.com', '1121 EpicVille Pl', null, 'Calgary','Canada', 'AB', 'T9A 3B3');
 
 CREATE TABLE TRANSACTION (
-	id							integer	not null auto_increment,
+	transaction_id				integer	not null auto_increment,
     currency					varchar(4) not null,
     amount 						float not null,
     time						DateTime,
     final_amount				float,
 	
     
-	primary key (id)
+	primary key (transaction_id)
 );
 
 INSERT INTO TRANSACTION (currency, amount, time, final_amount)
@@ -66,7 +66,7 @@ CREATE TABLE FEE (
 	
     
 	primary key (fee_id),
-    foreign key (transaction_id) references TRANSACTION (id)
+    foreign key (transaction_id) references TRANSACTION (transaction_id)
 );
 
 INSERT INTO FEE (amount, fee_type, transaction_id)
@@ -82,7 +82,7 @@ CREATE TABLE CRYPTO_TRANSFER (
     transaction_type			varchar(15) not null,
 	
 	primary key (transaction_id),
-    foreign key (transaction_id) references TRANSACTION (id)
+    foreign key (transaction_id) references TRANSACTION (transaction_id)
 );
 
 INSERT INTO CRYPTO_TRANSFER (transaction_id, exchange_reference_id, transaction_type)
@@ -97,7 +97,7 @@ CREATE TABLE TRADE (
     
 	
 	primary key (transaction_id),
-    foreign key (transaction_id) references TRANSACTION (id)
+    foreign key (transaction_id) references TRANSACTION (transaction_id)
 );
 
 INSERT INTO TRADE (transaction_id, exchange_reference_id, to_currency, converted_amount)
@@ -110,7 +110,7 @@ CREATE TABLE EXCHANGE_BANK_TRANSFER (
     
 	
 	primary key (transaction_id),
-    foreign key (transaction_id) references TRANSACTION (id)
+    foreign key (transaction_id) references TRANSACTION (transaction_id)
 );
 
 INSERT INTO EXCHANGE_BANK_TRANSFER (transaction_id,exchange_reference_id)

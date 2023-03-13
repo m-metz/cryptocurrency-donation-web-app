@@ -18,9 +18,9 @@ public class Trade extends Transaction {
         super();
     }
 
-    public Trade(int id, String currency, float amount, LocalDateTime time, float final_amount,
+    public Trade(int transactionId, String currency, float amount, LocalDateTime time, float final_amount,
             String exchangeReferenceId, String toCurrency, float convertedAmount) {
-        super(id, currency, amount, time, final_amount);
+        super(transactionId, currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
         this.toCurrency = toCurrency;
         this.convertedAmount = convertedAmount;

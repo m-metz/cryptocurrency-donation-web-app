@@ -15,9 +15,9 @@ public class ExchangeBankTransfer extends Transaction {
         super();
     }
 
-    public ExchangeBankTransfer(int id, String currency, float amount, LocalDateTime time,
+    public ExchangeBankTransfer(int transactionId, String currency, float amount, LocalDateTime time,
             float final_amount, String exchangeReferenceId) {
-        super(id, currency, amount, time, final_amount);
+        super(transactionId, currency, amount, time, final_amount);
         this.exchangeReferenceId = exchangeReferenceId;
     }
 
