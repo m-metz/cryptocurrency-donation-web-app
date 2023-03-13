@@ -32,7 +32,7 @@ public class Transaction {
 
     private float final_amount;
 
-    @JsonIgnore
+    // @JsonIgnore
     @OneToMany(mappedBy = "transaction")
     private List<Fee> fees = new ArrayList<>();
 
