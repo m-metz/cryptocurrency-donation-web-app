@@ -1,10 +1,8 @@
 package com.group13.cryptocurrencywebapp.exchangebanktransfer;
 
 import java.time.LocalDateTime;
-import com.group13.cryptocurrencywebapp.cryptocurrencydonation.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.transaction.Transaction;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -12,9 +10,6 @@ import jakarta.persistence.Table;
 public class ExchangeBankTransfer extends Transaction {
 
     private int exchangeReferenceId;
-
-    // @OneToOne(mappedBy = "exchange_bank_transfer")
-    // private CryptoCurrencyDonation cryptoCurrencyDonation;
 
     public ExchangeBankTransfer(int id, String currency, float amount, LocalDateTime time,
             float final_amount, int exchangeReferenceId) {

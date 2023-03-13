@@ -1,6 +1,5 @@
 package com.group13.cryptocurrencywebapp.fee;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.group13.cryptocurrencywebapp.transaction.Transaction;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity

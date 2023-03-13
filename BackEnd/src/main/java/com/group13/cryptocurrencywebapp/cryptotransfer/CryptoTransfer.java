@@ -1,10 +1,8 @@
 package com.group13.cryptocurrencywebapp.cryptotransfer;
 
 import java.time.LocalDateTime;
-import com.group13.cryptocurrencywebapp.cryptocurrencydonation.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.transaction.Transaction;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,9 +11,6 @@ public class CryptoTransfer extends Transaction {
 
     private int exchangeReferenceId;
     private String transactionType;
-
-    // @OneToOne(mappedBy = "crypto_transfer")
-    // private CryptoCurrencyDonation cryptoCurrencyDonation;
 
     public CryptoTransfer(int id, String currency, float amount, LocalDateTime time,
             float final_amount, int exchangeReferenceId, String transactionType) {

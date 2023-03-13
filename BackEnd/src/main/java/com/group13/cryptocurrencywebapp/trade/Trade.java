@@ -16,9 +16,6 @@ public class Trade extends Transaction {
     private String toCurrency;
     private float convertedAmount;
 
-    // @OneToOne(mappedBy = "trade")
-    // private CryptoCurrencyDonation cryptoCurrencyDonation;
-
     public Trade(int id, String currency, float amount, LocalDateTime time, float final_amount,
             String exchangeReferenceId, String toCurrency, float convertedAmount) {
         super(id, currency, amount, time, final_amount);
