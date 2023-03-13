@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transaction_id")
+    @Column(name = "id")
     private int id;
 
     private String currency;
@@ -33,8 +33,9 @@ public class Transaction {
     @OneToMany(mappedBy = "transaction")
     private List<Fee> fees = new ArrayList<>();
 
-    public Transaction() {}
-    
+    public Transaction() {
+    }
+
     public Transaction(int id, String currency, float amount, LocalDateTime time,
             float final_amount) {
         this.id = id;
@@ -48,8 +49,7 @@ public class Transaction {
         this.currency = currency;
         this.amount = amount;
         this.time = time;
-        this.
-        final_amount = final_amount;
+        this.final_amount = final_amount;
     }
 
     public int getId() {
@@ -99,7 +99,5 @@ public class Transaction {
     public void setFees(List<Fee> fees) {
         this.fees = fees;
     }
-    
-
 
 }
