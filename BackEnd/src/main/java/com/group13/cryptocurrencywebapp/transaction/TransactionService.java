@@ -1,5 +1,5 @@
 package com.group13.cryptocurrencywebapp.transaction;
 
-public class TransactionServive {
+public class TransactionService {
     
 }
