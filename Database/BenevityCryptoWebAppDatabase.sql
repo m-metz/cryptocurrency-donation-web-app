@@ -43,7 +43,7 @@ CREATE TABLE TRANSACTION (
     final_amount				float,
 	
     
-	primary key (transaction_id)
+	primary key (transaction_idexchange_bank_transfer)
 );
 
 INSERT INTO TRANSACTION (currency, amount, time, final_amount)
@@ -74,7 +74,11 @@ VALUES
 (0.008700, 'Gas', 1),
 (0.008797, 'Trade', 1),
 (10.000000, 'Wire', 2),
-(21.820000, 'Profit', 3);
+(21.820000, 'Profit', 3),
+(21.820000, 'Wire', 5),
+(25, 'Gas', 6),
+(12.820000, 'Trade', 7),
+(43.820000, 'Profit', 4);
 
 CREATE TABLE CRYPTO_TRANSFER (
     transaction_id				integer	not null,
