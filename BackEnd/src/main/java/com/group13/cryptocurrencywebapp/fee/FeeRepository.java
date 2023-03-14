@@ -1,5 +1,9 @@
 package com.group13.cryptocurrencywebapp.fee;
 
-public class FeeRepository {
-    
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+@Repository
+public interface FeeRepository extends JpaRepository<Fee, Integer> {
+
 }
