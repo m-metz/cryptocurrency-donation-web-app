@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "api/v1/fee")
+@RequestMapping(path = "api/v1/taxreceipt")
 public class TaxReceiptController {
     private final TaxReceiptService taxReceiptService;
 
