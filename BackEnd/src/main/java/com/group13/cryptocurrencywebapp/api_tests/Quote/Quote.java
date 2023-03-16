@@ -11,9 +11,9 @@ public class Quote {
         return value;
     }
 
-    public String toString(){
-        return "type: "+ type + "\nvalue" + value.toString();
-    }
+    // public String toString(){
+    //     return "type: "+ type + "\nvalue" + value.toString();
+    // }
 
     
 }

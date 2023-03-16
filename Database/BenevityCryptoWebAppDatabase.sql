@@ -43,7 +43,7 @@ CREATE TABLE TRANSACTION (
     final_amount				float,
 	
     
-	primary key (transaction_idexchange_bank_transfer)
+	primary key (transaction_id)
 );
 
 INSERT INTO TRANSACTION (currency, amount, time, final_amount)

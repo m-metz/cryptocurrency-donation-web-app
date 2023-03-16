@@ -7,13 +7,13 @@ public class Value {
     public int getId() {
         return id;
     }
-    
+
     public String getQuote() {
         return quote;
     }
 
-    public String toString(){   
-        return "id: "+ id +"\nquote: "+ quote;
-    }
+    // public String toString(){   
+    //     return "id: "+ id +"\nquote: "+ quote;
+    // }
 
 }

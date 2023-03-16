@@ -4,18 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/tests/quote")
 public class QuoteController {
     
     @Autowired
     private QuoteService  quoteService;
 
-    @GetMapping("/tests/quote")
-    public Quote getQuote(){
+    @GetMapping()
+    public Quote[] getQuote(){
+        //return new Quote();
         return quoteService.findQuote();
     }
+
+    
 
 
 }
