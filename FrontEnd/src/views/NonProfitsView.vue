@@ -1,7 +1,5 @@
 <template>
-  <main>
-    <div class="non-profits">
-      <h1>This is the view non-profits page</h1>
-    </div>
-  </main>
+  <div class="non-profits">
+    <h1>Donate Cryptocurrency to Non-Profits</h1>
+  </div>
 </template>

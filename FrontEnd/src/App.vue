@@ -3,11 +3,15 @@
     <nav>
       <RouterLink :to="{ name: 'non-profits' }">Non-Profits</RouterLink>
       |
-      <RouterLink :to="{ name: 'cryptocurrency-donations' }">Cryptocurrency Donations</RouterLink>
+      <RouterLink :to="{ name: 'cryptocurrency-donations' }">
+        Cryptocurrency Donations History
+      </RouterLink>
     </nav>
   </header>
 
-  <RouterView />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <script>
