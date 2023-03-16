@@ -1,8 +1,9 @@
 <template>
   <header>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink :to="{ name: 'non-profits' }">Non-Profits</RouterLink>
+      |
+      <RouterLink :to="{ name: 'cryptocurrency-donations' }">Cryptocurrency Donations</RouterLink>
     </nav>
   </header>
 
@@ -14,3 +15,5 @@ export default {
   name: 'App'
 }
 </script>
+
+<style></style>
