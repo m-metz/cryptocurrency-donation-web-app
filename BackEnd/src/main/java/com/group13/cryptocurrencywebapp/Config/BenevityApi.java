@@ -5,9 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.support.WebClientAdapter;
-import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import org.springframework.web.reactive.function.client.support.*;
 
 @Configuration
 public class BenevityApi {
@@ -20,7 +17,6 @@ public class BenevityApi {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 = //
                 new ServletOAuth2AuthorizedClientExchangeFilterFunction(clientManager);
         oauth2.setDefaultClientRegistrationId("benevity");
-
         return WebClient.builder() //
                 .baseUrl(API_ENDPOINT) //
                 .apply(oauth2.oauth2Configuration()) //
