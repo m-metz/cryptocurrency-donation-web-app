@@ -32,7 +32,7 @@ CREATE TABLE TAX_RECEIPT (
 
 INSERT INTO TAX_RECEIPT (amount, given_names, last_name, email, address1, address2, city, country, state_province_region, zip_postal_code)
 VALUES
-(150000.25, 'Reginald', 'Fancy Bottom', 'RFB@rich.com', '539 Gated Community Rd', null, 'Calgary','Canada', 'AB', 'T6B 5J9'),
+(150000.25, 'Reginald', 'Richman', 'RFB@rich.com', '539 Gated Community Rd', null, 'Calgary','Canada', 'AB', 'T6B 5J9'),
 (420.69, 'Johnny', 'Cool', 'Coolguy@swag.com', '1121 EpicVille Pl', null, 'Calgary','Canada', 'AB', 'T9A 3B3');
 
 CREATE TABLE TRANSACTION (
@@ -145,5 +145,5 @@ CREATE TABLE CURRENCY_DONATION (
 
 INSERT INTO CURRENCY_DONATION (from_crypto_address, to_crypto_address, tax_receipt_id, non_profit_id, donor_user_id, cryptocurrency_tx_id, crypto_transfer_id, trade_id, exchange_bank_transfer_id, status)
 VALUES
-('a5Fhsl3jgwSWghjdhfSdj94nFhls0jlsjk9gdj', 'jhgfsd839nhflk9SDF930hf990SDfhkjh93gAhf', 1, 'NP_000123', 'DR_00101', 'kjds983hkjds', 1, 3, 5, 'Complete');
+('a5Fhsl3jgwSWghjdhfSdj94nFhls0jlsjk9gdj', 'jhgfsd839nhflk9SDF930hf990SDfhkjh93gAhf', 1, '036-76376807382', 'DR_00101', 'kjds983hkjds', 1, 3, 5, 'Complete');
 
