@@ -1,4 +1,4 @@
-package com.group13.cryptocurrencywebapp.Config;
+package com.group13.cryptocurrencywebapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

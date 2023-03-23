@@ -1,4 +1,4 @@
-package com.group13.cryptocurrencywebapp.Config;
+package com.group13.cryptocurrencywebapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,23 +12,23 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 @Configuration
 public class OAuth2ClientManagerConfig {
 
-    @Bean
-    public OAuth2AuthorizedClientManager clientManager( //
-            ClientRegistrationRepository clientRegistrationRepository, //
-            OAuth2AuthorizedClientRepository authorizedClientRepository) {
+        @Bean
+        public OAuth2AuthorizedClientManager clientManager( //
+                        ClientRegistrationRepository clientRegistrationRepository, //
+                        OAuth2AuthorizedClientRepository authorizedClientRepository) {
 
-        OAuth2AuthorizedClientProvider clientProvider = OAuth2AuthorizedClientProviderBuilder.builder() //
-                .authorizationCode() //
-                .refreshToken() //
-                .clientCredentials() //
-                .build();
+                OAuth2AuthorizedClientProvider clientProvider = OAuth2AuthorizedClientProviderBuilder.builder() //
+                                .authorizationCode() //
+                                .refreshToken() //
+                                .clientCredentials() //
+                                .build();
 
-        DefaultOAuth2AuthorizedClientManager clientManager = new DefaultOAuth2AuthorizedClientManager(
-                clientRegistrationRepository, authorizedClientRepository);
-        clientManager.setAuthorizedClientProvider(clientProvider);
+                DefaultOAuth2AuthorizedClientManager clientManager = new DefaultOAuth2AuthorizedClientManager(
+                                clientRegistrationRepository, authorizedClientRepository);
+                clientManager.setAuthorizedClientProvider(clientProvider);
 
-        return clientManager;
+                return clientManager;
 
-    }
+        }
 
 }
