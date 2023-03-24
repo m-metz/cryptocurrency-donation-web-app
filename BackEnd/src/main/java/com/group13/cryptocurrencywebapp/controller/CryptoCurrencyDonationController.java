@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.service.BenevityService;
 import com.group13.cryptocurrencywebapp.service.CryptoCurrencyDonationService;
+import com.group13.cryptocurrencywebapp.service.ExchangeService;
+import com.group13.cryptocurrencywebapp.web_entity.exchange.ExchangeAccount;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 
 @RestController
@@ -20,17 +22,24 @@ import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 public class CryptoCurrencyDonationController {
     private final CryptoCurrencyDonationService cryptoCurrencyDonationService;
     private final BenevityService benevityService;
+    private final ExchangeService exchangeService;
 
     @Autowired
     public CryptoCurrencyDonationController(CryptoCurrencyDonationService cryptoCurrencyDonationService,
-                                            BenevityService benevityService) {
+                                            BenevityService benevityService, ExchangeService exchangeService) {
         this.cryptoCurrencyDonationService = cryptoCurrencyDonationService;
         this.benevityService = benevityService;
+        this.exchangeService = exchangeService;
     }
 
     @GetMapping()
     public List<CryptoCurrencyDonation> getAllCryptoCurrencyDonations() {
         return cryptoCurrencyDonationService.getAllCryptoDonations();
+    }
+
+    @GetMapping(path = "exchange/account")
+    public ExchangeAccount getAccountInfo() throws Exception {
+        return exchangeService.getAccountInfo();
     }
 
     @GetMapping("/Benevity/id={id}")
