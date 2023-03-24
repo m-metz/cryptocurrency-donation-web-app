@@ -9,22 +9,22 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class BenevityService {
 
-    @Autowired
-    @Qualifier("benevityClient")
-    private WebClient webclient = WebClient.create();
+    // @Autowired
+    // @Qualifier("benevityClient")
+    // private WebClient webclient = WebClient.create();
 
-    public String getDonationStatus(String id) {
-        ResponseEntity<BenevityDonation> response = webclient.get()
-                .uri("/donations/" + id)
-                .retrieve()
-                .toEntity(BenevityDonation.class)
-                .block();
+    // public String getDonationStatus(String id) {
+    // ResponseEntity<BenevityDonation> response = webclient.get()
+    // .uri("/donations/" + id)
+    // .retrieve()
+    // .toEntity(BenevityDonation.class)
+    // .block();
 
-        BenevityDonation donation = response.getBody();
-        String state = BenevityDonation.getState();
+    // BenevityDonation donation = response.getBody();
+    // String state = BenevityDonation.getState();
 
-        return state;
+    // return state;
 
-    }
+    // }
 
 }
