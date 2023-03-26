@@ -1,0 +1,120 @@
+<template>
+  <div class="non-profits">
+    <h1>Donate Cryptocurrency to Non-Profits</h1>
+    <form class="d-flex input-group w-auto align-items-center">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Search for non-profits"
+        aria-label="Search"
+      />
+      <mdbBtn outline="primary">Search</mdbBtn>
+    </form>
+    <mdbRow :cols="['1', 'md-3']" class="g-4">
+      <mdbCol>
+        <mdbCard>
+          <mdbCardImage
+            v-mdb-waves
+            src="https://mdbootstrap.com/img/new/standard/city/041.webp"
+            top
+            alt="..."
+          />
+          <mdbCardBody>
+            <mdbCardTitle>Non Profit 1</mdbCardTitle>
+            <mdbCardText>
+              This is a longer card with supporting text below as a natural
+              lead-in to additional content. This content is a little bit
+              longer.
+            </mdbCardText>
+            <mdbBtn tag="a" href="#!" color="primary">Donate</mdbBtn>
+          </mdbCardBody>
+        </mdbCard>
+      </mdbCol>
+      <mdbCol>
+        <mdbCard>
+          <mdbCardImage
+            v-mdb-waves
+            src="https://mdbootstrap.com/img/new/standard/city/042.webp"
+            top
+            alt="..."
+          />
+          <mdbCardBody>
+            <mdbCardTitle>Non Profit 2</mdbCardTitle>
+            <mdbCardText>
+              This is a longer card with supporting text below as a natural
+              lead-in to additional content. This content is a little bit
+              longer.
+            </mdbCardText>
+            <mdbBtn tag="a" href="#!" color="primary">Donate</mdbBtn>
+          </mdbCardBody>
+        </mdbCard>
+      </mdbCol>
+      <mdbCol>
+        <mdbCard>
+          <mdbCardImage
+            v-mdb-waves
+            src="https://mdbootstrap.com/img/new/standard/city/043.webp"
+            top
+            alt="..."
+          />
+          <mdbCardBody>
+            <mdbCardTitle>Non Profit 3</mdbCardTitle>
+            <mdbCardText>
+              This is a longer card with supporting text below as a natural
+              lead-in to additional content.
+            </mdbCardText>
+            <mdbBtn tag="a" href="#!" color="primary">Donate</mdbBtn>
+          </mdbCardBody>
+        </mdbCard>
+      </mdbCol>
+      <mdbCol>
+        <mdbCard>
+          <mdbCardImage
+            v-mdb-waves
+            src="https://mdbootstrap.com/img/new/standard/city/044.webp"
+            top
+            alt="..."
+          />
+          <mdbCardBody>
+            <mdbCardTitle>Non Profit 4</mdbCardTitle>
+            <mdbCardText>
+              This is a longer card with supporting text below as a natural
+              lead-in to additional content. This content is a little bit
+              longer.
+            </mdbCardText>
+            <mdbBtn tag="a" href="#!" color="primary">Donate</mdbBtn>
+          </mdbCardBody>
+        </mdbCard>
+      </mdbCol>
+    </mdbRow>
+  </div>
+</template>
+
+<script>
+import {
+  mdbCol,
+  mdbRow,
+  mdbCard,
+  mdbCardBody,
+  mdbCardTitle,
+  mdbCardText,
+  mdbCardImage,
+  mdbBtn,
+  mdbWaves,
+} from "mdbvue";
+export default {
+  components: {
+    mdbCol,
+    mdbRow,
+    mdbCard,
+    mdbCardBody,
+    mdbCardTitle,
+    mdbCardText,
+    mdbCardImage,
+    mdbBtn,
+  },
+  directives: {
+    mdbWaves,
+  },
+};
+</script>
