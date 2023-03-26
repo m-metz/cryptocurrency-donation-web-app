@@ -1,4 +1,4 @@
-package com.group13.cryptocurrencywebapp.web_entity.exchange;
+package com.group13.cryptocurrencywebapp.web_entity.exchange.binance;
 
 import java.util.List;
 
