@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.group13.cryptocurrencywebapp.config.Signature;
-import com.group13.cryptocurrencywebapp.web_entity.exchange.ExchangeAccount;
+import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
+import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 
 @Service
 public class ExchangeService {
@@ -35,6 +36,23 @@ public class ExchangeService {
                 .block();
 
         return response.getBody();
+    }
+
+    public String executeNewTrade(int value) {
+        String apiEndpoint = "/v3/order/test?";
+        String queryParams = "symbol=BUSDUSDT" + "&side=BUY" + "&type=MARKET" + "&quantity=" + value + "&timestamp="
+                + System.currentTimeMillis();
+        String signature = sign.getSignature(queryParams, secret);
+        String payload = apiEndpoint + queryParams + "&signature=" + signature;
+
+        ResponseEntity<String> response = webclient.post()
+                .uri(payload)
+                .retrieve()
+                .toEntity(String.class)
+                .block();
+
+        return response.getBody();
+
     }
 
 }
