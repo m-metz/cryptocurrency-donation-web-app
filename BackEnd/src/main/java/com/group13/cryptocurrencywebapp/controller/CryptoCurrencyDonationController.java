@@ -37,10 +37,10 @@ public class CryptoCurrencyDonationController {
         this.geminiService = geminiService;
     }
 
-    @GetMapping()
-    public List<CryptoCurrencyDonation> getAllCryptoCurrencyDonations() {
-        return cryptoCurrencyDonationService.getAllCryptoDonations();
-    }
+    // @GetMapping()
+    // public List<CryptoCurrencyDonation> getAllCryptoCurrencyDonations() {
+    // return cryptoCurrencyDonationService.getAllCryptoDonations();
+    // }
 
     @GetMapping(path = "exchange/account")
     public ExchangeAccount getAccountInfo() throws Exception {
@@ -61,6 +61,17 @@ public class CryptoCurrencyDonationController {
     public BenevityDonation createBenevityDonation(@RequestBody String benevityDonationStr) {
 
         return benevityService.createDonation(benevityDonationStr);
+    }
+
+    @PostMapping("/createDonation")
+    public CryptoCurrencyDonation addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
+        return cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
+
+    }
+
+    @GetMapping("/getDonation/all")
+    public List<CryptoCurrencyDonation> getAllCryptoCurrencyDonations() {
+        return cryptoCurrencyDonationService.getAllDonations();
     }
 
     @PostMapping(path = "exchange/newtrade/amount={amount}")
