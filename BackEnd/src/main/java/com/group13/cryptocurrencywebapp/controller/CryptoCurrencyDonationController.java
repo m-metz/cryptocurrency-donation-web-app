@@ -18,6 +18,8 @@ import com.group13.cryptocurrencywebapp.service.ExchangeService;
 import com.group13.cryptocurrencywebapp.service.GeminiService;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Balance;
+import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
+import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 
 @RestController
@@ -75,8 +77,13 @@ public class CryptoCurrencyDonationController {
     }
 
     @PostMapping(path = "exchange/newtrade/amount={amount}")
-    public String executeNewTrade(@PathVariable int amount) throws Exception {
-        return exchangeService.executeNewTrade(amount);
+    public Order executeNewTrade(@PathVariable int amount) throws Exception {
+        return geminiService.createNewOrder(amount);
+    }
+
+    @PostMapping(path = "exchange/newinstanttrade/amount={amount}")
+    public InstantOrder createNewInstantOrder(@PathVariable float amount) throws Exception {
+        return geminiService.createNewInstantOrder(amount);
     }
 
 }
