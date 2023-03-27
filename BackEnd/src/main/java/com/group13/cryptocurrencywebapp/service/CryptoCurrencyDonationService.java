@@ -19,21 +19,17 @@ public class CryptoCurrencyDonationService {
         this.cryptoCurrencyDonationRepository = cryptoCurrencyDonationRepository;
     }
 
-    // @Autowired
-    // @Qualifier("cryptocurrencyClient")
-    // private WebClient webclient = WebClient.create();
-
     public List<CryptoCurrencyDonation> getAllCryptoDonations() {
         return cryptoCurrencyDonationRepository.findAll();
     }
 
-    public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation){
+    public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
         cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
         return cryptoDonation;
     }
 
-    public List<CryptoCurrencyDonation> getAllDonations(){
+    public List<CryptoCurrencyDonation> getAllDonations() {
         return cryptoCurrencyDonationRepository.findAll();
     }
 
