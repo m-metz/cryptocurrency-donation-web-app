@@ -16,6 +16,8 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 npm install
 ```
 
+Then copy [src/apis/benevity/config.template.js](src/apis/benevity/config.template.js) to [src/apis/benevity/config.js](src/apis/benevity/config.js) and fill in the relavent configuaration parameters.
+
 ### Compile and Hot-Reload for Development
 
 ```sh
