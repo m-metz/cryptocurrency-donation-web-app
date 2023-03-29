@@ -22,6 +22,7 @@ public class CryptoTransfer extends Transaction {
         this.exchangeReferenceId = exchangeReferenceId;
         this.transactionType = transactionType;
     }
+    
 
     public CryptoTransfer(String currency, float amount, LocalDateTime time, float final_amount,
             String exchangeReferenceId, String transactionType) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
+import com.group13.cryptocurrencywebapp.entity.CryptoTransfer;
 import com.group13.cryptocurrencywebapp.service.BenevityService;
 import com.group13.cryptocurrencywebapp.service.CryptoCurrencyDonationService;
 import com.group13.cryptocurrencywebapp.service.EtherscanService;
@@ -73,6 +74,16 @@ public class CryptoCurrencyDonationController {
         return cryptoCurrencyDonationService.getAllDonations();
     }
 
+    @PostMapping(path = "/createDeposit/id={id}")
+    public CryptoTransfer createNewDeposit(@RequestBody CryptoTransfer cryptoTransfer){
+        return cryptoCurrencyDonationService.createDeposit(cryptoTransfer);
+    }
+
+    @GetMapping("/getDeposit/all")
+    public List<CryptoTransfer> getAllDeposits() {
+        return cryptoCurrencyDonationService.getAllDeposits();
+    }
+
     // Exchanges Endpoints
     @PostMapping(path = "exchange/newtrade/amount={amount}")
     public Order executeNewTrade(@PathVariable int amount) throws Exception {
@@ -104,5 +115,7 @@ public class CryptoCurrencyDonationController {
     public Price getEthPrice() {
         return etherscanService.getEthPrice();
     }
+
+    
 
 }
