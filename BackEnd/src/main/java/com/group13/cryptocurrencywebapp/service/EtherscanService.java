@@ -1,6 +1,7 @@
 package com.group13.cryptocurrencywebapp.service;
 
-import org.bouncycastle.jcajce.provider.asymmetric.util.PrimeCertaintyCalculator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.EthAddress;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.EthTransactionList;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 
 @Service
 public class EtherscanService {
@@ -32,8 +35,9 @@ public class EtherscanService {
                 .toEntity(EthAddress.class)
                 .block();
 
-        if (response.getBody() != null) {
-            if (checkMessage(response.getBody().getMessage()) == true) {
+        EthAddress respAddress = response.getBody();
+        if (respAddress != null) {
+            if (checkMessage(respAddress.getMessage()) == true) {
                 return "Valid Ethereum Address";
             } else {
                 return "Invalid Address";
@@ -62,6 +66,31 @@ public class EtherscanService {
         if (price != null) {
             if (checkMessage(price.getMessage()) == true) {
                 return price;
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Failed");
+            }
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Failed");
+        }
+
+    }
+
+    public List<Result> getTransactions(String address) {
+
+        String uri = "?module=account&action=txlist&address=" + address
+                + "&startblock=0&endblock=99999999&page=1&offset=1000&sort=desc&apikey=" + apiKey;
+
+        ResponseEntity<EthTransactionList> response = webclient.get()
+                .uri(uri)
+                .retrieve()
+                .toEntity(EthTransactionList.class)
+                .block();
+
+        EthTransactionList responseList = response.getBody();
+        if (responseList != null) {
+            if (checkMessage(responseList.getMessage()) == true) {
+                return responseList.getResult();
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Failed");
             }

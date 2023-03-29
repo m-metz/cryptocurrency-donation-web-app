@@ -24,6 +24,7 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 
 @RestController
 @RequestMapping(path = "api/v1/cryptocurrencydonation")
