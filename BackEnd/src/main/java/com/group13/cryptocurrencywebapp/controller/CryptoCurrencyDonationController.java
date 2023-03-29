@@ -22,6 +22,7 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Balance;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
 
 @RestController
 @RequestMapping(path = "api/v1/cryptocurrencydonation")
@@ -97,6 +98,11 @@ public class CryptoCurrencyDonationController {
     @GetMapping(path = "ethereum/validateaddress/address={address}")
     public String validateEthereumAddress(@PathVariable String address) {
         return etherscanService.validateAddress(address);
+    }
+
+    @GetMapping(path = "ethereum/price")
+    public Price getEthPrice() {
+        return etherscanService.getEthPrice();
     }
 
 }
