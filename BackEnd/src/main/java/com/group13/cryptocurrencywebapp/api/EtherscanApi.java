@@ -1,6 +1,5 @@
 package com.group13.cryptocurrencywebapp.api;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -11,18 +10,14 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
 @Configuration
-public class BinanceApi {
+public class EtherscanApi {
 
-    static String API_ENDPOINT = "https://testnet.binance.vision/api";
-
-    @Value("${binance.api.key}")
-    String apiKey;
+    static String API_ENDPOINT = "https://api-goerli.etherscan.io/api";
 
     @Bean
-    WebClient binanceClient() {
+    WebClient etherscanClient() {
         return WebClient.builder()
                 .baseUrl(API_ENDPOINT)
-                .defaultHeader("X-MBX-APIKEY", apiKey)
                 .clientConnector(new ReactorClientHttpConnector(
                         HttpClient.create().wiretap("reactor.netty.http.client.HttpClient", LogLevel.DEBUG,
                                 AdvancedByteBufFormat.TEXTUAL)))
