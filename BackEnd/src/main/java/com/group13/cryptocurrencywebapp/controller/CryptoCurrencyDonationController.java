@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.service.BenevityService;
 import com.group13.cryptocurrencywebapp.service.CryptoCurrencyDonationService;
+import com.group13.cryptocurrencywebapp.service.EtherscanService;
 import com.group13.cryptocurrencywebapp.service.ExchangeService;
 import com.group13.cryptocurrencywebapp.service.GeminiService;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
@@ -29,14 +30,17 @@ public class CryptoCurrencyDonationController {
     private final BenevityService benevityService;
     private final ExchangeService exchangeService;
     private final GeminiService geminiService;
+    private final EtherscanService etherscanService;
 
     @Autowired
     public CryptoCurrencyDonationController(CryptoCurrencyDonationService cryptoCurrencyDonationService,
-            BenevityService benevityService, ExchangeService exchangeService, GeminiService geminiService) {
+            BenevityService benevityService, ExchangeService exchangeService, GeminiService geminiService,
+            EtherscanService etherscanService) {
         this.cryptoCurrencyDonationService = cryptoCurrencyDonationService;
         this.benevityService = benevityService;
         this.exchangeService = exchangeService;
         this.geminiService = geminiService;
+        this.etherscanService = etherscanService;
     }
 
     // @GetMapping()
@@ -44,16 +48,7 @@ public class CryptoCurrencyDonationController {
     // return cryptoCurrencyDonationService.getAllCryptoDonations();
     // }
 
-    @GetMapping(path = "exchange/account")
-    public ExchangeAccount getAccountInfo() throws Exception {
-        return exchangeService.getAccountInfo();
-    }
-
-    @GetMapping(path = "gemini/balances")
-    public List<Balance> getGeminiBalancesInfo() throws UnsupportedEncodingException {
-        return geminiService.getBalancesInfo();
-    }
-
+    // Benevity Endpoints
     @GetMapping("/Benevity/id={id}")
     public String getBenevityDonation(@PathVariable String id) {
         return benevityService.getDonationStatus(id);
@@ -65,6 +60,7 @@ public class CryptoCurrencyDonationController {
         return benevityService.createDonation(benevityDonationStr);
     }
 
+    // Crypto Donation Endpoints
     @PostMapping("/createDonation")
     public CryptoCurrencyDonation addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
         return cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
@@ -76,6 +72,7 @@ public class CryptoCurrencyDonationController {
         return cryptoCurrencyDonationService.getAllDonations();
     }
 
+    // Exchanges Endpoints
     @PostMapping(path = "exchange/newtrade/amount={amount}")
     public Order executeNewTrade(@PathVariable int amount) throws Exception {
         return geminiService.createNewOrder(amount);
@@ -84,6 +81,22 @@ public class CryptoCurrencyDonationController {
     @PostMapping(path = "exchange/newinstanttrade/amount={amount}")
     public InstantOrder createNewInstantOrder(@PathVariable float amount) throws Exception {
         return geminiService.createNewInstantOrder(amount);
+    }
+
+    @GetMapping(path = "exchange/account")
+    public ExchangeAccount getAccountInfo() throws Exception {
+        return exchangeService.getAccountInfo();
+    }
+
+    @GetMapping(path = "gemini/balances")
+    public List<Balance> getGeminiBalancesInfo() throws UnsupportedEncodingException {
+        return geminiService.getBalancesInfo();
+    }
+
+    // EtherScan Endpoints
+    @GetMapping(path = "ethereum/validateaddress/address={address}")
+    public String validateEthereumAddress(@PathVariable String address) {
+        return etherscanService.validateAddress(address);
     }
 
 }
