@@ -9,7 +9,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.group13.cryptocurrencywebapp.config.Signature;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
-import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 
 @Service
 public class ExchangeService {
