@@ -40,7 +40,7 @@ public class ExchangeService {
 
     public String executeNewTrade(int value) {
         String apiEndpoint = "/v3/order/test?";
-        String queryParams = "symbol=BUSDUSDT" + "&side=BUY" + "&type=MARKET" + "&quantity=" + value + "&timestamp="
+        String queryParams = "symbol=ETHBUSD" + "&side=BUY" + "&type=MARKET" + "&quantity=" + value + "&timestamp="
                 + System.currentTimeMillis();
         String signature = sign.getSignature(queryParams, secret);
         String payload = apiEndpoint + queryParams + "&signature=" + signature;

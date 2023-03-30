@@ -90,6 +90,11 @@ public class CryptoCurrencyDonationController {
         return exchangeService.getAccountInfo();
     }
 
+    @PostMapping(path = "exchange/executetrade/amount={amount}")
+    public String getAccountInfo(@PathVariable int amount) throws Exception {
+        return exchangeService.executeNewTrade(amount);
+    }
+
     @GetMapping(path = "gemini/balances")
     public List<Balance> getGeminiBalancesInfo() throws UnsupportedEncodingException {
         return geminiService.getBalancesInfo();
