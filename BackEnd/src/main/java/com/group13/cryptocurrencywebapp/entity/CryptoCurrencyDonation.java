@@ -26,6 +26,8 @@ public class CryptoCurrencyDonation {
     private String fromCryptoAddress;
     private String status;
 
+    private float initialCryptoAmount;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tax_receipt_id")
     private TaxReceipt taxReceipt;
@@ -48,7 +50,7 @@ public class CryptoCurrencyDonation {
     public CryptoCurrencyDonation(int donationId, String nonProfitId, String donorUserId,
             String cryptocurrencyTxId, String toCryptoAddress, String fromCryptoAddress, String status,
             TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,
-            ExchangeBankTransfer exchangeBankTransfer) {
+            ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount) {
         this.donationId = donationId;
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
@@ -60,11 +62,12 @@ public class CryptoCurrencyDonation {
         this.trade = trade;
         this.cryptoTransfer = cryptoTransfer;
         this.exchangeBankTransfer = exchangeBankTransfer;
+        this.initialCryptoAmount = initialCryptoAmount;
     }
 
     public CryptoCurrencyDonation(String nonProfitId, String donorUserId, String cryptocurrencyTxId,
             String toCryptoAddress, String fromCryptoAddress, String status, TaxReceipt taxReceipt, Trade trade,
-            CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer) {
+            CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount) {
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
         this.cryptocurrencyTxId = cryptocurrencyTxId;
@@ -75,6 +78,7 @@ public class CryptoCurrencyDonation {
         this.trade = trade;
         this.cryptoTransfer = cryptoTransfer;
         this.exchangeBankTransfer = exchangeBankTransfer;
+        this.initialCryptoAmount = initialCryptoAmount;
     }
 
     public int getDonationId() {
@@ -163,6 +167,14 @@ public class CryptoCurrencyDonation {
 
     public void setExchangeBankTransfer(ExchangeBankTransfer exchangeBankTransfer) {
         this.exchangeBankTransfer = exchangeBankTransfer;
+    }
+
+    public float getInitialCryptoAmount() {
+        return initialCryptoAmount;
+    }
+
+    public void setInitialCryptoAmount(float initialCryptoAmount) {
+        this.initialCryptoAmount = initialCryptoAmount;
     }
 
 }

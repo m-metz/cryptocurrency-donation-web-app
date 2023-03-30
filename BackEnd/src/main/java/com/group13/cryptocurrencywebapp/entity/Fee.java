@@ -15,8 +15,8 @@ public class Fee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fee_id")
-
     private int feeId;
+    
     private float amount;
 
     @ManyToOne

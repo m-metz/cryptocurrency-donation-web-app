@@ -24,7 +24,6 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
-import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 
 @RestController
 @RequestMapping(path = "api/v1/cryptocurrencydonation")
@@ -59,7 +58,6 @@ public class CryptoCurrencyDonationController {
 
     @PostMapping("/Benevity/createDonation")
     public BenevityDonation createBenevityDonation(@RequestBody String benevityDonationStr) {
-
         return benevityService.createDonation(benevityDonationStr);
     }
 
@@ -67,7 +65,6 @@ public class CryptoCurrencyDonationController {
     @PostMapping("/createDonation")
     public CryptoCurrencyDonation addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
         return cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
-
     }
 
     @GetMapping("/getDonation/all")
@@ -75,9 +72,9 @@ public class CryptoCurrencyDonationController {
         return cryptoCurrencyDonationService.getAllDonations();
     }
 
-    @PostMapping(path = "/createDeposit/id={id}")
-    public CryptoTransfer createNewDeposit(@RequestBody CryptoTransfer cryptoTransfer){
-        return cryptoCurrencyDonationService.createDeposit(cryptoTransfer);
+    @PostMapping(path = "/createDeposit/DonationId={id}")
+    public CryptoTransfer createNewDeposit(@PathVariable int id){
+        return cryptoCurrencyDonationService.createDeposit(id);
     }
 
     @GetMapping("/getDeposit/all")
