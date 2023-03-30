@@ -61,18 +61,19 @@ public class CryptoCurrencyDonationService {
         deposit.setTime(java.time.LocalDateTime.now());
 
         Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
-        //deposit = cryptoTransferRepository.save(deposit);
+        deposit.setExchangeReferenceId(latest.getHash());
+        deposit = cryptoTransferRepository.save(deposit);
 
-        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()));
-        //gasFee = feeRepository.save(gasFee);
+        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()), deposit, "Gas");
+        gasFee = feeRepository.save(gasFee);
 
         deposit.setFees(Arrays.asList(new Fee[]{gasFee}));
         deposit.setFinal_amount(deposit.getAmount() - Float.parseFloat(latest.getGasUsed())/(float)1000000000000000000.0);
 
-        deposit.setExchangeReferenceId(latest.getHash());
-
-        deposit = cryptoTransferRepository.save(deposit);
+        //deposit = cryptoTransferRepository.save(deposit);
         CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
+        
+        //gasFee.setTransaction(deposit1);
         //gasFee = feeRepository.save(deposit.getFees().get(0));
 
         return deposit1;
@@ -92,8 +93,10 @@ public class CryptoCurrencyDonationService {
         }
 
         return latest;
-
     }
 
+    public List<Fee> getAllFees() {
+        return feeRepository.findAll();
+    }
 
 }

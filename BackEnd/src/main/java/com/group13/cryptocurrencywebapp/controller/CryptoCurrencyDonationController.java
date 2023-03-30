@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.entity.CryptoTransfer;
+import com.group13.cryptocurrencywebapp.entity.Fee;
 import com.group13.cryptocurrencywebapp.service.BenevityService;
 import com.group13.cryptocurrencywebapp.service.CryptoCurrencyDonationService;
 import com.group13.cryptocurrencywebapp.service.EtherscanService;
@@ -80,6 +81,11 @@ public class CryptoCurrencyDonationController {
     @GetMapping("/getDeposit/all")
     public List<CryptoTransfer> getAllDeposits() {
         return cryptoCurrencyDonationService.getAllDeposits();
+    }
+
+    @GetMapping("/getFee/all")
+    public List<Fee> getAllFee(){
+        return cryptoCurrencyDonationService.getAllFees();
     }
 
     // Exchanges Endpoints

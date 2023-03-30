@@ -62,7 +62,7 @@ CREATE TABLE FEE (
 	fee_id						integer	not null auto_increment,
     amount 						float not null,
     fee_type					varchar(15) not null,
-    transaction_id				integer not null,
+    transaction_id				integer,
 	
     
 	primary key (fee_id),
