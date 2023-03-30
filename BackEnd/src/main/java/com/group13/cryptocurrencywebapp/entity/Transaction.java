@@ -124,6 +124,12 @@ public class Transaction {
 
     public void addFee(Fee fee){
         fees.add(fee);
+        fee.setTransaction(this);
+    }
+
+    public void removeFee(Fee fee) {
+        fees.remove(fee);
+        fee.setTransaction(null);
     }
 
 }

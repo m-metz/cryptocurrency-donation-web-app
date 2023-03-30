@@ -1,5 +1,6 @@
 package com.group13.cryptocurrencywebapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,8 +22,10 @@ public class Fee {
 
     private String feeType;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "transaction_id")
+    
     private Transaction transaction;
 
     public Fee() {
@@ -73,11 +76,10 @@ public class Fee {
     public void setFeeType(String feeType) {
         this.feeType = feeType;
     }
-    
 
-    // public Transaction getTransaction() {
-    //     return transaction;
-    // }
+    public Transaction getTransaction() {
+        return transaction;
+    }
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
