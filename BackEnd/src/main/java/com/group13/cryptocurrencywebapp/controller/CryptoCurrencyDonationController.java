@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
+import com.group13.cryptocurrencywebapp.entity.CryptoTransfer;
+import com.group13.cryptocurrencywebapp.entity.Fee;
 import com.group13.cryptocurrencywebapp.service.BenevityService;
 import com.group13.cryptocurrencywebapp.service.CryptoCurrencyDonationService;
 import com.group13.cryptocurrencywebapp.service.EtherscanService;
@@ -23,7 +25,6 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
-import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 
 @RestController
 @RequestMapping(path = "api/v1/cryptocurrencydonation")
@@ -58,7 +59,6 @@ public class CryptoCurrencyDonationController {
 
     @PostMapping("/Benevity/createDonation")
     public BenevityDonation createBenevityDonation(@RequestBody String benevityDonationStr) {
-
         return benevityService.createDonation(benevityDonationStr);
     }
 
@@ -66,12 +66,26 @@ public class CryptoCurrencyDonationController {
     @PostMapping("/createDonation")
     public CryptoCurrencyDonation addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
         return cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
-
     }
 
     @GetMapping("/getDonation/all")
     public List<CryptoCurrencyDonation> getAllCryptoCurrencyDonations() {
         return cryptoCurrencyDonationService.getAllDonations();
+    }
+
+    @PostMapping(path = "/createDeposit/DonationId={id}")
+    public CryptoTransfer createNewDeposit(@PathVariable int id){
+        return cryptoCurrencyDonationService.createDeposit(id);
+    }
+
+    @GetMapping("/getDeposit/all")
+    public List<CryptoTransfer> getAllDeposits() {
+        return cryptoCurrencyDonationService.getAllDeposits();
+    }
+
+    @GetMapping("/getFee/all")
+    public List<Fee> getAllFee(){
+        return cryptoCurrencyDonationService.getAllFees();
     }
 
     // Exchanges Endpoints
@@ -110,5 +124,7 @@ public class CryptoCurrencyDonationController {
     public Price getEthPrice() {
         return etherscanService.getEthPrice();
     }
+
+    
 
 }

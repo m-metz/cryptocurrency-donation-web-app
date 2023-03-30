@@ -15,9 +15,11 @@ public class Fee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fee_id")
-
     private int feeId;
+
     private float amount;
+
+    private String feeType;
 
     @ManyToOne
     @JoinColumn(name = "transaction_id")
@@ -26,14 +28,27 @@ public class Fee {
     public Fee() {
     }
 
-    public Fee(int feeId, float amount) {
+    public Fee(int feeId, float amount, Transaction transaction, String feeType) {
         this.feeId = feeId;
         this.amount = amount;
+        this.transaction = transaction;
+        this.feeType=feeType;
     }
 
-    public Fee(float amount) {
+    public Fee(float amount, Transaction transaction, String feeType) {
         this.amount = amount;
+        this.transaction = transaction;
+        this.feeType=feeType;
     }
+
+    // public Fee(int feeId, float amount) {
+    //     this.feeId = feeId;
+    //     this.amount = amount;
+    // }
+
+    // public Fee(float amount) {
+    //     this.amount = amount;
+    // }
 
     public int getFeeId() {
         return feeId;
@@ -50,5 +65,23 @@ public class Fee {
     public void setAmount(float amount) {
         this.amount = amount;
     }
+
+    public String getFeeType() {
+        return feeType;
+    }
+
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
+    }
+    
+
+    // public Transaction getTransaction() {
+    //     return transaction;
+    // }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+    
 
 }

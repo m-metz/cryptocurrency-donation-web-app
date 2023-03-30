@@ -46,6 +46,7 @@ public class Transaction {
         this.time = time;
         this.final_amount = final_amount;
     }
+    
 
     public Transaction(String currency, float amount, LocalDateTime time, float final_amount) {
         this.currency = currency;
@@ -53,6 +54,25 @@ public class Transaction {
         this.time = time;
         this.final_amount = final_amount;
     }
+
+    // public Transaction(String currency, float amount, LocalDateTime time,
+    //         float final_amount, List<Fee> fees) {
+    //     this.currency = currency;
+    //     this.amount = amount;
+    //     this.time = time;
+    //     this.final_amount = final_amount;
+    //     this.fees = fees;
+    // }
+
+    // public Transaction(int transactionId, String currency, float amount, LocalDateTime time,
+    //         float final_amount, List<Fee> fees) {
+    //     this.transactionId = transactionId;
+    //     this.currency = currency;
+    //     this.amount = amount;
+    //     this.time = time;
+    //     this.final_amount = final_amount;
+    //     this.fees = fees;
+    // }
 
     public int getTransactionId() {
         return transactionId;
@@ -100,6 +120,10 @@ public class Transaction {
 
     public void setFees(List<Fee> fees) {
         this.fees = fees;
+    }
+
+    public void addFee(Fee fee){
+        fees.add(fee);
     }
 
 }
