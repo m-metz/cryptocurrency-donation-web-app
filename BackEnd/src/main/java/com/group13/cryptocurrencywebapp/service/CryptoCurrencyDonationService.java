@@ -25,18 +25,16 @@ public class CryptoCurrencyDonationService {
     private final EtherscanService etherscanService;
     private final TradeService tradeService;
     private final TradeRepository tradeRepository;
-    private final FeeRepository feeRepository;
 
     @Autowired
     public CryptoCurrencyDonationService(CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository,
             CryptoTransferRepository cryptoTransferRepository,
             FeeRepository feeRepository,
             EtherscanService etherscanService,
-            TradeService tradeService, TradeRepository tradeRepository, FeeRepository feeRepository) {
+            TradeService tradeService, TradeRepository tradeRepository) {
         this.cryptoCurrencyDonationRepository = cryptoCurrencyDonationRepository;
         this.tradeService = tradeService;
         this.tradeRepository = tradeRepository;
-        this.feeRepository = feeRepository;
         this.cryptoTransferRepository = cryptoTransferRepository;
         this.etherscanService = etherscanService;
         this.feeRepository = feeRepository;
