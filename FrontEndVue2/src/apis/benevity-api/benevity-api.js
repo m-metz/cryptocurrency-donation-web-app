@@ -1,21 +1,31 @@
+import { Buffer } from "buffer";
+
+import "isomorphic-fetch";
+
+import { isEmptyObject } from "@/helpers";
+
 /**
  * Singleton class used to access the Benevity API
  *
  * @class BenevityApi
  * @typedef {BenevityApi}
  */
-
-import { isEmptyObject } from "@/helpers/index.js";
-
 export default class BenevityApi {
   static #instance;
+
+  // API authentication configuration
   #baseUrl;
   #clientId;
   #clientSecret;
   #grantType;
+  #scopes;
   #adapter;
   #companyId;
   #apiKey;
+
+  // OAuth token tracking
+  #tokenExpiryTime;
+  #accessToken;
 
   constructor(config) {
     if (BenevityApi.#instance) {
@@ -33,12 +43,66 @@ export default class BenevityApi {
   }
 
   /*
-  This actually is used, just not on the this object. VSCode ts syntax highlighting can't detec that it's used.
+  This actually is used, just not on the this object. VSCode ts syntax highlighting can't detect that it's used.
   */
   #initialize(config) {
     if (!isEmptyObject(config)) {
-      Object.assign(BenevityApi.#instance, config);
+      Object.assign(this, config);
     }
+  }
+
+  refreshApiAuthentication() {
+    // Set variables
+    var currentTime = Date.now();
+
+    // Get a new token if current one expired, if no token exists, or if no expiryTime exists
+    if (
+      currentTime >= this.#tokenExpiryTime ||
+      !this.#accessToken ||
+      !this.#tokenExpiryTime
+    ) {
+      let tokenUrl = this.#baseUrl + "/oauth2/token";
+
+      let options = {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          authorization:
+            "Basic " +
+            Buffer.from(`${this.#clientId}:${this.#clientSecret}`).toString(
+              "base64"
+            ),
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: this.#grantType,
+          scope: this.#scopes,
+        }),
+      };
+      fetch(tokenUrl, options)
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Could not get OAuth token");
+          }
+          return response.json();
+        })
+        .then(function (json) {
+          console.log("parsed json", json);
+        });
+      // pm.sendRequest(options, function (err, response) {
+      //   this.#accessToken = response.json().access_token;
+
+      //   // Set the ExpiresInTime variable to the time given in the response if it exists
+      //   if (response.json().expires_in) {
+      //     this.#tokenExpiryTime =
+      //       currentTime + response.json().expires_in * 0.9 * 1000;
+      //   }
+      // });
+    }
+  }
+
+  get baseUrl() {
+    return this.baseUrl;
   }
 
   set baseUrl(value) {

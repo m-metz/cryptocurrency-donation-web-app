@@ -3,7 +3,7 @@ import { createPinia, PiniaVuePlugin } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";
-import "@/apis/benevity-api";
+import benevityApi from "@/apis/benevity-api";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
@@ -17,3 +17,7 @@ new Vue({
   pinia: createPinia(),
   render: (h) => h(App),
 }).$mount("#app");
+
+console.log(benevityApi);
+
+benevityApi.refreshApiAuthentication();
