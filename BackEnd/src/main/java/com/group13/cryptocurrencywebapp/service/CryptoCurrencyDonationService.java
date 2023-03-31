@@ -78,7 +78,7 @@ public class CryptoCurrencyDonationService {
             newTrade.setConvertedAmount(convertedAmount);
             newTrade = tradeRepository.save(newTrade);
 
-            Fee comissionFee = new Fee(comission, newTrade, "Comission");
+            Fee comissionFee = new Fee(comission, newTrade, "Trade", "USD");
             comissionFee = feeRepository.save(comissionFee);
 
             List<Fee> fees = new ArrayList<>();
@@ -119,7 +119,7 @@ public class CryptoCurrencyDonationService {
         deposit.setExchangeReferenceId(latest.getHash());
         deposit = cryptoTransferRepository.save(deposit);
 
-        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()), deposit, "Gas");
+        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()), deposit, "Gas", "ETH");
         gasFee = feeRepository.save(gasFee);
 
         List<Fee> fees = new ArrayList<>();

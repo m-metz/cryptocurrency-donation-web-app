@@ -25,32 +25,36 @@ public class Fee {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "transaction_id")
-    
+
     private Transaction transaction;
+
+    private String currency;
 
     public Fee() {
     }
 
-    public Fee(int feeId, float amount, Transaction transaction, String feeType) {
+    public Fee(int feeId, float amount, Transaction transaction, String feeType, String currency) {
         this.feeId = feeId;
         this.amount = amount;
         this.transaction = transaction;
-        this.feeType=feeType;
+        this.feeType = feeType;
+        this.currency = currency;
     }
 
-    public Fee(float amount, Transaction transaction, String feeType) {
+    public Fee(float amount, Transaction transaction, String feeType, String currency) {
         this.amount = amount;
         this.transaction = transaction;
-        this.feeType=feeType;
+        this.feeType = feeType;
+        this.currency = currency;
     }
 
     // public Fee(int feeId, float amount) {
-    //     this.feeId = feeId;
-    //     this.amount = amount;
+    // this.feeId = feeId;
+    // this.amount = amount;
     // }
 
     // public Fee(float amount) {
-    //     this.amount = amount;
+    // this.amount = amount;
     // }
 
     public int getFeeId() {
@@ -84,6 +88,13 @@ public class Fee {
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
     }
-    
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
 
 }
