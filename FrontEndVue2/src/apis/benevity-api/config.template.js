@@ -50,5 +50,5 @@ export default {
   If set to a relative path string, proxy benevityApi requests throught the Vite server in dev or
   preview mode. Else send directly to the Benevity API from the browser.
   */
-  viteProxyUrl: "/benevityApi",
+  // viteProxyUrl: "/benevityApi",
 };
