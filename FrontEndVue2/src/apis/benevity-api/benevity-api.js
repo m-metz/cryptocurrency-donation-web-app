@@ -2,7 +2,7 @@ import { Buffer } from "buffer";
 
 import "isomorphic-fetch";
 
-import { isEmptyObject } from "@/helpers";
+import { isEmptyObject } from "@/helpers/index.js";
 
 /**
  * Singleton class used to access the Benevity API
@@ -69,7 +69,7 @@ export default class BenevityApi {
 
       let options = {
         method: "POST",
-        credentials: "include",
+        // credentials: "include",
         headers: {
           authorization:
             "Basic " +
@@ -86,12 +86,16 @@ export default class BenevityApi {
       fetch(tokenUrl, options)
         .then(function (response) {
           if (!response.ok) {
+            console.log(response.text());
             throw new Error("Could not get OAuth token");
           }
           return response.json();
         })
         .then(function (json) {
           console.log("parsed json", json);
+        })
+        .catch(function (ex) {
+          console.error(ex);
         });
       // pm.sendRequest(options, function (err, response) {
       //   this.#accessToken = response.json().access_token;
