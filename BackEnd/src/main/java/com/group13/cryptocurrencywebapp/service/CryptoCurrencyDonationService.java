@@ -76,6 +76,7 @@ public class CryptoCurrencyDonationService {
                 comission = comission + Float.parseFloat(fill.getCommission());
             }
             newTrade.setConvertedAmount(convertedAmount);
+            newTrade.setFinal_amount(convertedAmount);
             newTrade = tradeRepository.save(newTrade);
 
             Fee comissionFee = new Fee(comission, newTrade, "Trade", "USD");
