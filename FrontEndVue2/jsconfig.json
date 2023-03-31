@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "checkJs": false,
+    "module": "node16",
     "target": "ES2022",
     "paths": {
       "@/*": ["./src/*"]
