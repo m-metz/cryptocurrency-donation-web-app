@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.entity.CryptoTransfer;
 import com.group13.cryptocurrencywebapp.entity.Fee;
+import com.group13.cryptocurrencywebapp.entity.Trade;
 import com.group13.cryptocurrencywebapp.service.BenevityService;
 import com.group13.cryptocurrencywebapp.service.CryptoCurrencyDonationService;
 import com.group13.cryptocurrencywebapp.service.EtherscanService;
 import com.group13.cryptocurrencywebapp.service.ExchangeService;
 import com.group13.cryptocurrencywebapp.service.GeminiService;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
+import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Balance;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
@@ -74,8 +76,13 @@ public class CryptoCurrencyDonationController {
     }
 
     @PostMapping(path = "/createDeposit/DonationId={id}")
-    public CryptoTransfer createNewDeposit(@PathVariable int id){
+    public CryptoTransfer createNewDeposit(@PathVariable int id) {
         return cryptoCurrencyDonationService.createDeposit(id);
+    }
+
+    @PostMapping(path = "/createTrade/DonationId={id}/Amount={amount}")
+    public Trade createNewDeposit(@PathVariable int id, @PathVariable float amount) throws InterruptedException {
+        return cryptoCurrencyDonationService.createTrade(id, amount);
     }
 
     @GetMapping("/getDeposit/all")
@@ -84,7 +91,7 @@ public class CryptoCurrencyDonationController {
     }
 
     @GetMapping("/getFee/all")
-    public List<Fee> getAllFee(){
+    public List<Fee> getAllFee() {
         return cryptoCurrencyDonationService.getAllFees();
     }
 
@@ -105,7 +112,7 @@ public class CryptoCurrencyDonationController {
     }
 
     @PostMapping(path = "exchange/executetrade/amount={amount}")
-    public String getAccountInfo(@PathVariable int amount) throws Exception {
+    public ExchangeTradeResponse getAccountInfo(@PathVariable float amount) throws Exception {
         return exchangeService.executeNewTrade(amount);
     }
 
@@ -124,7 +131,5 @@ public class CryptoCurrencyDonationController {
     public Price getEthPrice() {
         return etherscanService.getEthPrice();
     }
-
-    
 
 }
