@@ -72,7 +72,8 @@ public class CryptoCurrencyDonationService {
             float convertedAmount = 0;
             float comission = 0;
             for (Fill fill : response.getFills()) {
-                convertedAmount = convertedAmount + Float.parseFloat(fill.getQty());
+                convertedAmount = convertedAmount
+                        + (Float.parseFloat(fill.getQty()) * Float.parseFloat(fill.getPrice()));
                 comission = comission + Float.parseFloat(fill.getCommission());
             }
             newTrade.setConvertedAmount(convertedAmount);
