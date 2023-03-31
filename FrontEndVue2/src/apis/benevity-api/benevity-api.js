@@ -22,6 +22,7 @@ export default class BenevityApi {
   #adapter;
   #companyId;
   #apiKey;
+  #viteProxyUrl;
 
   // OAuth token tracking
   #tokenExpiryTime;
@@ -48,6 +49,9 @@ export default class BenevityApi {
   #initialize(config) {
     if (!isEmptyObject(config)) {
       Object.assign(this, config);
+      if (typeof this.#viteProxyUrl === "string") {
+        this.baseUrl = this.#viteProxyUrl;
+      }
     }
   }
 
@@ -131,5 +135,9 @@ export default class BenevityApi {
 
   set apiKey(value) {
     this.#apiKey = value;
+  }
+
+  set viteProxyUrl(value) {
+    this.#viteProxyUrl = value;
   }
 }
