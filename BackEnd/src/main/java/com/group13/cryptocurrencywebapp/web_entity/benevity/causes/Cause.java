@@ -1,4 +1,4 @@
-package com.group13.cryptocurrencywebapp.api_tests.Causes;
+package com.group13.cryptocurrencywebapp.web_entity.benevity.causes;
 
 public class Cause {
     private Data[] data;

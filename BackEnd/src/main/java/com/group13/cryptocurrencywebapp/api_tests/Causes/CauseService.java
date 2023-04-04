@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
+
 @Service
 public class CauseService {
 

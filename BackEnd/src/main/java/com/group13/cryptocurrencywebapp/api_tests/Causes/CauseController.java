@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
+
 @RestController
 @RequestMapping(path = "/cause")
 public class CauseController {
@@ -16,4 +18,3 @@ public class CauseController {
         return causeService.findAllCauses();
     }
 }
-
