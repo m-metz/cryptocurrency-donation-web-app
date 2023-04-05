@@ -101,6 +101,11 @@ public class CryptoCurrencyDonationController {
         return cryptoCurrencyDonationService.getAllFees();
     }
 
+    @GetMapping("/getdonations/userid={userid}")
+    public List<CryptoCurrencyDonation> getAllDonationsForUser(@PathVariable String userid) {
+        return cryptoCurrencyDonationService.getAllDonationsForUser(userid);
+    }
+
     // Exchanges Endpoints
     @PostMapping(path = "exchange/newtrade/amount={amount}")
     public Order executeNewTrade(@PathVariable int amount) throws Exception {

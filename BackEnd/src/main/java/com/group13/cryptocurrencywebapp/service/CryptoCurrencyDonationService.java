@@ -7,7 +7,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.support.Repositories;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.entity.CryptoTransfer;
 import com.group13.cryptocurrencywebapp.entity.Fee;
@@ -80,7 +83,7 @@ public class CryptoCurrencyDonationService {
             newTrade.setFinal_amount(convertedAmount);
             newTrade = tradeRepository.save(newTrade);
 
-            Fee comissionFee = new Fee(comission, newTrade, "Trade", "USD");
+            Fee comissionFee = new Fee(comission, newTrade, "Trade", newTrade.getCurrency());
             comissionFee = feeRepository.save(comissionFee);
 
             List<Fee> fees = new ArrayList<>();
@@ -163,6 +166,23 @@ public class CryptoCurrencyDonationService {
 
     public List<Fee> getAllFees() {
         return feeRepository.findAll();
+    }
+
+    public List<CryptoCurrencyDonation> getAllDonationsForUser(String userid) {
+        if (userid == null || userid.equals("")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Please inform a valid userid");
+        }
+        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
+
+        if (donations == null || donations.isEmpty() == true) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "No donations found for the userid:  " + userid + ".");
+        } else {
+            return donations;
+
+        }
+
     }
 
 }
