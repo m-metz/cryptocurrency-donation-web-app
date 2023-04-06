@@ -63,22 +63,23 @@ CREATE TABLE FEE (
     amount 						float not null,
     fee_type					varchar(15) not null,
     transaction_id				integer,
+    currency					varchar(4) not null,
 	
     
 	primary key (fee_id),
     foreign key (transaction_id) references TRANSACTION (transaction_id)
 );
 
-INSERT INTO FEE (amount, fee_type, transaction_id)
+INSERT INTO FEE (amount, fee_type, transaction_id, currency)
 VALUES
-(0.008700, 'Gas', 1),
-(0.008797, 'Trade', 1),
-(10.000000, 'Wire', 2),
-(21.820000, 'Profit', 3),
-(21.820000, 'Wire', 5),
-(25, 'Gas', 6),
-(12.820000, 'Trade', 7),
-(43.820000, 'Profit', 4);
+(0.008700, 'Gas', 1, 'ETH'),
+(0.008797, 'Trade', 1, 'USD'),
+(10.000000, 'Wire', 2, 'USD'),
+(21.820000, 'Profit', 3, 'USD'),
+(21.820000, 'Wire', 5, 'USD'),
+(25, 'Gas', 6, 'ETH'),
+(12.820000, 'Trade', 7, 'USD'),
+(43.820000, 'Profit', 4, 'USD');
 
 CREATE TABLE CRYPTO_TRANSFER (
     transaction_id				integer	not null,
