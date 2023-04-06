@@ -61,7 +61,7 @@ public class CryptoCurrencyDonationController {
         return benevityService.getOneCause(id);
     }
 
-    @GetMapping("/Benevity/cause/details/id={id}")
+    @GetMapping("/Benevity/cause/details/{id}")
     public CauseDetail getCauseDetails(@PathVariable String id) {
         return benevityService.getCauseDetails(id);
     }
