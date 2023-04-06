@@ -24,8 +24,6 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.Fill;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
-import io.netty.channel.VoidChannelPromise;
-
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
 @Service
