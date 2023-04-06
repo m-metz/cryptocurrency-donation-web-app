@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
+import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.detail.CauseDetail;
 
 import reactor.core.publisher.Mono;
 
@@ -51,7 +52,7 @@ public class BenevityService {
     }
 
     public Cause getOneCause(String id) {
-        String uri = "/search/causes?q=" + "\"" + id + "\"";
+        String uri = "/search/causes?q=id:" + id;
         ResponseEntity<Cause> response = webclient.get()
                 .uri(uri)
                 .retrieve()
@@ -59,6 +60,24 @@ public class BenevityService {
                 .block();
 
         Cause cause = response.getBody();
+
+        if (cause != null) {
+            return cause;
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Cause id=" + id + "not found!");
+        }
+    }
+
+    public CauseDetail getCauseDetails(String id) {
+        String uri = "/causes/" + id;
+        ResponseEntity<CauseDetail> response = webclient.get()
+                .uri(uri)
+                .retrieve()
+                .toEntity(CauseDetail.class)
+                .block();
+
+        CauseDetail cause = response.getBody();
 
         if (cause != null) {
             return cause;

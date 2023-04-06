@@ -27,6 +27,7 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.InstantOrder;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Order;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
+import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.detail.CauseDetail;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
 
 @RestController
@@ -58,6 +59,11 @@ public class CryptoCurrencyDonationController {
     @GetMapping("/Benevity/causes/id={id}")
     public Cause getOBenevityCause(@PathVariable String id) {
         return benevityService.getOneCause(id);
+    }
+
+    @GetMapping("/Benevity/cause/details/id={id}")
+    public CauseDetail getCauseDetails(@PathVariable String id) {
+        return benevityService.getCauseDetails(id);
     }
 
     @GetMapping("/Benevity/id={id}")
