@@ -21,6 +21,8 @@ import com.group13.cryptocurrencywebapp.repository.FeeRepository;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.Fill;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
 @Service
@@ -32,18 +34,21 @@ public class CryptoCurrencyDonationService {
     private final TradeService tradeService;
     private final TradeRepository tradeRepository;
     private final ExchangeService exchangeService;
+    private final BenevityService benevityService;
 
     @Autowired
     public CryptoCurrencyDonationService(CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository,
             CryptoTransferRepository cryptoTransferRepository,
             FeeRepository feeRepository,
             EtherscanService etherscanService,
+            BenevityService benevityService,
             TradeService tradeService, TradeRepository tradeRepository, ExchangeService exchangeService) {
         this.cryptoCurrencyDonationRepository = cryptoCurrencyDonationRepository;
         this.tradeService = tradeService;
         this.tradeRepository = tradeRepository;
         this.cryptoTransferRepository = cryptoTransferRepository;
         this.etherscanService = etherscanService;
+        this.benevityService = benevityService;
         this.feeRepository = feeRepository;
         this.exchangeService = exchangeService;
     }
@@ -143,10 +148,70 @@ public class CryptoCurrencyDonationService {
 
         // gasFee.setTransaction(deposit1);
         // gasFee = feeRepository.save(deposit.getFees().get(0));
-
+        
         // INSERT CONNECTION TO TRADE HERE
 
         return deposit1;
+    }
+
+    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency){
+
+        JSONArray data = new JSONArray();
+            data.add(new JSONObject().appendField("type",
+                                                    "donations"));
+        
+            JSONArray attributes = new JSONArray();
+
+                JSONArray destination = new JSONArray();
+                    destination.add(new JSONObject().appendField("recipientId",
+                                                                donation.getNonProfitId()));
+
+                JSONArray donor = new JSONArray();
+                    donor.add(new JSONObject().appendField("fullName", 
+                                                                donation.getTaxReceipt().getGivenNames()+ " " +
+                                                                donation.getTaxReceipt().getLastName()));
+                    donor.add(new JSONObject().appendField("email", 
+                                                                donation.getTaxReceipt().getEmail()));
+                    donor.add(new JSONObject().appendField("receipted",
+                                                        true));
+        
+                    JSONArray address = new JSONArray();
+                        address.add(new JSONObject().appendField("city",
+                                                                donation.getTaxReceipt().getCity()));
+                        address.add(new JSONObject().appendField("country",
+                                                                donation.getTaxReceipt().getCountry()));
+                        address.add(new JSONObject().appendField("line1",
+                                                                donation.getTaxReceipt().getAddress1()));
+                        address.add(new JSONObject().appendField("line2",
+                                                                donation.getTaxReceipt().getAddress2()));
+                        address.add(new JSONObject().appendField("state",
+                                                                donation.getTaxReceipt().getStateProvinceRegion()));
+                        address.add(new JSONObject().appendField("zip",
+                                                                donation.getTaxReceipt().getZipPostalCode()));
+                        
+                    donor.add(address);
+
+                attributes.add(donor);
+
+                JSONArray funds = new JSONArray();
+                    funds.add(new JSONObject().appendField("amount",
+                                                                donation.getTaxReceipt().getAmount()));
+                    funds.add(new JSONObject().appendField("currency",
+                                                                currency));
+                    funds.add(new JSONObject().appendField("paymentType",
+                                                                "DONATION_REPORT"));
+                    funds.add(new JSONObject().appendField("source",
+                                                                "COMPANY"));
+                attributes.add(funds);
+
+                //Metadata if needed
+                // JSONArray metadata = new JSONArray();
+                //     metadata.add(new JSONObject().appendField("amount",
+                //                                                 donation.getTaxReceipt().getAmount()));
+            
+            data.add(attributes);
+       
+        benevityService.createDonation(data.toJSONString());
     }
 
     public Result filterTransactions(String toAddress, String fromAddress) {
