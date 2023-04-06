@@ -1,4 +1,4 @@
-function isEmptyObject(obj) {
+export function isEmptyObject(obj) {
   var name;
   for (name in obj) {
     return false;
@@ -6,4 +6,7 @@ function isEmptyObject(obj) {
   return true;
 }
 
-export { isEmptyObject };
+export function warnStackTrace(message) {
+  let e = new Error();
+  console.warn(message, e.stack);
+}

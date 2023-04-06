@@ -25,7 +25,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# These are copied from config.template.js, and should never be checked in so
-# that sensitive information is protected.
-config.js

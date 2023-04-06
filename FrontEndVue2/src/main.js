@@ -18,4 +18,4 @@ new Vue({
   render: (h) => h(App),
 }).$mount("#app");
 
-benevityApi.refreshApiAuthentication();
+console.log(benevityApi.searchCauses("*"));
