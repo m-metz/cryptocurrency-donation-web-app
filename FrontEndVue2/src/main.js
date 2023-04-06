@@ -18,4 +18,4 @@ new Vue({
   render: (h) => h(App),
 }).$mount("#app");
 
-console.log(benevityApi);
+console.log(benevityApi.searchCauses("*"));

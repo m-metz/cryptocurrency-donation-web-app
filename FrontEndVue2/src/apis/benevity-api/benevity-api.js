@@ -1,5 +1,9 @@
 import "isomorphic-fetch";
 
+import NotImplementedError from "@/errors/not-implemented-error";
+import { isEmptyObject, warnStackTrace } from "@/helpers/index.js";
+import searchCauses from "./mocks/search/causes.json";
+
 /**
  * @typedef {import("./config").config} config
  */
@@ -13,9 +17,8 @@ import "isomorphic-fetch";
 export default class BenevityApi {
   static #instance;
 
-  // API authentication configuration
   #baseUrl;
-  // #useMocks;
+  #useMockForUnimplemented;
 
   /**
    * Creates an instance of BenevityApi.
@@ -50,6 +53,31 @@ export default class BenevityApi {
   #initialize(config) {
     if (!isEmptyObject(config)) {
       this.#baseUrl = config.baseUrl;
+      this.#useMockForUnimplemented = config.useMockForUnimplemented;
+    }
+  }
+
+  /**
+   *
+   * @param {string} query
+   */
+  /*
+  Unused params because the API is not implemented.
+  */
+  // eslint-disable-next-line no-unused-vars
+  searchCauses(query = "*") {
+    if (this.#useMockForUnimplemented) {
+      if (query !== "*") {
+        warnStackTrace(
+          `searchCause is mocked yet a non-default query was passed in. query=${query}`
+        );
+      }
+      return searchCauses;
+    } else {
+      /*
+        Remove this.#useMockForUnimplemented when implemented.
+      */
+      throw NotImplementedError("searchCauses");
     }
   }
 }

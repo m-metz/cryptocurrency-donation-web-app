@@ -1,0 +1,336 @@
+{
+  "data": [
+    {
+        "type": "causes",
+        "id": "840-530196605",
+        "attributes": {
+            "name": "AMERICAN RED CROSS",
+            "description": "The American Red Cross prevents and alleviates human suffering in the face of emergencies by mobilizing the power of volunteers and the generosity of donors. As the nation’s premie...",
+            "city": "Washington",
+            "state": {
+                "name": "District of Columbia",
+                "code": "US-DC"
+            },
+            "country": {
+                "name": "United States",
+                "code": "US"
+            },
+            "geo_coordinates": {
+                "latitude": "38.894830",
+                "longitude": "-77.040210"
+            },
+            "donation": {
+                "donor_count": "8300",
+                "trending_score": 6
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/840-530196605.jpg",
+            "categories": [
+                {
+                    "category_name": "Public Safety, Disaster Preparedness, and Relief",
+                    "category_code": "M",
+                    "subcategory_name": "Disaster Preparedness and Relief Services",
+                    "subcategory_code": "M20"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "036-76376807382",
+        "attributes": {
+            "name": "Homeless Connect Sydney",
+            "description": "The first seed of Sydney Homeless Connect was planted during a business trip to San Francisco in 2009. During this overseas trip, Andrew Everingham was invited to come along and vo...",
+            "city": "Sydney",
+            "state": {
+                "name": "New South Wales",
+                "code": "AU-NSW"
+            },
+            "country": {
+                "name": "Australia",
+                "code": "AU"
+            },
+            "geo_coordinates": {
+                "latitude": "-33.813990",
+                "longitude": "151.210400"
+            },
+            "donation": {
+                "donor_count": "10",
+                "trending_score": 3
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/036-76376807382.jpg",
+            "categories": [
+                {
+                    "category_name": "Human Services",
+                    "category_code": "P",
+                    "subcategory_name": "Homeless Persons Centers, Services",
+                    "subcategory_code": "P85"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "826-X1089",
+        "attributes": {
+            "name": "The University of Sheffield",
+            "description": "The University of Sheffield was founded over a hundred years ago, founded on the aspirations and financial support of the people of Sheffield. Today we are a global community and o...",
+            "city": "Sheffield",
+            "state": {
+                "name": "England",
+                "code": "GB-ENG"
+            },
+            "country": {
+                "name": "United Kingdom",
+                "code": "GB"
+            },
+            "geo_coordinates": {
+                "latitude": "53.381966",
+                "longitude": "-1.488688"
+            },
+            "donation": {
+                "donor_count": "0",
+                "trending_score": 3
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/826-X1089.jpg",
+            "categories": [
+                {
+                    "category_name": "Education",
+                    "category_code": "B",
+                    "subcategory_name": "Education N.E.C.",
+                    "subcategory_code": "B99"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "124-122680572RR0001",
+        "attributes": {
+            "name": "CANADIAN UNICEF COMMITTEE COMITE UNICEF CANADA",
+            "description": "UNICEF stands for every child, everywhere. We are guided by the 1989 Convention on the Rights of the Child, advocating for the protection of children’s rights, helping to meet thei...",
+            "city": "Toronto",
+            "state": {
+                "name": "Ontario",
+                "code": "CA-ON"
+            },
+            "country": {
+                "name": "Canada",
+                "code": "CA"
+            },
+            "geo_coordinates": {
+                "latitude": "43.707620",
+                "longitude": "-79.395860"
+            },
+            "donation": {
+                "donor_count": "10",
+                "trending_score": 3
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/124-122680572RR0001.png",
+            "categories": [
+                {
+                    "category_name": "International, Foreign Affairs, and National Security",
+                    "category_code": "Q",
+                    "subcategory_name": "United Nations Association",
+                    "subcategory_code": "Q42"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "124-119219814RR0001",
+        "attributes": {
+            "name": "CANADIAN RED CROSS / CROIX-ROUGE CANADIENNE",
+            "description": "*** Le français suit***\n\nFor more than 125 years, the Canadian Red Cross has provided help to those in need, responding to the most pressing challenges in society. \n   \nToday, as d...",
+            "city": "Ottawa",
+            "state": {
+                "name": "Ontario",
+                "code": "CA-ON"
+            },
+            "country": {
+                "name": "Canada",
+                "code": "CA"
+            },
+            "geo_coordinates": {
+                "latitude": "45.415390",
+                "longitude": "-75.697570"
+            },
+            "donation": {
+                "donor_count": "300",
+                "trending_score": 3
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/124-119219814RR0001.jpg",
+            "categories": [
+                {
+                    "category_name": "Health - General and Rehabilitative",
+                    "category_code": "E",
+                    "subcategory_name": "Health - General and Rehabilitative N.E.C.",
+                    "subcategory_code": "E99"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "840-832331498",
+        "attributes": {
+            "name": "STOCKTON FOOD PANTRY INC",
+            "city": "STOCKTON",
+            "state": {
+                "name": "Kansas",
+                "code": "US-KS"
+            },
+            "country": {
+                "name": "United States",
+                "code": "US"
+            },
+            "geo_coordinates": {
+                "latitude": "39.436328",
+                "longitude": "-99.272195"
+            },
+            "donation": {
+                "donor_count": "10",
+                "trending_score": 3
+            },
+            "categories": [
+                {
+                    "category_name": "Food, Agriculture, and Nutrition",
+                    "category_code": "K",
+                    "subcategory_name": "Food Banks, Food Pantries",
+                    "subcategory_code": "K31"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "840-131846366",
+        "attributes": {
+            "name": "MARCH OF DIMES INC",
+            "description": "March of Dimes leads the fight for the health of all moms and babies. We support research, lead programs and provide education and advocacy so that every baby can have the best pos...",
+            "city": "Arlington",
+            "state": {
+                "name": "Virginia",
+                "code": "US-VA"
+            },
+            "country": {
+                "name": "United States",
+                "code": "US"
+            },
+            "geo_coordinates": {
+                "latitude": "38.859450",
+                "longitude": "-77.049620"
+            },
+            "donation": {
+                "donor_count": "100",
+                "trending_score": 3
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/840-131846366.jpg",
+            "categories": [
+                {
+                    "category_name": "Voluntary Health Organizations and Medical Disciplines",
+                    "category_code": "G",
+                    "subcategory_name": "Birth Defects and Genetic Diseases",
+                    "subcategory_code": "G20"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    },
+    {
+        "type": "causes",
+        "id": "840-471837509",
+        "attributes": {
+            "name": "UNITED HELP UKRAINE",
+            "description": "United Help Ukraine strives to serve as a leading voice and partner that works diligently alongside the people and institutions of Ukraine so the nation and its people remain free,...",
+            "city": "Gaithersburg",
+            "state": {
+                "name": "Maryland",
+                "code": "US-MD"
+            },
+            "country": {
+                "name": "United States",
+                "code": "US"
+            },
+            "geo_coordinates": {
+                "latitude": "12.345678",
+                "longitude": "-123.456780"
+            },
+            "donation": {
+                "donor_count": "10",
+                "trending_score": 3
+            },
+            "logo": "https://logos.benevity.org/400x400/public/clogos/840-471837509.png",
+            "categories": [
+                {
+                    "category_name": "Human Services",
+                    "category_code": "P",
+                    "subcategory_name": "Human Service Organizations - Multipurpose",
+                    "subcategory_code": "P20"
+                }
+            ],
+            "visibility": "match",
+            "status": {
+                "match": "eligible",
+                "program": "eligible",
+                "routing": "eligible",
+                "payment": "eligible"
+            }
+        }
+    }
+  ],
+  "links": {
+    "self": "/search/causes?autocorrect=false&include_children=true&q=*&visibility=donate&sort=default&page_size=25&page=1",
+    "first": "/search/causes?autocorrect=false&include_children=true&q=*&visibility=donate&sort=default&page_size=25&page=1",
+    "next": "/search/causes?autocorrect=false&include_children=true&q=*&visibility=donate&sort=default&page_size=25&page=2",
+    "last": "/search/causes?autocorrect=false&include_children=true&q=*&visibility=donate&sort=default&page_size=25&page=58890"
+  }
+}
