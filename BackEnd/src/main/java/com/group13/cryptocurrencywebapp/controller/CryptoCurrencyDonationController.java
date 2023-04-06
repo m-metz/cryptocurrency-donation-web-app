@@ -92,6 +92,12 @@ public class CryptoCurrencyDonationController {
         return cryptoCurrencyDonationService.createDeposit(id);
     }
 
+    // Testing transaction flow
+    @PostMapping(path = "/flow/createDeposit/DonationId={id}")
+    public void createFlowNewDeposit(@PathVariable int id) {
+        cryptoCurrencyDonationService.createFlowNewDeposit(id);
+    }
+
     @PostMapping(path = "/createTrade/DonationId={id}/Amount={amount}")
     public Trade createNewDeposit(@PathVariable int id, @PathVariable float amount) throws InterruptedException {
         return cryptoCurrencyDonationService.createTrade(id, amount);

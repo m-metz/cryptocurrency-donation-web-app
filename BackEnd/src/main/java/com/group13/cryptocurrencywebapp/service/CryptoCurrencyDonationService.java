@@ -21,6 +21,9 @@ import com.group13.cryptocurrencywebapp.repository.FeeRepository;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.Fill;
+
+import io.netty.channel.VoidChannelPromise;
+
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
 @Service
@@ -66,7 +69,6 @@ public class CryptoCurrencyDonationService {
         newTrade.setCurrency("ETH");
         newTrade.setAmount(amount);
         newTrade.setTime(LocalDateTime.now());
-        newTrade.setToCurrency("USD");
 
         ExchangeTradeResponse response = exchangeService.executeNewTrade(amount);
 
@@ -74,16 +76,20 @@ public class CryptoCurrencyDonationService {
             newTrade.setExchangeReferenceId(response.getClientOrderId());
             float convertedAmount = 0;
             float comission = 0;
+            String comissiontAsset = "";
             for (Fill fill : response.getFills()) {
                 convertedAmount = convertedAmount
                         + (Float.parseFloat(fill.getQty()) * Float.parseFloat(fill.getPrice()));
                 comission = comission + Float.parseFloat(fill.getCommission());
+                comissiontAsset = fill.getCommissionAsset();
+
             }
             newTrade.setConvertedAmount(convertedAmount);
             newTrade.setFinal_amount(convertedAmount);
+            newTrade.setToCurrency(comissiontAsset);
             newTrade = tradeRepository.save(newTrade);
 
-            Fee comissionFee = new Fee(comission, newTrade, "Trade", newTrade.getCurrency());
+            Fee comissionFee = new Fee(comission, newTrade, "Trade", comissiontAsset);
             comissionFee = feeRepository.save(comissionFee);
 
             List<Fee> fees = new ArrayList<>();
@@ -94,6 +100,8 @@ public class CryptoCurrencyDonationService {
 
             donation.setTrade(newTrade);
             donation = cryptoCurrencyDonationRepository.save(donation);
+
+            // INSERT HERE CONNECTION WITH BENEVITY DONATION
 
             return newTrade;
 
@@ -180,6 +188,92 @@ public class CryptoCurrencyDonationService {
                     "No donations found for the userid:  " + userid + ".");
         } else {
             return donations;
+
+        }
+
+    }
+
+    // Transaction Flow methods
+    public void createFlowNewDeposit(int id) {
+        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(id).get();
+
+        CryptoTransfer deposit = new CryptoTransfer();
+
+        deposit.setAmount(donation.getInitialCryptoAmount());
+        deposit.setCurrency("ETH"); // This is hardcoded. In the future, for other coins,
+                                    // you may need to collect this
+                                    // information from the front end when
+                                    // you create the cryptoDonation object
+
+        deposit.setTime(java.time.LocalDateTime.now());
+
+        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        deposit.setExchangeReferenceId(latest.getHash());
+        deposit = cryptoTransferRepository.save(deposit);
+
+        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()), deposit, "Gas", "ETH");
+        gasFee = feeRepository.save(gasFee);
+
+        List<Fee> fees = new ArrayList<>();
+        fees.add(gasFee);
+        // had to change because of immutable list
+        // deposit.setFees(Arrays.asList(new Fee[] { gasFee }));
+        deposit.setFees(fees);
+        deposit.setFinal_amount(
+                deposit.getAmount() - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
+
+        // deposit = cryptoTransferRepository.save(deposit);
+        CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
+
+        donation.setCryptoTransfer(deposit1);
+        donation = cryptoCurrencyDonationRepository.save(donation);
+
+        try {
+            createFlowTrade(donation.getDonationId(), deposit.getFinal_amount());
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            System.out.println("Trade creation Failed");
+        }
+    }
+
+    public void createFlowTrade(int donationId, float amount) throws InterruptedException {
+        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
+        Trade newTrade = new Trade();
+
+        newTrade.setCurrency("ETH");
+        newTrade.setAmount(amount);
+        newTrade.setTime(LocalDateTime.now());
+
+        ExchangeTradeResponse response = exchangeService.executeNewTrade(amount);
+
+        if (response != null) {
+            newTrade.setExchangeReferenceId(response.getClientOrderId());
+            float convertedAmount = 0;
+            float comission = 0;
+            String comissiontAsset = "";
+            for (Fill fill : response.getFills()) {
+                convertedAmount = convertedAmount
+                        + (Float.parseFloat(fill.getQty()) * Float.parseFloat(fill.getPrice()));
+                comission = comission + Float.parseFloat(fill.getCommission());
+                comissiontAsset = fill.getCommissionAsset();
+            }
+            newTrade.setConvertedAmount(convertedAmount);
+            newTrade.setFinal_amount(convertedAmount);
+            newTrade.setToCurrency(comissiontAsset);
+            newTrade = tradeRepository.save(newTrade);
+
+            Fee comissionFee = new Fee(comission, newTrade, "Trade", comissiontAsset);
+            comissionFee = feeRepository.save(comissionFee);
+
+            List<Fee> fees = new ArrayList<>();
+            fees.add(comissionFee);
+
+            newTrade.setFees(fees);
+            newTrade = tradeRepository.save(newTrade);
+
+            donation.setTrade(newTrade);
+            donation = cryptoCurrencyDonationRepository.save(donation);
 
         }
 
