@@ -1,6 +1,8 @@
 import "isomorphic-fetch";
 
-import { isEmptyObject } from "@/helpers/index.js";
+/**
+ * @typedef {import("./config").config} config
+ */
 
 /**
  * Singleton class used to access the Benevity API
@@ -15,6 +17,12 @@ export default class BenevityApi {
   #baseUrl;
   // #useMocks;
 
+  /**
+   * Creates an instance of BenevityApi.
+   *
+   * @constructor
+   * @param {config} config
+   */
   constructor(config) {
     if (BenevityApi.#instance) {
       BenevityApi.#instance.#initialize(config);
@@ -32,9 +40,13 @@ export default class BenevityApi {
     BenevityApi.#instance.#initialize(config);
   }
 
-  /*
-  This actually is used, just not on the `this` object. VSCode ts syntax highlighting can't detect that it's used.
-  */
+  /**
+   * Initialize the config params.
+   *
+   * This actually is used, just not on the `this` object. VSCode ts syntax highlighting can't detect that it's used.
+   *
+   * @param {config} config
+   */
   #initialize(config) {
     if (!isEmptyObject(config)) {
       this.#baseUrl = config.baseUrl;
