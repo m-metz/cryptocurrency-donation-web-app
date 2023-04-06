@@ -340,6 +340,8 @@ public class CryptoCurrencyDonationService {
             donation.setTrade(newTrade);
             donation = cryptoCurrencyDonationRepository.save(donation);
 
+            createBenevityDonation(donation, newTrade.getToCurrency());
+
         }
 
     }
