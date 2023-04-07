@@ -25,6 +25,8 @@ public class CryptoCurrencyDonation {
     private String toCryptoAddress;
     private String fromCryptoAddress;
     private String status;
+    private String benevityDonationId;
+    private boolean receipted;
 
     private float initialCryptoAmount;
 
@@ -50,7 +52,9 @@ public class CryptoCurrencyDonation {
     public CryptoCurrencyDonation(int donationId, String nonProfitId, String donorUserId,
             String cryptocurrencyTxId, String toCryptoAddress, String fromCryptoAddress, String status,
             TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,
-            ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount) {
+            ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount, 
+            String benevityDonationId, boolean receipted) {
+
         this.donationId = donationId;
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
@@ -63,11 +67,14 @@ public class CryptoCurrencyDonation {
         this.cryptoTransfer = cryptoTransfer;
         this.exchangeBankTransfer = exchangeBankTransfer;
         this.initialCryptoAmount = initialCryptoAmount;
+        this.benevityDonationId = benevityDonationId;
+        this.receipted = receipted;
     }
 
     public CryptoCurrencyDonation(String nonProfitId, String donorUserId, String cryptocurrencyTxId,
             String toCryptoAddress, String fromCryptoAddress, String status, TaxReceipt taxReceipt, Trade trade,
-            CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount) {
+            CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount,
+            String benevityDonationId, boolean receipted) {
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
         this.cryptocurrencyTxId = cryptocurrencyTxId;
@@ -79,6 +86,17 @@ public class CryptoCurrencyDonation {
         this.cryptoTransfer = cryptoTransfer;
         this.exchangeBankTransfer = exchangeBankTransfer;
         this.initialCryptoAmount = initialCryptoAmount;
+        this.benevityDonationId = benevityDonationId;
+        this.receipted = receipted;
+    }
+
+    
+    public boolean getReceipted() {
+        return receipted;
+    }
+
+    public void setReceipted(boolean receipted) {
+        this.receipted = receipted;
     }
 
     public int getDonationId() {
@@ -175,6 +193,14 @@ public class CryptoCurrencyDonation {
 
     public void setInitialCryptoAmount(float initialCryptoAmount) {
         this.initialCryptoAmount = initialCryptoAmount;
+    }
+
+    public String getBenevityDonationId() {
+        return benevityDonationId;
+    }
+
+    public void setBenevityDonationId(String benevityDonationId) {
+        this.benevityDonationId = benevityDonationId;
     }
 
 }

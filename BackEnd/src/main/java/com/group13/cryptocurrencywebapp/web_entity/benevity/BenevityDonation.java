@@ -12,5 +12,9 @@ public class BenevityDonation {
     public String retrieveStatus(){
         return data.retrieveStatus();
     }
+
+    public String retrieveDonationId(){
+        return data.getId();
+    }
     
 }
