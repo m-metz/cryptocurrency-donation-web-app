@@ -223,11 +223,11 @@ public class CryptoCurrencyDonationService {
         System.out.println("Donation body created: \n" + payload.toJSONString());
         BenevityDonation benevityResponse = benevityService.createDonation(payload.toJSONString());
 
-        String status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
+        BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
         
         int retryCount = 1;
-        while(!status.equals("INITIATED")){
-            System.out.println("Benevity donation is not yet accepted. Waiting 1 min to retry....");
+        while(!status.retrieveStatus().equals("INITIATED")){
+            System.out.println("Benevity donation is not yet approved. status = " + status.retrieveStatus() +". Waiting 1 min to retry....");
             try {
                 Thread.sleep(60000 * retryCount);
             } catch (InterruptedException e) {
@@ -242,7 +242,14 @@ public class CryptoCurrencyDonationService {
         System.out.println("Benevity donation has been accepted!");
         donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
         donation.setStatus("COMPLETE");
+
+        if(donation.getReceipted()==true){ 
+            benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
+        }
+
     }
+
+
 
     public Result filterTransactions(String toAddress, String fromAddress) {
         List<Result> allTransactions = etherscanService.getTransactions(toAddress);

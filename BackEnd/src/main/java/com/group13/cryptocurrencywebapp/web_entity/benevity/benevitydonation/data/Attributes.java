@@ -37,4 +37,8 @@ public class Attributes {
     public Destination getDestination() {
         return destination;
     }
+
+    public String retrieveReceiptId() {
+        return funds.getReceiptId();
+    }
 }
