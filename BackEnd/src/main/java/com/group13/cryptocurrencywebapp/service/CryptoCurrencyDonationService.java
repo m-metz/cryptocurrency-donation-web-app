@@ -181,7 +181,7 @@ public class CryptoCurrencyDonationService {
             donor.appendField("email",
                     donation.getTaxReceipt().getEmail());
             donor.appendField("receipted",
-                    true);
+                    donation.getReceipted());
 
             JSONObject address = new JSONObject();
             address.appendField("city",
@@ -238,7 +238,10 @@ public class CryptoCurrencyDonationService {
             status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         }
+
         System.out.println("Benevity donation has been accepted!");
+        donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
+        donation.setStatus("COMPLETE");
     }
 
     public Result filterTransactions(String toAddress, String fromAddress) {
