@@ -161,7 +161,161 @@ public class CryptoCurrencyDonationService {
         return deposit1;
     }
 
+    public Result filterTransactions(String toAddress, String fromAddress) {
+        List<Result> allTransactions = etherscanService.getTransactions(toAddress);
+
+        Result latest = null;
+
+        for (int i = 0; i < allTransactions.size(); i++) {
+            if (allTransactions.get(i).getFrom().equals(fromAddress.toLowerCase())) {
+                latest = allTransactions.get(i);
+                break;
+            }
+        }
+
+        return latest;
+    }
+
+    public List<Fee> getAllFees() {
+        return feeRepository.findAll();
+    }
+
+    public List<CryptoCurrencyDonation> getAllDonationsForUser(String userid) {
+        if (userid == null || userid.equals("")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Please inform a valid userid");
+        }
+        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
+
+        if (donations == null || donations.isEmpty() == true) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "No donations found for the userid:  " + userid + ".");
+        } else {
+            return donations;
+
+        }
+
+    }
+
+    // Transaction Flow methods
+    public void createFlowNewDeposit(int id) {
+        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(id).get();
+
+        if(donation.getStatus().equals("NEW")){
+            donation.setStatus("D-INPROGRESS");
+            System.out.println("\n\n~~~StatusUpdate: "+donation.getStatus());
+        }else{
+            System.out.println("This donation is not in the correct state to perform a deposit!");
+            return;
+        }
+
+        
+        CryptoTransfer deposit = new CryptoTransfer();
+
+        deposit.setAmount(donation.getInitialCryptoAmount());
+        deposit.setCurrency("ETH"); // This is hardcoded. In the future, for other coins,
+                                    // you may need to collect this
+                                    // information from the front end when
+                                    // you create the cryptoDonation object
+
+        deposit.setTime(java.time.LocalDateTime.now());
+
+        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        deposit.setExchangeReferenceId(latest.getHash());
+        deposit = cryptoTransferRepository.save(deposit);
+
+        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()), deposit, "Gas", "ETH");
+        gasFee = feeRepository.save(gasFee);
+
+        List<Fee> fees = new ArrayList<>();
+        fees.add(gasFee);
+        // had to change because of immutable list
+        // deposit.setFees(Arrays.asList(new Fee[] { gasFee }));
+        deposit.setFees(fees);
+        deposit.setFinal_amount(
+                deposit.getAmount() - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
+
+        // deposit = cryptoTransferRepository.save(deposit);
+        CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
+
+        donation.setCryptoTransfer(deposit1);
+        donation = cryptoCurrencyDonationRepository.save(donation);
+
+
+
+        try {
+            createFlowTrade(donation.getDonationId(), deposit.getFinal_amount());
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            System.out.println("Trade creation Failed");
+        }
+    }
+
+    public void createFlowTrade(int donationId, float amount) throws InterruptedException {
+        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
+        Trade newTrade = new Trade();
+
+        if(donation.getStatus().equals("D-INPROGRESS")){
+            donation.setStatus("T-INPROGRESS");
+            System.out.println("\n\n~~~StatusUpdate: "+donation.getStatus());
+        }else{
+            System.out.println("This donation is not in the correct state to perform a trade!");
+            return;
+        }
+
+        newTrade.setCurrency("ETH");
+        newTrade.setAmount(amount);
+        newTrade.setTime(LocalDateTime.now());
+
+        ExchangeTradeResponse response = exchangeService.executeNewTrade(amount);
+
+        if (response != null) {
+            newTrade.setExchangeReferenceId(response.getClientOrderId());
+            float convertedAmount = 0;
+            float comission = 0;
+            String comissiontAsset = "";
+            for (Fill fill : response.getFills()) {
+                convertedAmount = convertedAmount
+                        + (Float.parseFloat(fill.getQty()) * Float.parseFloat(fill.getPrice()));
+                comission = comission + Float.parseFloat(fill.getCommission());
+                comissiontAsset = fill.getCommissionAsset();
+            }
+            newTrade.setConvertedAmount(convertedAmount);
+            newTrade.setFinal_amount(convertedAmount);
+            newTrade.setToCurrency(comissiontAsset);
+            newTrade = tradeRepository.save(newTrade);
+
+            Fee comissionFee = new Fee(comission, newTrade, "Trade", comissiontAsset);
+            comissionFee = feeRepository.save(comissionFee);
+
+            List<Fee> fees = new ArrayList<>();
+            fees.add(comissionFee);
+
+            newTrade.setFees(fees);
+            newTrade = tradeRepository.save(newTrade);
+
+            donation.setTrade(newTrade);
+            donation = cryptoCurrencyDonationRepository.save(donation);
+
+            createBenevityDonation(donation, "USD");
+            
+
+        }
+
+    }
+
     public void createBenevityDonation(CryptoCurrencyDonation donation, String currency) {
+
+        if(donation.getStatus().equals("T-INPROGRESS")){
+            donation.setStatus("BD-INPROGRESS");
+            System.out.println("\n\n~~~StatusUpdate: "+donation.getStatus());
+        }
+        else{
+            System.out.println("This donation is not in the correct state to create a Benevity donation!");
+            return;
+        }
+        
         JSONObject payload = new JSONObject();
             JSONObject data = new JSONObject();
             data.appendField("type",
@@ -245,133 +399,6 @@ public class CryptoCurrencyDonationService {
 
         if(donation.getReceipted()==true){ 
             benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
-        }
-
-    }
-
-
-
-    public Result filterTransactions(String toAddress, String fromAddress) {
-        List<Result> allTransactions = etherscanService.getTransactions(toAddress);
-
-        Result latest = null;
-
-        for (int i = 0; i < allTransactions.size(); i++) {
-            if (allTransactions.get(i).getFrom().equals(fromAddress.toLowerCase())) {
-                latest = allTransactions.get(i);
-                break;
-            }
-        }
-
-        return latest;
-    }
-
-    public List<Fee> getAllFees() {
-        return feeRepository.findAll();
-    }
-
-    public List<CryptoCurrencyDonation> getAllDonationsForUser(String userid) {
-        if (userid == null || userid.equals("")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Please inform a valid userid");
-        }
-        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
-
-        if (donations == null || donations.isEmpty() == true) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "No donations found for the userid:  " + userid + ".");
-        } else {
-            return donations;
-
-        }
-
-    }
-
-    // Transaction Flow methods
-    public void createFlowNewDeposit(int id) {
-        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(id).get();
-
-        CryptoTransfer deposit = new CryptoTransfer();
-
-        deposit.setAmount(donation.getInitialCryptoAmount());
-        deposit.setCurrency("ETH"); // This is hardcoded. In the future, for other coins,
-                                    // you may need to collect this
-                                    // information from the front end when
-                                    // you create the cryptoDonation object
-
-        deposit.setTime(java.time.LocalDateTime.now());
-
-        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
-        deposit.setExchangeReferenceId(latest.getHash());
-        deposit = cryptoTransferRepository.save(deposit);
-
-        Fee gasFee = new Fee(Float.parseFloat(latest.getGasUsed()), deposit, "Gas", "ETH");
-        gasFee = feeRepository.save(gasFee);
-
-        List<Fee> fees = new ArrayList<>();
-        fees.add(gasFee);
-        // had to change because of immutable list
-        // deposit.setFees(Arrays.asList(new Fee[] { gasFee }));
-        deposit.setFees(fees);
-        deposit.setFinal_amount(
-                deposit.getAmount() - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
-
-        // deposit = cryptoTransferRepository.save(deposit);
-        CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
-
-        donation.setCryptoTransfer(deposit1);
-        donation = cryptoCurrencyDonationRepository.save(donation);
-
-        try {
-            createFlowTrade(donation.getDonationId(), deposit.getFinal_amount());
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.out.println("Trade creation Failed");
-        }
-    }
-
-    public void createFlowTrade(int donationId, float amount) throws InterruptedException {
-        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
-        Trade newTrade = new Trade();
-
-        newTrade.setCurrency("ETH");
-        newTrade.setAmount(amount);
-        newTrade.setTime(LocalDateTime.now());
-
-        ExchangeTradeResponse response = exchangeService.executeNewTrade(amount);
-
-        if (response != null) {
-            newTrade.setExchangeReferenceId(response.getClientOrderId());
-            float convertedAmount = 0;
-            float comission = 0;
-            String comissiontAsset = "";
-            for (Fill fill : response.getFills()) {
-                convertedAmount = convertedAmount
-                        + (Float.parseFloat(fill.getQty()) * Float.parseFloat(fill.getPrice()));
-                comission = comission + Float.parseFloat(fill.getCommission());
-                comissiontAsset = fill.getCommissionAsset();
-            }
-            newTrade.setConvertedAmount(convertedAmount);
-            newTrade.setFinal_amount(convertedAmount);
-            newTrade.setToCurrency(comissiontAsset);
-            newTrade = tradeRepository.save(newTrade);
-
-            Fee comissionFee = new Fee(comission, newTrade, "Trade", comissiontAsset);
-            comissionFee = feeRepository.save(comissionFee);
-
-            List<Fee> fees = new ArrayList<>();
-            fees.add(comissionFee);
-
-            newTrade.setFees(fees);
-            newTrade = tradeRepository.save(newTrade);
-
-            donation.setTrade(newTrade);
-            donation = cryptoCurrencyDonationRepository.save(donation);
-
-            createBenevityDonation(donation, "USD");
-            
-
         }
 
     }
