@@ -18,4 +18,10 @@ new Vue({
   render: (h) => h(App),
 }).$mount("#app");
 
-console.log(benevityApi.searchCauses("*"));
+benevityApi.searchCauses("*").then((causes) => {
+  console.log(causes);
+});
+
+benevityApi.causes("124-122680572RR0001").then((cause) => {
+  console.log(cause);
+});

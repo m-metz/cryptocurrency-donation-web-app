@@ -14,6 +14,6 @@ Copy config.template.js to config.js and fill in the required configuration para
  * @type {config} object
  */
 export default {
-  baseUrl: "http://localhost:8080",
+  baseUrl: "http://localhost:8080/api/v1/cryptocurrencydonation/Benevity",
   useMockForUnimplemented: true,
 };

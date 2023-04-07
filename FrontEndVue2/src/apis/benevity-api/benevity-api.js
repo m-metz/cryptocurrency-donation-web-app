@@ -58,14 +58,39 @@ export default class BenevityApi {
   }
 
   /**
+   * Provides full details of a cause, like their full description etc. that a
+   * search would shorten.
    *
-   * @param {string} query
+   * https://developer.benevity.org/guides/causes/get-cause-details.html
+   *
+   * @param {string} id A causes id, it may be alphanumeric and have -.
+   * @returns {Promise}
    */
-  /*
-  Unused params because the API is not implemented.
-  */
-  // eslint-disable-next-line no-unused-vars
-  searchCauses(query = "*") {
+  async causes(id) {
+    return fetch(this.#baseUrl + "/causes/" + id)
+      .then(function (response) {
+        if (!response.ok) {
+          console.log(response.text());
+          throw new Error(`Could not get cause details by id=${id}`);
+        }
+        return response.json();
+      })
+      .catch(function (ex) {
+        console.error(ex);
+      });
+  }
+
+  /**
+   * Search for causes on the benevity API by passing in a query string.
+   *
+   * https://developer.benevity.org/guides/causes/search-cause.html
+   *
+   * You can also use "id:123-456789" format to look up a specific id, or
+   * '"123-456789"' to get a specific cause, and the cause id's children.
+   * @param {string} [query="*"]
+   * @returns {Promise}
+   */
+  async searchCauses(query = "*") {
     if (this.#useMockForUnimplemented) {
       if (query !== "*") {
         warnStackTrace(
