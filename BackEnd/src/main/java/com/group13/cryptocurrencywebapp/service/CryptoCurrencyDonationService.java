@@ -105,7 +105,7 @@ public class CryptoCurrencyDonationService {
             donation = cryptoCurrencyDonationRepository.save(donation);
 
             // INSERT HERE CONNECTION WITH BENEVITY DONATION
-            createBenevityDonation(donation, newTrade.getToCurrency());
+            createBenevityDonation(donation, "USD");
             return newTrade;
 
         } else {
@@ -161,65 +161,128 @@ public class CryptoCurrencyDonationService {
     }
 
     public void createBenevityDonation(CryptoCurrencyDonation donation, String currency) {
-        JSONArray payload = new JSONArray();
-            JSONArray data = new JSONArray();
-            data.add(new JSONObject().appendField("type",
-                    "donations"));
+        JSONObject payload = new JSONObject();
+            JSONObject data = new JSONObject();
+            data.appendField("type",
+                    "donations");
 
-            JSONArray attributes = new JSONArray();
+            JSONObject attributes = new JSONObject();
 
-            JSONArray destination = new JSONArray();
-            destination.add(new JSONObject().appendField("recipientId",
-                    donation.getNonProfitId()));
-
-            JSONArray donor = new JSONArray();
-            donor.add(new JSONObject().appendField("fullName",
+            JSONObject destination = new JSONObject();
+            destination.appendField("recipientId",
+                    donation.getNonProfitId());
+            attributes.appendField("destination", destination);
+            
+            JSONObject donor = new JSONObject();
+            donor.appendField("fullName",
                     donation.getTaxReceipt().getGivenNames() + " " +
-                            donation.getTaxReceipt().getLastName()));
-            donor.add(new JSONObject().appendField("email",
-                    donation.getTaxReceipt().getEmail()));
-            donor.add(new JSONObject().appendField("receipted",
-                    true));
+                            donation.getTaxReceipt().getLastName());
+            donor.appendField("email",
+                    donation.getTaxReceipt().getEmail());
+            donor.appendField("receipted",
+                    true);
 
-            JSONArray address = new JSONArray();
-            address.add(new JSONObject().appendField("city",
-                    donation.getTaxReceipt().getCity()));
-            address.add(new JSONObject().appendField("country",
-                    donation.getTaxReceipt().getCountry()));
-            address.add(new JSONObject().appendField("line1",
-                    donation.getTaxReceipt().getAddress1()));
-            address.add(new JSONObject().appendField("line2",
-                    donation.getTaxReceipt().getAddress2()));
-            address.add(new JSONObject().appendField("state",
-                    donation.getTaxReceipt().getStateProvinceRegion()));
-            address.add(new JSONObject().appendField("zip",
-                    donation.getTaxReceipt().getZipPostalCode()));
+            JSONObject address = new JSONObject();
+            address.appendField("city",
+                    donation.getTaxReceipt().getCity());
+            address.appendField("country",
+                    donation.getTaxReceipt().getCountry());
+            address.appendField("line1",
+                    donation.getTaxReceipt().getAddress1());
+            address.appendField("line2",
+                    donation.getTaxReceipt().getAddress2());
+            address.appendField("state",
+                    donation.getTaxReceipt().getStateProvinceRegion());
+            address.appendField("zip",
+                    donation.getTaxReceipt().getZipPostalCode());
 
-            donor.add(address);
+            donor.appendField("address",address);
 
-            attributes.add(donor);
+            attributes.appendField("donor",donor);
 
-            JSONArray funds = new JSONArray();
-            funds.add(new JSONObject().appendField("amount",
-                    donation.getTaxReceipt().getAmount()));
-            funds.add(new JSONObject().appendField("currency",
-                    currency));
-            funds.add(new JSONObject().appendField("paymentType",
-                    "DONATION_REPORT"));
-            funds.add(new JSONObject().appendField("source",
-                    "COMPANY"));
-            attributes.add(funds);
+            JSONObject funds = new JSONObject();
+            funds.appendField("amount",
+                    donation.getTaxReceipt().getAmount());
+            funds.appendField("currencyCode",
+                    currency);
+            funds.appendField("paymentType",
+                    "DONATION_REPORT");
+            funds.appendField("source",
+                    "COMPANY");
+            attributes.appendField("funds",funds);
 
             // Metadata if needed
             // JSONArray metadata = new JSONArray();
             // metadata.add(new JSONObject().appendField("amount",
             // donation.getTaxReceipt().getAmount()));
 
-            data.add(attributes);
-            
-        payload.add(data);
-        benevityService.createDonation(payload.toJSONString());
+            data.appendField("attributes",(attributes));
+
+        payload.appendField("data", data);
         System.out.println("Donation body created: \n" + payload.toJSONString());
+        benevityService.createDonation(payload.toJSONString());
+
+
+        // JSONArray payload = new JSONArray();
+        //     JSONArray data = new JSONArray();
+        //     data.add(new JSONObject().appendField("type",
+        //             "donations"));
+
+        //     JSONArray attributes = new JSONArray();
+
+        //     JSONArray destination = new JSONArray();
+        //     destination.add(new JSONObject().appendField("recipientId",
+        //             donation.getNonProfitId()));
+
+        //     JSONArray donor = new JSONArray();
+        //     donor.add(new JSONObject().appendField("fullName",
+        //             donation.getTaxReceipt().getGivenNames() + " " +
+        //                     donation.getTaxReceipt().getLastName()));
+        //     donor.add(new JSONObject().appendField("email",
+        //             donation.getTaxReceipt().getEmail()));
+        //     donor.add(new JSONObject().appendField("receipted",
+        //             true));
+
+        //     JSONArray address = new JSONArray();
+        //     address.add(new JSONObject().appendField("city",
+        //             donation.getTaxReceipt().getCity()));
+        //     address.add(new JSONObject().appendField("country",
+        //             donation.getTaxReceipt().getCountry()));
+        //     address.add(new JSONObject().appendField("line1",
+        //             donation.getTaxReceipt().getAddress1()));
+        //     address.add(new JSONObject().appendField("line2",
+        //             donation.getTaxReceipt().getAddress2()));
+        //     address.add(new JSONObject().appendField("state",
+        //             donation.getTaxReceipt().getStateProvinceRegion()));
+        //     address.add(new JSONObject().appendField("zip",
+        //             donation.getTaxReceipt().getZipPostalCode()));
+
+        //     donor.add(address);
+
+        //     attributes.add(donor);
+
+        //     JSONArray funds = new JSONArray();
+        //     funds.add(new JSONObject().appendField("amount",
+        //             donation.getTaxReceipt().getAmount()));
+        //     funds.add(new JSONObject().appendField("currency",
+        //             currency));
+        //     funds.add(new JSONObject().appendField("paymentType",
+        //             "DONATION_REPORT"));
+        //     funds.add(new JSONObject().appendField("source",
+        //             "COMPANY"));
+        //     attributes.add(funds);
+
+        //     // Metadata if needed
+        //     // JSONArray metadata = new JSONArray();
+        //     // metadata.add(new JSONObject().appendField("amount",
+        //     // donation.getTaxReceipt().getAmount()));
+
+        //     data.add(attributes);
+
+        // payload.add(data);
+        // System.out.println("Donation body created: \n" + payload.toJSONString());
+        // benevityService.createDonation(payload.toJSONString());
+        
     }
 
     public Result filterTransactions(String toAddress, String fromAddress) {
