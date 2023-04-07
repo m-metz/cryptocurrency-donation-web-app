@@ -57,9 +57,15 @@ public class CryptoCurrencyDonationService {
 
     public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
-        cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
+        if (cryptoDonation != null) {
+            cryptoDonation.setStatus("NEW");
+            cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
+            return cryptoDonation;
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Donation Creation Failed! Invalid information sent.");
+        }
 
-        return cryptoDonation;
     }
 
     public List<CryptoCurrencyDonation> getAllDonations() {
@@ -317,71 +323,72 @@ public class CryptoCurrencyDonationService {
         }
         
         JSONObject payload = new JSONObject();
-            JSONObject data = new JSONObject();
-            data.appendField("type",
-                    "donations");
+        JSONObject data = new JSONObject();
+        data.appendField("type",
+                "donations");
 
-            JSONObject attributes = new JSONObject();
+        JSONObject attributes = new JSONObject();
 
-            JSONObject destination = new JSONObject();
-            destination.appendField("recipientId",
-                    donation.getNonProfitId());
-            attributes.appendField("destination", destination);
-            
-            JSONObject donor = new JSONObject();
-            donor.appendField("fullName",
-                    donation.getTaxReceipt().getGivenNames() + " " +
-                            donation.getTaxReceipt().getLastName());
-            donor.appendField("email",
-                    donation.getTaxReceipt().getEmail());
-            donor.appendField("receipted",
-                    donation.getReceipted());
+        JSONObject destination = new JSONObject();
+        destination.appendField("recipientId",
+                donation.getNonProfitId());
+        attributes.appendField("destination", destination);
 
-            JSONObject address = new JSONObject();
-            address.appendField("city",
-                    donation.getTaxReceipt().getCity());
-            address.appendField("country",
-                    donation.getTaxReceipt().getCountry());
-            address.appendField("line1",
-                    donation.getTaxReceipt().getAddress1());
-            address.appendField("line2",
-                    donation.getTaxReceipt().getAddress2());
-            address.appendField("state",
-                    donation.getTaxReceipt().getStateProvinceRegion());
-            address.appendField("zip",
-                    donation.getTaxReceipt().getZipPostalCode());
+        JSONObject donor = new JSONObject();
+        donor.appendField("fullName",
+                donation.getTaxReceipt().getGivenNames() + " " +
+                        donation.getTaxReceipt().getLastName());
+        donor.appendField("email",
+                donation.getTaxReceipt().getEmail());
+        donor.appendField("receipted",
+                donation.getReceipted());
 
-            donor.appendField("address",address);
+        JSONObject address = new JSONObject();
+        address.appendField("city",
+                donation.getTaxReceipt().getCity());
+        address.appendField("country",
+                donation.getTaxReceipt().getCountry());
+        address.appendField("line1",
+                donation.getTaxReceipt().getAddress1());
+        address.appendField("line2",
+                donation.getTaxReceipt().getAddress2());
+        address.appendField("state",
+                donation.getTaxReceipt().getStateProvinceRegion());
+        address.appendField("zip",
+                donation.getTaxReceipt().getZipPostalCode());
 
-            attributes.appendField("donor",donor);
+        donor.appendField("address", address);
 
-            JSONObject funds = new JSONObject();
-            funds.appendField("amount",
-                    donation.getTaxReceipt().getAmount());
-            funds.appendField("currencyCode",
-                    currency);
-            funds.appendField("paymentType",
-                    "DONATION_REPORT");
-            funds.appendField("source",
-                    "COMPANY");
-            attributes.appendField("funds",funds);
+        attributes.appendField("donor", donor);
 
-            // Metadata if needed
-            // JSONArray metadata = new JSONArray();
-            // metadata.add(new JSONObject().appendField("amount",
-            // donation.getTaxReceipt().getAmount()));
+        JSONObject funds = new JSONObject();
+        funds.appendField("amount",
+                donation.getTaxReceipt().getAmount());
+        funds.appendField("currencyCode",
+                currency);
+        funds.appendField("paymentType",
+                "DONATION_REPORT");
+        funds.appendField("source",
+                "COMPANY");
+        attributes.appendField("funds", funds);
 
-            data.appendField("attributes",(attributes));
+        // Metadata if needed
+        // JSONArray metadata = new JSONArray();
+        // metadata.add(new JSONObject().appendField("amount",
+        // donation.getTaxReceipt().getAmount()));
+
+        data.appendField("attributes", (attributes));
 
         payload.appendField("data", data);
         System.out.println("Donation body created: \n" + payload.toJSONString());
         BenevityDonation benevityResponse = benevityService.createDonation(payload.toJSONString());
 
         BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
-        
+
         int retryCount = 1;
-        while(!status.retrieveStatus().equals("INITIATED")){
-            System.out.println("Benevity donation is not yet approved. status = " + status.retrieveStatus() +". Waiting 1 min to retry....");
+        while (!status.retrieveStatus().equals("INITIATED")) {
+            System.out.println("Benevity donation is not yet approved. status = " + status.retrieveStatus()
+                    + ". Waiting 1 min to retry....");
             try {
                 Thread.sleep(60000 * retryCount);
             } catch (InterruptedException e) {
@@ -397,7 +404,7 @@ public class CryptoCurrencyDonationService {
         donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
         donation.setStatus("COMPLETE");
 
-        if(donation.getReceipted()==true){ 
+        if (donation.getReceipted() == true) {
             benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
         }
 
