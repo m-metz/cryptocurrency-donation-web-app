@@ -137,7 +137,7 @@ CREATE TABLE CURRENCY_DONATION (
     initial_crypto_amount		float, 
     status						varchar(20) not null,
     benevity_donation_id		varchar(255),
-    receipted					boolean,currency_donationcurrency_donation
+    receipted					boolean,
 
     
 	primary key (donation_id),
