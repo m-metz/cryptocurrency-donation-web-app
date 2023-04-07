@@ -5,6 +5,7 @@ public class Funds {
     private String currencyCode;
     private String paymentType;
     private String source;
+    private String receiptId;
 
     public int getAmount() {
         return amount;
@@ -21,4 +22,10 @@ public class Funds {
     public String getSource() {
         return source;
     }
+
+    public String getReceiptId() {
+        return receiptId;
+    }
+
+    
 }

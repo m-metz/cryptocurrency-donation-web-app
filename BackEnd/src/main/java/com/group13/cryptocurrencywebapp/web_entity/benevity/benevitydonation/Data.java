@@ -21,5 +21,8 @@ public class Data {
     public String getType() {
         return type;
     }
+    public String retrieveReceiptId() {
+        return attributes.retrieveReceiptId();
+    }
     
 }
