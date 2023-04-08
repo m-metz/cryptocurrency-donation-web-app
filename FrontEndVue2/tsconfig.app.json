@@ -1,0 +1,29 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "vite.config.ts", "src/**/*.json"],
+  "exclude": ["src/**/__tests__/*"],
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    /*
+    This prevents "Cannot write file '<...>.js' because it would overwrite
+    input file. ts" error messages.
+
+    Vite already compiles to js, so we don't need extra js being emitted by ts
+    files. Although this emitting of js seems to be prevented by vite, ts
+    intellisense seems to think js is still going to output and overwrite
+    its own self (because it is included in **\/* and has the same file
+    extension). You cant exclude js, or only include ts because then js
+    intellisense doesn't work.
+    */
+    "noEmit":true,
+    "allowJs":true,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "vueCompilerOptions": {
+    "target": 2.7
+  }
+}

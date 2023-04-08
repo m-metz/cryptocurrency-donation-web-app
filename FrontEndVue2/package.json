@@ -3,15 +3,18 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
     "test:e2e": "start-server-and-test preview http://localhost:4173/ 'cypress open --e2e'",
     "test:e2e:ci": "start-server-and-test preview http://localhost:4173/ 'cypress run --e2e'",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
     "buffer": "^6.0.3",
+    "fast-xml-parser": "^4.1.3",
     "isomorphic-fetch": "^3.0.0",
     "mdbvue": "^6.7.3",
     "pinia": "^2.0.16",
@@ -20,21 +23,29 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
+    "@types/isomorphic-fetch": "^0.0.36",
+    "@types/jsdom": "^16.2.15",
+    "@types/node": "^16.18.23",
     "@vitejs/plugin-legacy": "^2.0.0",
     "@vitejs/plugin-vue2": "^1.1.2",
     "@vitejs/plugin-vue2-jsx": "^1.0.2",
     "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.2",
     "@vue/test-utils": "^1.3.0",
+    "@vue/tsconfig": "^0.1.3",
     "cypress": "^10.3.0",
     "eslint": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-vue": "^9.0.0",
     "jsdom": "^20.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "start-server-and-test": "^1.14.0",
     "terser": "^5.14.2",
+    "typescript": "~4.7.4",
     "vite": "^3.0.2",
     "vitest": "^0.18.1",
-    "vue-template-compiler": "^2.7.7"
+    "vue-template-compiler": "^2.7.7",
+    "vue-tsc": "^0.38.9"
   }
 }
