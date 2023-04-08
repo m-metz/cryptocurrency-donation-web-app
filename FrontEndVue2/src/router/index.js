@@ -13,14 +13,34 @@ const router = new VueRouter({
       component: () => import("@/views/NonProfitsView.vue"),
     },
     {
+      path: "/non-profit/:id",
+      name: "non-profit",
+      component: () => import("@/views/NonProfitView.vue"),
+    },
+    {
       path: "/cryptocurrency-donations",
       name: "cryptocurrency-donations",
       // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
+      // this generates a separate chunk (...View.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import("@/views/CryptocurrencyDonationsView.vue"),
     },
   ],
+});
+
+function hasQueryParams(route) {
+  return !!Object.keys(route.query).length;
+}
+
+/*
+Keep query params if to route does not have any.
+*/
+router.beforeEach((to, from, next) => {
+  if (!hasQueryParams(to) && hasQueryParams(from)) {
+    next({ name: to.name, params: to.params, query: from.query });
+  } else {
+    next();
+  }
 });
 
 export default router;
