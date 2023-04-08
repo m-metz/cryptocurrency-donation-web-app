@@ -6,9 +6,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
@@ -27,6 +31,8 @@ import net.minidev.json.JSONObject;
 
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
+@Configuration
+@EnableScheduling
 @Service
 public class CryptoCurrencyDonationService {
     private final CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository;
@@ -407,6 +413,70 @@ public class CryptoCurrencyDonationService {
             benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
         }
 
+    }
+
+    @Transactional
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelayString = "${initialDelay.in.milliseconds}")
+    public void retryTimedoutCryptoDonations() throws InterruptedException {
+        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findByStatusContaining("TIMEDOUT");
+        if (donations.isEmpty()) {
+            System.out.println("No Timedout donations found");
+            return;
+        }
+        for (CryptoCurrencyDonation donation : donations) {
+            if (donation.getStatus().equals("D-TIMEDOUT")) {
+                CryptoTransfer deposit = donation.getCryptoTransfer();
+                donation.setCryptoTransfer(null);
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                if (deposit != null) {
+                    // Deleting failed Crypto Transfer
+                    List<Fee> fees = deposit.getFees();
+                    deposit.setFees(null);
+                    deposit = cryptoTransferRepository.save(deposit);
+                    if (fees.isEmpty() == false) {
+                        for (Fee fee : fees) {
+                            feeRepository.delete(fee);
+                        }
+                    }
+
+                    cryptoTransferRepository.delete(deposit);
+                }
+                // Updating Donation and Starting over CryptoTransfer flow
+                donation.setStatus("NEW");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                createFlowNewDeposit(donation.getDonationId());
+                System.out.println("Deposit recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+            } else if (donation.getStatus().equals("T-TIMEDOUT")) {
+                Trade trade = donation.getTrade();
+                donation.setTrade(null);
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                if (trade != null) {
+                    // Deleting failed Trade
+                    List<Fee> fees = trade.getFees();
+                    trade.setFees(null);
+                    trade = tradeRepository.save(trade);
+                    if (fees.isEmpty() == false) {
+                        for (Fee fee : fees) {
+                            feeRepository.delete(fee);
+                        }
+                    }
+                    tradeRepository.delete(trade);
+                }
+                // Updating Donation and Starting over Trade flow
+                donation.setStatus("D-INPROGRESS");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                createFlowTrade(donation.getDonationId(), donation.getCryptoTransfer().getFinal_amount());
+                System.out.println("Trade recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+            } else {
+                // Updating Donation and Starting over Benevity Donation flow
+                donation.setStatus("T-INPROGRESS");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                createBenevityDonation(donation, "USD");
+                System.out.println(
+                        "Benevity Donation recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+            }
+
+        }
     }
 
 }
