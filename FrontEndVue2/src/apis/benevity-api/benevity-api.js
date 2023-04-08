@@ -2,7 +2,8 @@ import "isomorphic-fetch";
 
 import NotImplementedError from "@/errors/not-implemented-error";
 import { isEmptyObject, warnStackTrace } from "@/helpers/index.js";
-import searchCauses from "./mocks/search/causes.json";
+import searchCausesQueryQStar from "./mocks/search/causes_q=[star].json";
+import adapterGeneralGetUserProfileQueryUserTestUserCA from "./mocks/Adapter.General/MockID1/GetUserProfile_user=TestUserCA.xml";
 
 /**
  * @typedef {import("./config").config} config
@@ -81,23 +82,53 @@ export default class BenevityApi {
   }
 
   /**
+   * Get a users profile by your company's user ID.
+   *
+   * https://apidocs.benevity-platform.org/docs/index.jsp?context=operation&adapter=Adapter.General&operation=GetUserProfile&sort=
+   *
+   * @param {string} user Unique identifier of the User to activate. This is
+   *  the identifier supplied by the Participating Business when the User was
+   *  added to the system.
+   * @returns {Promise}
+   */
+  async adapterGeneralGetUserProfile(user) {
+    if (this.#useMockForUnimplemented) {
+      const expectedUser = "TestUserCA";
+      if (user !== expectedUser) {
+        warnStackTrace(
+          "searchCause is mocked but the parameters don't match the mock. " +
+            `user=${user}, expectedUser=${expectedUser}`
+        );
+      }
+      return adapterGeneralGetUserProfileQueryUserTestUserCA;
+    } else {
+      /*
+        Remove this.#useMockForUnimplemented when implemented.
+      */
+      throw NotImplementedError("searchCauses");
+    }
+  }
+
+  /**
    * Search for causes on the benevity API by passing in a query string.
    *
    * https://developer.benevity.org/guides/causes/search-cause.html
    *
-   * You can also use "id:123-456789" format to look up a specific id, or
-   * '"123-456789"' to get a specific cause, and the cause id's children.
-   * @param {string} [query="*"]
+   * @param {string} [query="*"] the q parameter string. You can also use
+   *  "id:123-456789" format to look up a specific id, or '"123-456789"' to get
+   *  a specific cause, and the cause id's children.
    * @returns {Promise}
    */
   async searchCauses(query = "*") {
     if (this.#useMockForUnimplemented) {
-      if (query !== "*") {
+      const expectedQuery = "*";
+      if (query !== expectedQuery) {
         warnStackTrace(
-          `searchCause is mocked yet a non-default query was passed in. query=${query}`
+          "searchCause is mocked but the parameters don't match the mock. " +
+            `query=${query}, expectedQuery=${expectedQuery}`
         );
       }
-      return searchCauses;
+      return searchCausesQueryQStar;
     } else {
       /*
         Remove this.#useMockForUnimplemented when implemented.

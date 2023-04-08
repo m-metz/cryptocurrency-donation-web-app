@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response type="GetUserProfile" status="SUCCESS" id="5f044307-7a53-4e7e-9ae7-e9ec3ee6f6b2">
+    <request>
+        <param name="hmac" value="lkxMlKvY7rLiZylSX8KeZ+M6P1A=" />
+        <param name="user" value="TestUserCA" />
+    </request>
+    <messages>
+        <message type="info" code="803" field="">
+            This xml has been deprecated -- replace /content/user/account element with
+            /content/user/accounts/account elements.
+        </message>
+    </messages>
+    <content type="text/xml; charset=utf-8">
+        <user id="G0NXYU3MZY" lastname="Doe" firstname="John" initials=""
+            email="testuser@benevity.com" address-street="123 Main St" address-city="Los Angeles"
+            address-state="CA" address-postcode="90210" address-country="US" active="yes"
+            deleted="no">
+            <allocations>
+                <portfolio id="" type="0" fraction="100" name="Unallocated" />
+            </allocations>
+            <identifiers />
+            <attestations />
+            <preferences />
+            <teams />
+        </user>
+    </content>
+</response>

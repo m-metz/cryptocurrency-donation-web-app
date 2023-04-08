@@ -25,3 +25,9 @@ benevityApi.searchCauses("*").then((causes) => {
 benevityApi.causes("124-122680572RR0001").then((cause) => {
   console.log(cause);
 });
+
+benevityApi
+  .adapterGeneralGetUserProfile("TestUserCA")
+  .then((getUserProfile) => {
+    console.log(getUserProfile);
+  });
