@@ -11,7 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.detail.CauseDetail;
-
+import com.nimbusds.oauth2.sdk.Response;
+import net.minidev.json.JSONObject;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -35,7 +36,7 @@ public class BenevityService {
     }
 
     // Get the status of an existing donation
-    public String getDonationStatus(String id) {
+    public BenevityDonation getDonationStatus(String id) {
         ResponseEntity<BenevityDonation> response = webclient.get()
                 .uri("/donations/" + id)
                 .retrieve()
@@ -43,12 +44,42 @@ public class BenevityService {
                 .block();
 
         BenevityDonation donation = response.getBody();
-        String state = null;
+        // String state = null;
 
-        if (!(donation == null)) {
-            state = donation.retrieveStatus();
+        // if (!(donation == null)) {
+        //     state = donation.retrieveStatus();
+        // }
+        return donation;
+    }
+
+    public void sendReceiptEmail(String receiptId, String email){
+
+        JSONObject payload = new JSONObject();
+
+            JSONObject data = new JSONObject();
+
+            data.appendField("type", "emails");
+                JSONObject attributes = new JSONObject();
+                attributes.appendField("to",email);
+
+            data.appendField("attributes", attributes);
+
+        payload.appendField("data", data);
+
+        ResponseEntity<String> response = webclient.post()
+
+                .uri("/receipts/" + receiptId + "/email")
+                .body(Mono.just(payload.toJSONString()), String.class)
+                .header("Content-type","application/vnd.api+json")
+                .retrieve()
+                .toEntity(String.class)
+                .block();
+        System.out.println("\n\n\n~~~~~~~RESPONSE");
+        System.out.println(response.getStatusCode());
+
+        if(response.getStatusCode().is2xxSuccessful()){
+            System.out.println("\n\nTRANSACTION COMPLETE!");
         }
-        return state;
     }
 
     public Cause getOneCause(String id) {

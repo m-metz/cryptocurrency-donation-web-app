@@ -67,7 +67,7 @@ public class CryptoCurrencyDonationController {
     }
 
     @GetMapping("/Benevity/id={id}")
-    public String getBenevityDonation(@PathVariable String id) {
+    public BenevityDonation getBenevityDonation(@PathVariable String id) {
         return benevityService.getDonationStatus(id);
     }
 
