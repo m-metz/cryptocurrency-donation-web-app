@@ -66,8 +66,12 @@ public class ExchangeService {
                 if (retryCount > 10) {
                     ExchangeTradeResponse cancel = cancelTrade(trade.getClientOrderId());
                     if (cancel != null) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                "Order id " + trade.getClientOrderId() + "cancelled in the Exchange System!");
+                        // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        // "Order id " + trade.getClientOrderId() + "cancelled in the Exchange
+                        // System!");
+                        System.out.println(
+                                "Trade Order id " + trade.getClientOrderId() + "cancelled in the Exchange System!");
+                        return null;
                     }
 
                 }

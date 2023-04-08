@@ -207,15 +207,14 @@ public class CryptoCurrencyDonationService {
     public void createFlowNewDeposit(int id) {
         CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(id).get();
 
-        if(donation.getStatus().equals("NEW")){
+        if (donation.getStatus().equals("NEW")) {
             donation.setStatus("D-INPROGRESS");
-            System.out.println("\n\n~~~StatusUpdate: "+donation.getStatus());
-        }else{
+            System.out.println("\n\n~~~StatusUpdate: " + donation.getStatus());
+        } else {
             System.out.println("This donation is not in the correct state to perform a deposit!");
             return;
         }
 
-        
         CryptoTransfer deposit = new CryptoTransfer();
 
         deposit.setAmount(donation.getInitialCryptoAmount());
@@ -247,8 +246,6 @@ public class CryptoCurrencyDonationService {
         donation.setCryptoTransfer(deposit1);
         donation = cryptoCurrencyDonationRepository.save(donation);
 
-
-
         try {
             createFlowTrade(donation.getDonationId(), deposit.getFinal_amount());
         } catch (InterruptedException e) {
@@ -262,10 +259,10 @@ public class CryptoCurrencyDonationService {
         CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
         Trade newTrade = new Trade();
 
-        if(donation.getStatus().equals("D-INPROGRESS")){
+        if (donation.getStatus().equals("D-INPROGRESS")) {
             donation.setStatus("T-INPROGRESS");
-            System.out.println("\n\n~~~StatusUpdate: "+donation.getStatus());
-        }else{
+            System.out.println("\n\n~~~StatusUpdate: " + donation.getStatus());
+        } else {
             System.out.println("This donation is not in the correct state to perform a trade!");
             return;
         }
@@ -305,23 +302,25 @@ public class CryptoCurrencyDonationService {
             donation = cryptoCurrencyDonationRepository.save(donation);
 
             createBenevityDonation(donation, "USD");
-            
 
+        } else {
+            donation.setStatus("T-TIMEOUT");
+            cryptoCurrencyDonationRepository.save(donation);
+            return;
         }
 
     }
 
     public void createBenevityDonation(CryptoCurrencyDonation donation, String currency) {
 
-        if(donation.getStatus().equals("T-INPROGRESS")){
+        if (donation.getStatus().equals("T-INPROGRESS")) {
             donation.setStatus("BD-INPROGRESS");
-            System.out.println("\n\n~~~StatusUpdate: "+donation.getStatus());
-        }
-        else{
+            System.out.println("\n\n~~~StatusUpdate: " + donation.getStatus());
+        } else {
             System.out.println("This donation is not in the correct state to create a Benevity donation!");
             return;
         }
-        
+
         JSONObject payload = new JSONObject();
         JSONObject data = new JSONObject();
         data.appendField("type",
