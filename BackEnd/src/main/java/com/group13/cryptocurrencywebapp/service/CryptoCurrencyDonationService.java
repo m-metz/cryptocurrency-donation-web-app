@@ -112,7 +112,7 @@ public class CryptoCurrencyDonationService {
             donation = cryptoCurrencyDonationRepository.save(donation);
 
             // INSERT HERE CONNECTION WITH BENEVITY DONATION
-            createBenevityDonation(donation, "USD");
+            createBenevityDonation(donation, "USD", 0);
             return newTrade;
 
         } else {
@@ -301,7 +301,7 @@ public class CryptoCurrencyDonationService {
             donation.setTrade(newTrade);
             donation = cryptoCurrencyDonationRepository.save(donation);
 
-            createBenevityDonation(donation, "USD");
+            createBenevityDonation(donation, "USD", 0);
 
         } else {
             donation.setStatus("T-TIMEOUT");
@@ -311,7 +311,7 @@ public class CryptoCurrencyDonationService {
 
     }
 
-    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency) {
+    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency, int timesTried) {
 
         if (donation.getStatus().equals("T-INPROGRESS")) {
             donation.setStatus("BD-INPROGRESS");
@@ -385,7 +385,7 @@ public class CryptoCurrencyDonationService {
         BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         int retryCount = 1;
-        while (!status.retrieveStatus().equals("INITIATED")) {
+        while (status.retrieveStatus().equals("ACCEPTED")) {
             System.out.println("Benevity donation is not yet approved. status = " + status.retrieveStatus()
                     + ". Waiting 1 min to retry....");
             try {
@@ -399,13 +399,32 @@ public class CryptoCurrencyDonationService {
 
         }
 
-        System.out.println("Benevity donation has been accepted!");
-        donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
-        donation.setStatus("COMPLETE");
+        if(status.retrieveStatus().equals("DECLINED")){
+            System.out.println("Donation was declined!");
+            
+            if(timesTried >=4){
+                System.out.println("Donation retried 5 times with no result! Contact a system administrator.");
+                donation.setStatus("BD-TIMEOUT");
+                return;
+            }
 
-        if (donation.getReceipted() == true) {
-            benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
+            createBenevityDonation(donation, currency, timesTried+1);
+
+        }else if(status.retrieveStatus().equals("INITIATED")){
+
+            System.out.println("Benevity donation has been accepted!");
+            donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
+            donation.setStatus("COMPLETE");
+    
+            if (donation.getReceipted() == true) {
+                benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
+            }
+        } else {
+            System.out.println("Unknown donation status encountered. Comtact a system administrator.");
+            donation.setStatus("BD-UNKNOWNSTATUS");
         }
+
+       
 
     }
 
