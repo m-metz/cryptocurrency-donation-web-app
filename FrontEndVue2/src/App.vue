@@ -15,18 +15,26 @@
         </mdbNavbarToggler>
       </mdbNavbar>
     </header>
-
-    <main>
-      <RouterView />
-    </main>
+    <mdbContainer fluid id="main-content" class="px-4">
+      <main>
+        <RouterView />
+      </main>
+    </mdbContainer>
   </div>
 </template>
 
 <script>
-import { mdbNavbar, mdbNavbarToggler, mdbNavbarNav, mdbNavItem } from "mdbvue";
+import {
+  mdbContainer,
+  mdbNavbar,
+  mdbNavbarToggler,
+  mdbNavbarNav,
+  mdbNavItem,
+} from "mdbvue";
 
 export default {
   components: {
+    mdbContainer,
     mdbNavbar,
     mdbNavbarToggler,
     mdbNavbarNav,

@@ -1,18 +1,18 @@
 <template>
   <div class="non-profits">
     <h1>Donate Cryptocurrency to Non-Profits</h1>
-    <form class="d-flex input-group w-auto align-items-center">
+    <form class="d-flex input-group w-auto align-items-center my-3">
       <input
         type="search"
         class="form-control"
         placeholder="Search for non-profits"
         aria-label="Search"
       />
-      <mdbBtn outline="primary">Search</mdbBtn>
+      <mdbBtn outline="primary" class="my-0">Search</mdbBtn>
     </form>
-    <mdbRow :cols="['1', 'md-3']" class="g-4">
-      <mdbCol>
-        <mdbCard>
+    <mdbRow class="row-cols-1 row-cols-md-3 mx-0 my-n3">
+      <mdbCol class="p-3">
+        <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
             src="https://mdbootstrap.com/img/new/standard/city/041.webp"
@@ -30,8 +30,8 @@
           </mdbCardBody>
         </mdbCard>
       </mdbCol>
-      <mdbCol>
-        <mdbCard>
+      <mdbCol class="p-3">
+        <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
             src="https://mdbootstrap.com/img/new/standard/city/042.webp"
@@ -49,8 +49,8 @@
           </mdbCardBody>
         </mdbCard>
       </mdbCol>
-      <mdbCol>
-        <mdbCard>
+      <mdbCol class="p-3">
+        <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
             src="https://mdbootstrap.com/img/new/standard/city/043.webp"
@@ -67,8 +67,8 @@
           </mdbCardBody>
         </mdbCard>
       </mdbCol>
-      <mdbCol>
-        <mdbCard>
+      <mdbCol class="p-3">
+        <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
             src="https://mdbootstrap.com/img/new/standard/city/044.webp"
