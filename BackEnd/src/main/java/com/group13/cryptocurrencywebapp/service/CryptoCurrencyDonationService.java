@@ -505,7 +505,7 @@ public class CryptoCurrencyDonationService {
                 // Updating Donation and Starting over Benevity Donation flow
                 donation.setStatus("T-INPROGRESS");
                 donation = cryptoCurrencyDonationRepository.save(donation);
-                createBenevityDonation(donation, "USD");
+                createBenevityDonation(donation, "USD", 0);
                 System.out.println(
                         "Benevity Donation recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
             }
