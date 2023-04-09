@@ -1,16 +1,16 @@
 <template>
-  <div class="non-profit">
-    <div v-if="loading" class="loading"></div>
+  <mdbRow class="non-profit">
+    <mdbCol v-if="loading" class="loading"></mdbCol>
 
-    <div v-if="error" class="error">{{ error }}</div>
+    <mdbCol v-if="error" class="error">{{ error }}</mdbCol>
 
-    <div v-if="cause" class="content">
+    <mdbCol v-if="cause" class="content">
       <mdbRow
         v-if="cause.data.attributes.logos"
         class="justify-content-center my-5"
       >
-        <mdbCol lg="auto">
-          <mdbView class="rounded-lg z-depth-2 mb-lg-0 mb-4" hover>
+        <mdbCol col="auto">
+          <mdbView class="rounded-lg z-depth-2" hover>
             <img
               class="img-fluid"
               :src="cause.data.attributes.logos[2].url"
@@ -20,61 +20,35 @@
           </mdbView>
         </mdbCol>
       </mdbRow>
-      <h2 class="h1-responsive font-weight-normal text-center my-4">
-        {{ cause.data.attributes.name }}
-      </h2>
-      <p class="text-center my-4">
-        <mdbBtn size="lg" color="primary">Donate</mdbBtn>
-      </p>
-      <p class="w-responsive mx-auto mb-5">
-        {{ cause.data.attributes.caption }}
-      </p>
-      <mdbRow
-        v-if="cause.data.attributes.logos"
-        class="mb-3 align-items-center"
-      >
-        <mdbCol lg="auto">
-          <mdbView class="rounded-lg z-depth-2 mb-lg-0 mb-4" hover>
-            <img
-              class="img-fluid"
-              :src="cause.data.attributes.logos[2].url"
-              alt="Sample image"
-            />
-            <mdbMask overlay="white-slight" waves />
-          </mdbView>
-        </mdbCol>
+      <mdbRow class="mb-3">
         <mdbCol>
-          <h3 class="font-weight-normal mb-3 p-0 text-primary">Description</h3>
+          <h2 class="h1 font-weight-normal text-center my-4">
+            {{ cause.data.attributes.name }}
+          </h2>
+          <p class="text-center my-4">
+            <mdbBtn size="lg" color="primary">Donate</mdbBtn>
+          </p>
+          <h3 class="font-weight-normal mb-3 text-primary">Who we are?</h3>
+          <p>
+            {{ cause.data.attributes.caption }}
+          </p>
+        </mdbCol>
+      </mdbRow>
+      <mdbRow class="mb-3">
+        <mdbCol>
+          <h3 class="font-weight-normal mb-3 text-primary">Description</h3>
           <p>
             {{ cause.data.attributes.description }}
           </p>
         </mdbCol>
       </mdbRow>
-      <mdbRow
-        v-if="cause.data.attributes.logos"
-        class="mb-4 justify-content-center"
-      >
+      <mdbRow class="mb-4 justify-content-center">
         <mdbCol col="auto">
           <mdbBtn size="lg" color="primary">Donate</mdbBtn>
         </mdbCol>
       </mdbRow>
-      <mdbRow v-else class="mb-5">
-        <mdbCol>
-          <section class="w-responsive mx-auto mb-5">
-            <h3 class="font-weight-bold mb-3 p-0 text-primary">
-              <strong>Description</strong>
-            </h3>
-            <p>
-              {{ cause.data.attributes.description }}
-            </p>
-            <p class="text-center my-4">
-              <mdbBtn size="lg" color="primary">Donate</mdbBtn>
-            </p>
-          </section>
-        </mdbCol>
-      </mdbRow>
-    </div>
-  </div>
+    </mdbCol>
+  </mdbRow>
 </template>
 
 <script>
@@ -118,6 +92,7 @@ export default {
         },
         (error) => {
           this.loading = false;
+          console.error(error);
           this.error = error.toString();
         }
       );

@@ -23,7 +23,7 @@
         </mdbNavbarToggler>
       </mdbNavbar>
     </header>
-    <mdbContainer fluid id="main-content" class="px-4">
+    <mdbContainer fluid id="main-content" class="container-xl px-4">
       <main>
         <RouterView />
       </main>
