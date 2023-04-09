@@ -63,21 +63,19 @@ public class CryptoCurrencyDonationService {
 
     public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
-
         if (cryptoDonation != null) {
             cryptoDonation.setStatus("NEW");
-            
 
-            if(cryptoDonation.getTaxReceipt().getAmount()==-999){
+            if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
 
                 System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
                 float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
-                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
+                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
                 System.out.println(cryptoDonation.getTaxReceipt().getAmount());
                 System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
+                // cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
             }
-            //TODO Create a catch for if etherscan is down
+            // TODO Create a catch for if etherscan is down
 
             cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
 
@@ -336,6 +334,7 @@ public class CryptoCurrencyDonationService {
 
         if (donation.getStatus().equals("T-INPROGRESS")) {
             donation.setStatus("BD-INPROGRESS");
+            donation = cryptoCurrencyDonationRepository.save(donation);
             System.out.println("\n\n~~~StatusUpdate: " + donation.getStatus());
         } else {
             System.out.println("This donation is not in the correct state to create a Benevity donation!");
@@ -383,7 +382,7 @@ public class CryptoCurrencyDonationService {
 
         JSONObject funds = new JSONObject();
         funds.appendField("amount",
-                (int)donation.getTaxReceipt().getAmount()*100);
+                (int) donation.getTaxReceipt().getAmount() * 100);
         funds.appendField("currencyCode",
                 currency);
         funds.appendField("paymentType",
@@ -420,32 +419,33 @@ public class CryptoCurrencyDonationService {
 
         }
 
-        if(status.retrieveStatus().equals("DECLINED")){
+        if (status.retrieveStatus().equals("DECLINED")) {
             System.out.println("Donation was declined!");
-            
-            if(timesTried >=4){
+
+            if (timesTried >= 4) {
                 System.out.println("Donation retried 5 times with no result! Contact a system administrator.");
                 donation.setStatus("BD-TIMEOUT");
+                donation = cryptoCurrencyDonationRepository.save(donation);
                 return;
             }
 
-            createBenevityDonation(donation, currency, timesTried+1);
+            createBenevityDonation(donation, currency, timesTried + 1);
 
-        }else if(status.retrieveStatus().equals("INITIATED")){
+        } else if (status.retrieveStatus().equals("INITIATED")) {
 
             System.out.println("Benevity donation has been accepted!");
             donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
             donation.setStatus("COMPLETE");
-    
+            donation = cryptoCurrencyDonationRepository.save(donation);
+
             if (donation.getReceipted() == true) {
                 benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
             }
         } else {
             System.out.println("Unknown donation status encountered. Comtact a system administrator.");
             donation.setStatus("BD-UNKNOWNSTATUS");
+            donation = cryptoCurrencyDonationRepository.save(donation);
         }
-
-       
 
     }
 
