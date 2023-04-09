@@ -147,7 +147,7 @@ CREATE TABLE CURRENCY_DONATION (
     foreign key (exchange_bank_transfer_id) references EXCHANGE_BANK_TRANSFER(transaction_id)
 );
 
-INSERT INTO CURRENCY_DONATION (from_crypto_address, to_crypto_address, tax_receipt_id, non_profit_id, donor_user_id, cryptocurrency_tx_id, crypto_transfer_id, trade_id, exchange_bank_transfer_id, initial_crypto_amount, status)
+INSERT INTO CURRENCY_DONATION (from_crypto_address, to_crypto_address, tax_receipt_id, non_profit_id, donor_user_id, cryptocurrency_tx_id, crypto_transfer_id, trade_id, exchange_bank_transfer_id, initial_crypto_amount, status, receipted)
 VALUES
-('a5Fhsl3jgwSWghjdhfSdj94nFhls0jlsjk9gdj', 'jhgfsd839nhflk9SDF930hf990SDfhkjh93gAhf', 1, '036-76376807382', 'DR_00101', 'kjds983hkjds', 1, 3, 5, 1.0, 'Complete');
+('a5Fhsl3jgwSWghjdhfSdj94nFhls0jlsjk9gdj', 'jhgfsd839nhflk9SDF930hf990SDfhkjh93gAhf', 1, '036-76376807382', 'DR_00101', 'kjds983hkjds', 1, 3, 5, 1.0, 'Complete', true);
 
