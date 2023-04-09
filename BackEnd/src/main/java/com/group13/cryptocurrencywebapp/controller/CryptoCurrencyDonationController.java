@@ -50,11 +50,6 @@ public class CryptoCurrencyDonationController {
         this.etherscanService = etherscanService;
     }
 
-    // @GetMapping()
-    // public List<CryptoCurrencyDonation> getAllCryptoCurrencyDonations() {
-    // return cryptoCurrencyDonationService.getAllCryptoDonations();
-    // }
-
     // Benevity Endpoints
     @GetMapping("/Benevity/causes/id={id}")
     public Cause getOBenevityCause(@PathVariable String id) {
