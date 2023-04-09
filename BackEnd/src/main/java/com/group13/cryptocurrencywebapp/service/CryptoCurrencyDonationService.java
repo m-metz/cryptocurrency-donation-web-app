@@ -75,7 +75,7 @@ public class CryptoCurrencyDonationService {
                 cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
                 System.out.println(cryptoDonation.getTaxReceipt().getAmount());
                 System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
+                //cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
             }
             //TODO Create a catch for if etherscan is down
 
