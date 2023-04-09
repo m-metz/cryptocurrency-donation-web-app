@@ -6,9 +6,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
@@ -27,6 +31,8 @@ import net.minidev.json.JSONObject;
 
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
+@Configuration
+@EnableScheduling
 @Service
 public class CryptoCurrencyDonationService {
     private final CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository;
@@ -112,7 +118,7 @@ public class CryptoCurrencyDonationService {
             donation = cryptoCurrencyDonationRepository.save(donation);
 
             // INSERT HERE CONNECTION WITH BENEVITY DONATION
-            createBenevityDonation(donation, "USD");
+            createBenevityDonation(donation, "USD", 0);
             return newTrade;
 
         } else {
@@ -301,7 +307,7 @@ public class CryptoCurrencyDonationService {
             donation.setTrade(newTrade);
             donation = cryptoCurrencyDonationRepository.save(donation);
 
-            createBenevityDonation(donation, "USD");
+            createBenevityDonation(donation, "USD", 0);
 
         } else {
             donation.setStatus("T-TIMEOUT");
@@ -311,7 +317,7 @@ public class CryptoCurrencyDonationService {
 
     }
 
-    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency) {
+    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency, int timesTried) {
 
         if (donation.getStatus().equals("T-INPROGRESS")) {
             donation.setStatus("BD-INPROGRESS");
@@ -385,7 +391,7 @@ public class CryptoCurrencyDonationService {
         BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         int retryCount = 1;
-        while (!status.retrieveStatus().equals("INITIATED")) {
+        while (status.retrieveStatus().equals("ACCEPTED")) {
             System.out.println("Benevity donation is not yet approved. status = " + status.retrieveStatus()
                     + ". Waiting 1 min to retry....");
             try {
@@ -399,14 +405,97 @@ public class CryptoCurrencyDonationService {
 
         }
 
-        System.out.println("Benevity donation has been accepted!");
-        donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
-        donation.setStatus("COMPLETE");
+        if(status.retrieveStatus().equals("DECLINED")){
+            System.out.println("Donation was declined!");
+            
+            if(timesTried >=4){
+                System.out.println("Donation retried 5 times with no result! Contact a system administrator.");
+                donation.setStatus("BD-TIMEOUT");
+                return;
+            }
 
-        if (donation.getReceipted() == true) {
-            benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
+            createBenevityDonation(donation, currency, timesTried+1);
+
+        }else if(status.retrieveStatus().equals("INITIATED")){
+
+            System.out.println("Benevity donation has been accepted!");
+            donation.setBenevityDonationId(benevityResponse.retrieveDonationId());
+            donation.setStatus("COMPLETE");
+    
+            if (donation.getReceipted() == true) {
+                benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
+            }
+        } else {
+            System.out.println("Unknown donation status encountered. Comtact a system administrator.");
+            donation.setStatus("BD-UNKNOWNSTATUS");
         }
 
+       
+
+    }
+
+    @Transactional
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelayString = "${initialDelay.in.milliseconds}")
+    public void retryTimedoutCryptoDonations() throws InterruptedException {
+        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findByStatusContaining("TIMEDOUT");
+        if (donations.isEmpty()) {
+            System.out.println("No Timedout donations found");
+            return;
+        }
+        for (CryptoCurrencyDonation donation : donations) {
+            if (donation.getStatus().equals("D-TIMEDOUT")) {
+                CryptoTransfer deposit = donation.getCryptoTransfer();
+                donation.setCryptoTransfer(null);
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                if (deposit != null) {
+                    // Deleting failed Crypto Transfer
+                    List<Fee> fees = deposit.getFees();
+                    deposit.setFees(null);
+                    deposit = cryptoTransferRepository.save(deposit);
+                    if (fees.isEmpty() == false) {
+                        for (Fee fee : fees) {
+                            feeRepository.delete(fee);
+                        }
+                    }
+
+                    cryptoTransferRepository.delete(deposit);
+                }
+                // Updating Donation and Starting over CryptoTransfer flow
+                donation.setStatus("NEW");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                createFlowNewDeposit(donation.getDonationId());
+                System.out.println("Deposit recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+            } else if (donation.getStatus().equals("T-TIMEDOUT")) {
+                Trade trade = donation.getTrade();
+                donation.setTrade(null);
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                if (trade != null) {
+                    // Deleting failed Trade
+                    List<Fee> fees = trade.getFees();
+                    trade.setFees(null);
+                    trade = tradeRepository.save(trade);
+                    if (fees.isEmpty() == false) {
+                        for (Fee fee : fees) {
+                            feeRepository.delete(fee);
+                        }
+                    }
+                    tradeRepository.delete(trade);
+                }
+                // Updating Donation and Starting over Trade flow
+                donation.setStatus("D-INPROGRESS");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                createFlowTrade(donation.getDonationId(), donation.getCryptoTransfer().getFinal_amount());
+                System.out.println("Trade recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+            } else {
+                // Updating Donation and Starting over Benevity Donation flow
+                donation.setStatus("T-INPROGRESS");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                createBenevityDonation(donation, "USD");
+                System.out.println(
+                        "Benevity Donation recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+            }
+
+        }
     }
 
 }
