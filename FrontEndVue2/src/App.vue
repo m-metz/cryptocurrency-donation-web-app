@@ -8,8 +8,13 @@
         <mdbNavbarToggler>
           <mdbNavbarNav>
             <mdbNavItem :to="{ name: 'non-profits' }"> Non-Profits </mdbNavItem>
-            <mdbNavItem :to="{ name: 'non-profit', params: { id: '123' } }">
-              Demo on-Profit with ID 123
+            <mdbNavItem
+              :to="{
+                name: 'non-profit',
+                params: { id: '124-122680572RR0001' },
+              }"
+            >
+              Unicef Demo
             </mdbNavItem>
             <mdbNavItem :to="{ name: 'cryptocurrency-donations' }">
               Cryptocurrency Donations History

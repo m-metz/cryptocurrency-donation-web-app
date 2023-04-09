@@ -68,17 +68,13 @@ export default class BenevityApi {
    * @returns {Promise}
    */
   async causes(id) {
-    return fetch(this.#baseUrl + "/causes/" + id)
-      .then(function (response) {
-        if (!response.ok) {
-          console.log(response.text());
-          throw new Error(`Could not get cause details by id=${id}`);
-        }
-        return response.json();
-      })
-      .catch(function (ex) {
-        console.error(ex);
-      });
+    return fetch(this.#baseUrl + "/causes/" + id).then(function (response) {
+      if (!response.ok) {
+        console.log(response.text());
+        throw new Error(`Could not get cause details by id=${id}`);
+      }
+      return response.json();
+    });
   }
 
   /**
