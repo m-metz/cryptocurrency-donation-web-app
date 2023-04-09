@@ -1,8 +1,8 @@
 <template>
-  <div class="non-profits">
+  <div class="non-profit">
     <h1>Donate Cryptocurrency to Non-Profits</h1>
-    <mdbRow class="row-cols-1 row-cols-md-3 mx-0 my-n3">
-      <mdbCol class="p-3">
+    <mdbRow class="row-cols-1 row-cols-md-3 mt-n3">
+      <mdbCol class="my-3">
         <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves

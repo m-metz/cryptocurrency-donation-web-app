@@ -4,11 +4,13 @@ import { createPinia, PiniaVuePlugin } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import benevityApi from "@/apis/benevity-api";
-
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "bootstrap-css-only/css/bootstrap.min.css";
+/*
+Bootstrap has to be customized before mdb loads, so don't import it in main.scss
+*/
+import "./assets/bootstrap-customized.scss";
 import "mdbvue/lib/css/mdb.min.css";
-import "./assets/main.css";
+import "./assets/main.scss";
 
 Vue.use(PiniaVuePlugin);
 

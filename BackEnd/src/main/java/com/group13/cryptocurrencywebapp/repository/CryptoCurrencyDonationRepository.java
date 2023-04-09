@@ -15,4 +15,6 @@ public interface CryptoCurrencyDonationRepository extends JpaRepository<CryptoCu
 
     List<CryptoCurrencyDonation> findAllByDonorUserId(String userid);
 
+    List<CryptoCurrencyDonation> findByStatusContaining(String string);
+
 }
