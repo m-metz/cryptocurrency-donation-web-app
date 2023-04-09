@@ -28,7 +28,7 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTrad
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.Fill;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-
+import net.minidev.json.parser.JSONParser;
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
 @Configuration
@@ -63,9 +63,24 @@ public class CryptoCurrencyDonationService {
 
     public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
+
         if (cryptoDonation != null) {
             cryptoDonation.setStatus("NEW");
+            
+
+            if(cryptoDonation.getTaxReceipt().getAmount()==-999){
+
+                System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
+                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
+                System.out.println(cryptoDonation.getTaxReceipt().getAmount());
+                System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
+            }
+            //TODO Create a catch for if etherscan is down
+
             cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
+
             return cryptoDonation;
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -368,7 +383,7 @@ public class CryptoCurrencyDonationService {
 
         JSONObject funds = new JSONObject();
         funds.appendField("amount",
-                donation.getTaxReceipt().getAmount());
+                (int)donation.getTaxReceipt().getAmount()*100);
         funds.appendField("currencyCode",
                 currency);
         funds.appendField("paymentType",
@@ -490,7 +505,7 @@ public class CryptoCurrencyDonationService {
                 // Updating Donation and Starting over Benevity Donation flow
                 donation.setStatus("T-INPROGRESS");
                 donation = cryptoCurrencyDonationRepository.save(donation);
-                createBenevityDonation(donation, "USD");
+                createBenevityDonation(donation, "USD", 0);
                 System.out.println(
                         "Benevity Donation recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
             }
