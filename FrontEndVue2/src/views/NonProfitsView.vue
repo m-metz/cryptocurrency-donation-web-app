@@ -1,7 +1,7 @@
 <template>
   <div class="non-profits">
     <h1>Donate Cryptocurrency to Non-Profits</h1>
-    <form class="d-flex input-group w-auto align-items-center my-3">
+    <form class="d-flex input-group w-auto align-items-center">
       <input
         type="search"
         class="form-control"
@@ -10,8 +10,8 @@
       />
       <mdbBtn outline="primary" class="my-0">Search</mdbBtn>
     </form>
-    <mdbRow class="row-cols-1 row-cols-md-3 mx-0 my-n3">
-      <mdbCol class="p-3">
+    <mdbRow class="row-cols-1 row-cols-md-3 mt-n3">
+      <mdbCol class="my-3">
         <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
@@ -30,7 +30,7 @@
           </mdbCardBody>
         </mdbCard>
       </mdbCol>
-      <mdbCol class="p-3">
+      <mdbCol class="my-3">
         <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
@@ -49,7 +49,7 @@
           </mdbCardBody>
         </mdbCard>
       </mdbCol>
-      <mdbCol class="p-3">
+      <mdbCol class="my-3">
         <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
@@ -67,7 +67,7 @@
           </mdbCardBody>
         </mdbCard>
       </mdbCol>
-      <mdbCol class="p-3">
+      <mdbCol class="my-3">
         <mdbCard class="h-100">
           <mdbCardImage
             v-mdb-waves
