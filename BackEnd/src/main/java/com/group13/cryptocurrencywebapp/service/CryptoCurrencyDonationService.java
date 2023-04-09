@@ -1,13 +1,11 @@
 package com.group13.cryptocurrencywebapp.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.repository.support.Repositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,10 +24,10 @@ import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.Fill;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import com.group13.cryptocurrencywebapp.repository.TradeRepository;
+
+import net.minidev.json.JSONObject;
+
 
 @Configuration
 @EnableScheduling
@@ -39,20 +37,18 @@ public class CryptoCurrencyDonationService {
     private final CryptoTransferRepository cryptoTransferRepository;
     private final FeeRepository feeRepository;
     private final EtherscanService etherscanService;
-    private final TradeService tradeService;
     private final TradeRepository tradeRepository;
     private final ExchangeService exchangeService;
     private final BenevityService benevityService;
 
     @Autowired
-    public CryptoCurrencyDonationService(CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository,
-            CryptoTransferRepository cryptoTransferRepository,
-            FeeRepository feeRepository,
-            EtherscanService etherscanService,
-            BenevityService benevityService,
-            TradeService tradeService, TradeRepository tradeRepository, ExchangeService exchangeService) {
+    public CryptoCurrencyDonationService(
+            CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository,
+            CryptoTransferRepository cryptoTransferRepository, FeeRepository feeRepository,
+            EtherscanService etherscanService, BenevityService benevityService,
+            TradeRepository tradeRepository, ExchangeService exchangeService) {
+
         this.cryptoCurrencyDonationRepository = cryptoCurrencyDonationRepository;
-        this.tradeService = tradeService;
         this.tradeRepository = tradeRepository;
         this.cryptoTransferRepository = cryptoTransferRepository;
         this.etherscanService = etherscanService;
@@ -69,11 +65,12 @@ public class CryptoCurrencyDonationService {
             if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
 
                 System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
-                cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
+                float ethPrice =
+                        Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
+                cryptoDonation.getTaxReceipt()
+                        .setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
                 System.out.println(cryptoDonation.getTaxReceipt().getAmount());
                 System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                // cryptoDonation.getTaxReceipt().setAmount(cryptoDonation.getInitialCryptoAmount()*ethPrice);
             }
             // TODO Create a catch for if etherscan is down
 
@@ -92,7 +89,8 @@ public class CryptoCurrencyDonationService {
     }
 
     public Trade createTrade(int donationId, float amount) throws InterruptedException {
-        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
+        CryptoCurrencyDonation donation =
+                cryptoCurrencyDonationRepository.findById(donationId).get();
         Trade newTrade = new Trade();
 
         newTrade.setCurrency("ETH");
@@ -130,7 +128,6 @@ public class CryptoCurrencyDonationService {
             donation.setTrade(newTrade);
             donation = cryptoCurrencyDonationRepository.save(donation);
 
-            // INSERT HERE CONNECTION WITH BENEVITY DONATION
             createBenevityDonation(donation, "USD", 0);
             return newTrade;
 
@@ -157,7 +154,8 @@ public class CryptoCurrencyDonationService {
 
         deposit.setTime(java.time.LocalDateTime.now());
 
-        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        Result latest =
+                filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
         deposit.setExchangeReferenceId(latest.getHash());
         deposit = cryptoTransferRepository.save(deposit);
 
@@ -166,22 +164,15 @@ public class CryptoCurrencyDonationService {
 
         List<Fee> fees = new ArrayList<>();
         fees.add(gasFee);
-        // had to change because of immutable list
-        // deposit.setFees(Arrays.asList(new Fee[] { gasFee }));
         deposit.setFees(fees);
-        deposit.setFinal_amount(
-                deposit.getAmount() - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
+        deposit.setFinal_amount(deposit.getAmount()
+                - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
 
-        // deposit = cryptoTransferRepository.save(deposit);
-        CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
+        CryptoTransfer deposit1 =
+                cryptoTransferRepository.findById(deposit.getTransactionId()).get();
 
         donation.setCryptoTransfer(deposit1);
         donation = cryptoCurrencyDonationRepository.save(donation);
-
-        // gasFee.setTransaction(deposit1);
-        // gasFee = feeRepository.save(deposit.getFees().get(0));
-
-        // INSERT CONNECTION TO TRADE HERE
 
         return deposit1;
     }
@@ -210,7 +201,8 @@ public class CryptoCurrencyDonationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Please inform a valid userid");
         }
-        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
+        List<CryptoCurrencyDonation> donations =
+                cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
 
         if (donations == null || donations.isEmpty() == true) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -219,7 +211,7 @@ public class CryptoCurrencyDonationService {
             return donations;
 
         }
-
+        
     }
 
     // Transaction Flow methods
@@ -244,7 +236,8 @@ public class CryptoCurrencyDonationService {
 
         deposit.setTime(java.time.LocalDateTime.now());
 
-        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        Result latest =
+                filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
         deposit.setExchangeReferenceId(latest.getHash());
         deposit = cryptoTransferRepository.save(deposit);
 
@@ -253,14 +246,12 @@ public class CryptoCurrencyDonationService {
 
         List<Fee> fees = new ArrayList<>();
         fees.add(gasFee);
-        // had to change because of immutable list
-        // deposit.setFees(Arrays.asList(new Fee[] { gasFee }));
         deposit.setFees(fees);
-        deposit.setFinal_amount(
-                deposit.getAmount() - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
+        deposit.setFinal_amount(deposit.getAmount()
+                - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
 
-        // deposit = cryptoTransferRepository.save(deposit);
-        CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
+        CryptoTransfer deposit1 =
+                cryptoTransferRepository.findById(deposit.getTransactionId()).get();
 
         donation.setCryptoTransfer(deposit1);
         donation = cryptoCurrencyDonationRepository.save(donation);
@@ -275,7 +266,8 @@ public class CryptoCurrencyDonationService {
     }
 
     public void createFlowTrade(int donationId, float amount) throws InterruptedException {
-        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
+        CryptoCurrencyDonation donation =
+                cryptoCurrencyDonationRepository.findById(donationId).get();
         Trade newTrade = new Trade();
 
         if (donation.getStatus().equals("D-INPROGRESS")) {
@@ -330,65 +322,52 @@ public class CryptoCurrencyDonationService {
 
     }
 
-    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency, int timesTried) {
+    public void createBenevityDonation(CryptoCurrencyDonation donation, String currency,
+            int timesTried) {
 
         if (donation.getStatus().equals("T-INPROGRESS")) {
             donation.setStatus("BD-INPROGRESS");
             donation = cryptoCurrencyDonationRepository.save(donation);
             System.out.println("\n\n~~~StatusUpdate: " + donation.getStatus());
         } else {
-            System.out.println("This donation is not in the correct state to create a Benevity donation!");
+            System.out.println(
+                    "This donation is not in the correct state to create a Benevity donation!");
             return;
         }
 
         JSONObject payload = new JSONObject();
         JSONObject data = new JSONObject();
-        data.appendField("type",
-                "donations");
+        data.appendField("type", "donations");
 
         JSONObject attributes = new JSONObject();
 
         JSONObject destination = new JSONObject();
-        destination.appendField("recipientId",
-                donation.getNonProfitId());
+        destination.appendField("recipientId", donation.getNonProfitId());
         attributes.appendField("destination", destination);
 
         JSONObject donor = new JSONObject();
-        donor.appendField("fullName",
-                donation.getTaxReceipt().getGivenNames() + " " +
-                        donation.getTaxReceipt().getLastName());
-        donor.appendField("email",
-                donation.getTaxReceipt().getEmail());
-        donor.appendField("receipted",
-                donation.getReceipted());
+        donor.appendField("fullName", donation.getTaxReceipt().getGivenNames() + " "
+                + donation.getTaxReceipt().getLastName());
+        donor.appendField("email", donation.getTaxReceipt().getEmail());
+        donor.appendField("receipted", donation.getReceipted());
 
         JSONObject address = new JSONObject();
-        address.appendField("city",
-                donation.getTaxReceipt().getCity());
-        address.appendField("country",
-                donation.getTaxReceipt().getCountry());
-        address.appendField("line1",
-                donation.getTaxReceipt().getAddress1());
-        address.appendField("line2",
-                donation.getTaxReceipt().getAddress2());
-        address.appendField("state",
-                donation.getTaxReceipt().getStateProvinceRegion());
-        address.appendField("zip",
-                donation.getTaxReceipt().getZipPostalCode());
+        address.appendField("city", donation.getTaxReceipt().getCity());
+        address.appendField("country", donation.getTaxReceipt().getCountry());
+        address.appendField("line1", donation.getTaxReceipt().getAddress1());
+        address.appendField("line2", donation.getTaxReceipt().getAddress2());
+        address.appendField("state", donation.getTaxReceipt().getStateProvinceRegion());
+        address.appendField("zip", donation.getTaxReceipt().getZipPostalCode());
 
         donor.appendField("address", address);
 
         attributes.appendField("donor", donor);
 
         JSONObject funds = new JSONObject();
-        funds.appendField("amount",
-                (int) donation.getTaxReceipt().getAmount() * 100);
-        funds.appendField("currencyCode",
-                currency);
-        funds.appendField("paymentType",
-                "DONATION_REPORT");
-        funds.appendField("source",
-                "COMPANY");
+        funds.appendField("amount", (int) donation.getTaxReceipt().getAmount() * 100);
+        funds.appendField("currencyCode", currency);
+        funds.appendField("paymentType", "DONATION_REPORT");
+        funds.appendField("source", "COMPANY");
         attributes.appendField("funds", funds);
 
         // Metadata if needed
@@ -402,12 +381,13 @@ public class CryptoCurrencyDonationService {
         System.out.println("Donation body created: \n" + payload.toJSONString());
         BenevityDonation benevityResponse = benevityService.createDonation(payload.toJSONString());
 
-        BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
+        BenevityDonation status =
+                benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         int retryCount = 1;
         while (status.retrieveStatus().equals("ACCEPTED")) {
-            System.out.println("Benevity donation is not yet approved. status = " + status.retrieveStatus()
-                    + ". Waiting 1 min to retry....");
+            System.out.println("Benevity donation is not yet approved. status = "
+                    + status.retrieveStatus() + ". Waiting 1 min to retry....");
             try {
                 Thread.sleep(60000 * retryCount);
             } catch (InterruptedException e) {
@@ -423,7 +403,8 @@ public class CryptoCurrencyDonationService {
             System.out.println("Donation was declined!");
 
             if (timesTried >= 4) {
-                System.out.println("Donation retried 5 times with no result! Contact a system administrator.");
+                System.out.println(
+                        "Donation retried 5 times with no result! Contact a system administrator.");
                 donation.setStatus("BD-TIMEOUT");
                 donation = cryptoCurrencyDonationRepository.save(donation);
                 return;
@@ -439,10 +420,12 @@ public class CryptoCurrencyDonationService {
             donation = cryptoCurrencyDonationRepository.save(donation);
 
             if (donation.getReceipted() == true) {
-                benevityService.sendReceiptEmail(status.retrieveReceiptId(), donation.getTaxReceipt().getEmail());
+                benevityService.sendReceiptEmail(status.retrieveReceiptId(),
+                        donation.getTaxReceipt().getEmail());
             }
         } else {
-            System.out.println("Unknown donation status encountered. Comtact a system administrator.");
+            System.out.println(
+                    "Unknown donation status encountered. Comtact a system administrator.");
             donation.setStatus("BD-UNKNOWNSTATUS");
             donation = cryptoCurrencyDonationRepository.save(donation);
         }
@@ -450,9 +433,11 @@ public class CryptoCurrencyDonationService {
     }
 
     @Transactional
-    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelayString = "${initialDelay.in.milliseconds}")
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}",
+            initialDelayString = "${initialDelay.in.milliseconds}")
     public void retryTimedoutCryptoDonations() throws InterruptedException {
-        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findByStatusContaining("TIMEDOUT");
+        List<CryptoCurrencyDonation> donations =
+                cryptoCurrencyDonationRepository.findByStatusContaining("TIMEDOUT");
         if (donations.isEmpty()) {
             System.out.println("No Timedout donations found");
             return;
@@ -479,7 +464,8 @@ public class CryptoCurrencyDonationService {
                 donation.setStatus("NEW");
                 donation = cryptoCurrencyDonationRepository.save(donation);
                 createFlowNewDeposit(donation.getDonationId());
-                System.out.println("Deposit recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+                System.out.println("Deposit recovery for CryptoDonation id: "
+                        + donation.getDonationId() + "executed!");
             } else if (donation.getStatus().equals("T-TIMEDOUT")) {
                 Trade trade = donation.getTrade();
                 donation.setTrade(null);
@@ -499,18 +485,18 @@ public class CryptoCurrencyDonationService {
                 // Updating Donation and Starting over Trade flow
                 donation.setStatus("D-INPROGRESS");
                 donation = cryptoCurrencyDonationRepository.save(donation);
-                createFlowTrade(donation.getDonationId(), donation.getCryptoTransfer().getFinal_amount());
-                System.out.println("Trade recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+                createFlowTrade(donation.getDonationId(),
+                        donation.getCryptoTransfer().getFinal_amount());
+                System.out.println("Trade recovery for CryptoDonation id: "
+                        + donation.getDonationId() + "executed!");
             } else {
                 // Updating Donation and Starting over Benevity Donation flow
                 donation.setStatus("T-INPROGRESS");
                 donation = cryptoCurrencyDonationRepository.save(donation);
                 createBenevityDonation(donation, "USD", 0);
-                System.out.println(
-                        "Benevity Donation recovery for CryptoDonation id: " + donation.getDonationId() + "executed!");
+                System.out.println("Benevity Donation recovery for CryptoDonation id: "
+                        + donation.getDonationId() + "executed!");
             }
-
         }
     }
-
 }
