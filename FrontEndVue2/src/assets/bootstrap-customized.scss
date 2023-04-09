@@ -1,0 +1,29 @@
+/*
+Variables have to be defined before importing the rest of bootstrap to override.
+*/
+
+/*
+Make this the same as double the default font size (in pixels) that most
+browsers so that container spacing matches the font/inline $spacer (1rem) until
+the user sets a larger font size.
+*/
+$grid-gutter-width: 32px;
+
+/*
+Spacer-spacing should match gutter width units (px), and not be in rem (as we
+don't want font size to affect spacers, as they are usually used for grid
+layout and not for text/inline element layout.
+
+Also make all spacing power of 2 instead of 1.5x and 3x for size 4 and 5.
+*/
+$spacer-spacing: (calc($grid-gutter-width / 2));
+
+$spacers: (
+    1: ($spacer-spacing * .25),
+    2: ($spacer-spacing * .5),
+    3: $spacer-spacing ,
+    4: ($spacer-spacing * 2),
+    5: ($spacer-spacing * 4)
+  );
+
+@import "bootstrap/scss/bootstrap";
