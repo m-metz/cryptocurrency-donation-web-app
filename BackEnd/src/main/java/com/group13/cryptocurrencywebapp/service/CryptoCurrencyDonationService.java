@@ -419,7 +419,7 @@ public class CryptoCurrencyDonationService {
             donation.setStatus("COMPLETE");
             donation = cryptoCurrencyDonationRepository.save(donation);
 
-            if (donation.getReceipted() == true) {
+            if (donation.getReceipted() == true && timesTried == 0) {
                 benevityService.sendReceiptEmail(status.retrieveReceiptId(),
                         donation.getTaxReceipt().getEmail());
             }
