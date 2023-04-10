@@ -46,13 +46,12 @@ public class CryptoCurrencyDonation {
     @JoinColumn(name = "exchange_bank_transfer_id")
     private ExchangeBankTransfer exchangeBankTransfer;
 
-    public CryptoCurrencyDonation() {
-    }
+    public CryptoCurrencyDonation() {}
 
     public CryptoCurrencyDonation(int donationId, String nonProfitId, String donorUserId,
-            String cryptocurrencyTxId, String toCryptoAddress, String fromCryptoAddress, String status,
-            TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,
-            ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount, 
+            String cryptocurrencyTxId, String toCryptoAddress, String fromCryptoAddress,
+            String status, TaxReceipt taxReceipt, Trade trade, CryptoTransfer cryptoTransfer,
+            ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount,
             String benevityDonationId, boolean receipted) {
 
         this.donationId = donationId;
@@ -72,9 +71,9 @@ public class CryptoCurrencyDonation {
     }
 
     public CryptoCurrencyDonation(String nonProfitId, String donorUserId, String cryptocurrencyTxId,
-            String toCryptoAddress, String fromCryptoAddress, String status, TaxReceipt taxReceipt, Trade trade,
-            CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer, float initialCryptoAmount,
-            String benevityDonationId, boolean receipted) {
+            String toCryptoAddress, String fromCryptoAddress, String status, TaxReceipt taxReceipt,
+            Trade trade, CryptoTransfer cryptoTransfer, ExchangeBankTransfer exchangeBankTransfer,
+            float initialCryptoAmount, String benevityDonationId, boolean receipted) {
         this.nonProfitId = nonProfitId;
         this.donorUserId = donorUserId;
         this.cryptocurrencyTxId = cryptocurrencyTxId;
@@ -90,7 +89,7 @@ public class CryptoCurrencyDonation {
         this.receipted = receipted;
     }
 
-    
+
     public boolean getReceipted() {
         return receipted;
     }

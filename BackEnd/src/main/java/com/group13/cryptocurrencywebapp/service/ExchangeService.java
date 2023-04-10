@@ -3,11 +3,9 @@ package com.group13.cryptocurrencywebapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.group13.cryptocurrencywebapp.config.Signature;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
@@ -31,27 +29,21 @@ public class ExchangeService {
         String signature = sign.getSignature(queryParams, secret);
         String payload = apiEndpoint + queryParams + "&signature=" + signature;
 
-        ResponseEntity<ExchangeAccount> response = webclient.get()
-                .uri(payload)
-                .retrieve()
-                .toEntity(ExchangeAccount.class)
-                .block();
+        ResponseEntity<ExchangeAccount> response =
+                webclient.get().uri(payload).retrieve().toEntity(ExchangeAccount.class).block();
 
         return response.getBody();
     }
 
     public ExchangeTradeResponse executeNewTrade(float value) throws InterruptedException {
         String apiEndpoint = "/v3/order?";
-        String queryParams = "symbol=ETHBUSD" + "&side=SELL" + "&type=MARKET" + "&quantity=" + value + "&timestamp="
-                + System.currentTimeMillis();
+        String queryParams = "symbol=ETHBUSD" + "&side=SELL" + "&type=MARKET" + "&quantity=" + value
+                + "&timestamp=" + System.currentTimeMillis();
         String signature = sign.getSignature(queryParams, secret);
         String payload = apiEndpoint + queryParams + "&signature=" + signature;
 
-        ResponseEntity<ExchangeTradeResponse> response = webclient.post()
-                .uri(payload)
-                .retrieve()
-                .toEntity(ExchangeTradeResponse.class)
-                .block();
+        ResponseEntity<ExchangeTradeResponse> response = webclient.post().uri(payload).retrieve()
+                .toEntity(ExchangeTradeResponse.class).block();
 
         ExchangeTradeResponse trade = response.getBody();
 
@@ -69,8 +61,8 @@ public class ExchangeService {
                         // throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         // "Order id " + trade.getClientOrderId() + "cancelled in the Exchange
                         // System!");
-                        System.out.println(
-                                "Trade Order id " + trade.getClientOrderId() + "cancelled in the Exchange System!");
+                        System.out.println("Trade Order id " + trade.getClientOrderId()
+                                + "cancelled in the Exchange System!");
                         return null;
                     }
 
@@ -80,11 +72,8 @@ public class ExchangeService {
             }
             return trade;
         } else {
-
+            return null;
         }
-
-        return null;
-
     }
 
     public ExchangeTradeResponse queryTrade(String clientOrderId) {
@@ -94,11 +83,8 @@ public class ExchangeService {
         String signature = sign.getSignature(queryParams, secret);
         String payload = apiEndpoint + queryParams + "&signature=" + signature;
 
-        ResponseEntity<ExchangeTradeResponse> response = webclient.get()
-                .uri(payload)
-                .retrieve()
-                .toEntity(ExchangeTradeResponse.class)
-                .block();
+        ResponseEntity<ExchangeTradeResponse> response = webclient.get().uri(payload).retrieve()
+                .toEntity(ExchangeTradeResponse.class).block();
 
         ExchangeTradeResponse trade = response.getBody();
         if (trade != null) {
@@ -115,11 +101,8 @@ public class ExchangeService {
         String signature = sign.getSignature(queryParams, secret);
         String payload = apiEndpoint + queryParams + "&signature=" + signature;
 
-        ResponseEntity<ExchangeTradeResponse> response = webclient.delete()
-                .uri(payload)
-                .retrieve()
-                .toEntity(ExchangeTradeResponse.class)
-                .block();
+        ResponseEntity<ExchangeTradeResponse> response = webclient.delete().uri(payload).retrieve()
+                .toEntity(ExchangeTradeResponse.class).block();
 
         ExchangeTradeResponse trade = response.getBody();
         if (trade != null) {

@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.detail.CauseDetail;
-import com.nimbusds.oauth2.sdk.Response;
+
 import net.minidev.json.JSONObject;
 import reactor.core.publisher.Mono;
 
@@ -44,11 +44,7 @@ public class BenevityService {
                 .block();
 
         BenevityDonation donation = response.getBody();
-        // String state = null;
 
-        // if (!(donation == null)) {
-        //     state = donation.retrieveStatus();
-        // }
         return donation;
     }
 
@@ -56,7 +52,7 @@ public class BenevityService {
 
         JSONObject payload = new JSONObject();
 
-            JSONObject data = new JSONObject();
+        JSONObject data = new JSONObject();
 
             data.appendField("type", "emails");
                 JSONObject attributes = new JSONObject();
