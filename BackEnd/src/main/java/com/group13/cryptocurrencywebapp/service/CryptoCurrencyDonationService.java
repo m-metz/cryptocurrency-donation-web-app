@@ -112,6 +112,10 @@ public class CryptoCurrencyDonationService {
         return feeRepository.findAll();
     }
 
+    public List<Trade> getAllTrades() {
+        return tradeRepository.findAll();
+    }
+
     public List<CryptoCurrencyDonation> getAllDonationsForUser(String userid) {
         if (userid == null || userid.equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -415,4 +419,6 @@ public class CryptoCurrencyDonationService {
             }
         }
     }
+
+
 }
