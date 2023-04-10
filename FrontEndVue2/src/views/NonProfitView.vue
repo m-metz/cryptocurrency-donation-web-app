@@ -10,10 +10,13 @@
         class="justify-content-center my-5"
       >
         <mdbCol col="auto">
-          <mdbView class="rounded-lg z-depth-2" hover>
+          <mdbView
+            class="rounded-lg z-depth-2 row w-300px justify-content-center align-content-center"
+            hover
+          >
             <img
-              class="img-fluid"
-              :src="cause.data.attributes.logos[2].url"
+              class="col-auto"
+              :src="cause.data.attributes.logos[0].url"
               alt="Sample image"
             />
             <mdbMask overlay="white-slight" waves />
