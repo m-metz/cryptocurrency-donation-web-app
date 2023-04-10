@@ -15,6 +15,23 @@ import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.detail.CauseD
 import net.minidev.json.JSONObject;
 import reactor.core.publisher.Mono;
 
+/** 
+ * <pre>
+ * Class Name: BenevityService
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Service class that is defined with all of teh functionality necessary
+ * to create and process a cryptocurrency donation
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
+
 @Service
 public class BenevityService {
 

@@ -425,7 +425,7 @@ public class CryptoCurrencyDonationService {
             }
         } else {
             System.out.println(
-                    "Unknown donation status encountered. Comtact a system administrator.");
+                    "Unknown donation status encountered. Contact a system administrator.");
             donation.setStatus("BD-UNKNOWNSTATUS");
             donation = cryptoCurrencyDonationRepository.save(donation);
         }
