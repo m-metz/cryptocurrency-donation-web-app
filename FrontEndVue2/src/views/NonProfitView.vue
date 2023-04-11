@@ -16,7 +16,7 @@
           >
             <img
               class="col-auto"
-              :src="cause.data.attributes.logos[0].url"
+              :src="cause.data.attributes.logos[2].url"
               alt="Sample image"
             />
             <mdbMask overlay="white-slight" waves />
@@ -57,27 +57,82 @@
       <mdbModal size="xl" :show="modal" @close="modal = false">
         <form>
           <mdbModalHeader class="text-center">
-            <mdbModalTitle tag="h4" bold class="w-100">Sign up</mdbModalTitle>
+            <mdbModalTitle tag="h4" bold class="w-100"
+              >Make a Donation</mdbModalTitle
+            >
           </mdbModalHeader>
           <mdbModalBody class="mx-3 grey-text">
             <mdbInput
-              name="first-name"
-              label="First name"
+              name="given-names"
+              label="Given names"
               icon="user"
+              iconClass="fa-fw"
               class="mb-4"
             />
             <mdbInput
               name="last-name"
               label="Last name"
-              icon="user"
-              iconClass="fa-blank"
+              icon="blank"
+              iconClass="fa-fw"
               class="mb-4"
             ></mdbInput>
             <mdbInput
               name="email"
               label="Email"
               icon="envelope"
+              iconClass="fa-fw"
               type="email"
+              class="mb-4"
+            />
+            <mdbInput
+              name="address-line1"
+              label="Street Address"
+              icon="map-marker-alt"
+              iconClass="fa-fw"
+              class="mb-4"
+            ></mdbInput>
+            <mdbInput
+              name="address-line2"
+              label="Apt, Suite, Unit, Additional Address Information (optional)"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+            ></mdbInput>
+            <mdbInput
+              name="city"
+              label="City"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+            ></mdbInput>
+            <mdbInput
+              name="state-province-region"
+              label="State, Province, Region"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+            ></mdbInput>
+            <mdbInput
+              name="country"
+              label="Country"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+            ></mdbInput>
+            <mdbInput
+              name="zip-postal-code"
+              label="Zip, Postal Code"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+            ></mdbInput>
+            <mdbInput
+              name="from-crypto-address"
+              autocomplete="do-not-autofill"
+              label="Your Ethereum Account Address"
+              icon="ethereum"
+              iconClass="fa-fw"
+              fab
               class="mb-4"
             />
           </mdbModalBody>
@@ -85,7 +140,7 @@
             <mdbBtn outline="primary" @click.native="modal = false"
               >Close</mdbBtn
             >
-            <mdbBtn color="primary">Save changes</mdbBtn>
+            <mdbBtn color="primary" type="submit">Save changes</mdbBtn>
           </mdbModalFooter>
         </form>
       </mdbModal>
