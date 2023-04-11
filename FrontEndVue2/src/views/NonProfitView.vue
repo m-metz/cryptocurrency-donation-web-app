@@ -68,6 +68,8 @@
               icon="user"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="100"
             />
             <mdbInput
               name="last-name"
@@ -75,6 +77,8 @@
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="100"
             ></mdbInput>
             <mdbInput
               name="email"
@@ -83,6 +87,8 @@
               iconClass="fa-fw"
               type="email"
               class="mb-4"
+              required
+              maxlength="30"
             />
             <mdbInput
               name="address-line1"
@@ -90,6 +96,8 @@
               icon="map-marker-alt"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="100"
             ></mdbInput>
             <mdbInput
               name="address-line2"
@@ -97,6 +105,7 @@
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
+              maxlength="100"
             ></mdbInput>
             <mdbInput
               name="city"
@@ -104,6 +113,8 @@
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="85"
             ></mdbInput>
             <mdbInput
               name="state-province-region"
@@ -111,6 +122,8 @@
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="60"
             ></mdbInput>
             <mdbInput
               name="country"
@@ -118,6 +131,8 @@
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="10"
             ></mdbInput>
             <mdbInput
               name="zip-postal-code"
@@ -125,15 +140,32 @@
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="7"
             ></mdbInput>
             <mdbInput
               name="from-crypto-address"
-              autocomplete="do-not-autofill"
+              autocomplete="from-crypto-address"
               label="Your Ethereum Account Address"
               icon="ethereum"
               iconClass="fa-fw"
               fab
               class="mb-4"
+              required
+              maxlength="50"
+            />
+            <mdbInput
+              name="initial-crypto-amount"
+              autocomplete="do-not-autofill"
+              label="ETH Amount"
+              icon="ethereum"
+              iconClass="fa-fw"
+              fab
+              type="number"
+              class="mb-4"
+              required
+              min="1"
+              step="0.001"
             />
           </mdbModalBody>
           <mdbModalFooter center>
