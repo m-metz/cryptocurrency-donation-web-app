@@ -115,6 +115,10 @@
               class="mb-4"
               required
               maxlength="100"
+              :value="
+                getPropIfExist(user, '@_firstname') +
+                getPropIfExist(user, '@_initials')
+              "
             />
             <mdbInput
               name="lastName"
@@ -124,6 +128,7 @@
               class="mb-4"
               required
               maxlength="100"
+              :value="getPropIfExist(user, '@_lastname')"
             ></mdbInput>
             <mdbInput
               name="email"
@@ -134,6 +139,7 @@
               class="mb-4"
               required
               maxlength="30"
+              :value="getPropIfExist(user, '@_email')"
             />
             <mdbInput
               name="address1"
@@ -144,6 +150,7 @@
               class="mb-4"
               required
               maxlength="100"
+              :value="getPropIfExist(user, '@_address-street')"
             ></mdbInput>
             <mdbInput
               name="address2"
@@ -162,6 +169,7 @@
               class="mb-4"
               required
               maxlength="85"
+              :value="getPropIfExist(user, '@_address-city')"
             ></mdbInput>
             <mdbInput
               name="stateProvinceRegion"
@@ -172,6 +180,7 @@
               class="mb-4"
               required
               maxlength="60"
+              :value="getPropIfExist(user, '@_address-state')"
             ></mdbInput>
             <mdbInput
               name="country"
@@ -181,6 +190,7 @@
               class="mb-4"
               required
               maxlength="10"
+              :value="getPropIfExist(user, '@_address-country')"
             ></mdbInput>
             <mdbInput
               name="zipPostalCode"
@@ -191,6 +201,7 @@
               class="mb-4"
               required
               maxlength="7"
+              :value="getPropIfExist(user, '@_address-postcode')"
             ></mdbInput>
           </mdbModalBody>
           <mdbModalBody
@@ -248,6 +259,7 @@
 <script>
 import benevityApi from "@/apis/benevity-api";
 import cryptocurrencyDonationWebAppApi from "@/apis/cryptocurrency-donation-web-app-api";
+import { isEmptyObject } from "@/helpers";
 import {
   mdbAlert,
   mdbCol,
@@ -290,6 +302,8 @@ export default {
       cause: null,
       error: null,
 
+      user: null,
+
       modal: false,
       modalPage: 1,
 
@@ -325,6 +339,7 @@ export default {
         return "";
       }
     },
+
     fetchData() {
       this.error = this.cause = null;
       this.loading = true;
@@ -339,7 +354,25 @@ export default {
           this.error = error.toString();
         }
       );
+
+      if (this.$route.query.user) {
+        benevityApi
+          .adapterGeneralGetUserProfile(this.$route.query.user)
+          .then((getUserProfile) => {
+            this.user = getUserProfile.response.content.user;
+          });
+      }
     },
+
+    getPropIfExist(object, prop) {
+      if (typeof object === "object" && object !== null) {
+        if (prop in object) {
+          return object[prop];
+        }
+      }
+      return "";
+    },
+
     submitForm(event) {
       if (!this.cryptocurrencyDonation) {
         const formData = new FormData(event.target);
@@ -362,6 +395,7 @@ export default {
           );
       }
     },
+
     valdiateBeforeNavigatingForm({ forward = true }) {
       let allowNavigation = false;
 

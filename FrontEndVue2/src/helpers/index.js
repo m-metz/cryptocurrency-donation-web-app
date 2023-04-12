@@ -1,5 +1,5 @@
 export function isEmptyObject(obj) {
-  var name;
+  let name;
   for (name in obj) {
     return false;
   }
@@ -7,6 +7,6 @@ export function isEmptyObject(obj) {
 }
 
 export function warnStackTrace(message) {
-  let e = new Error();
+  const e = new Error();
   console.warn(message, e.stack);
 }
