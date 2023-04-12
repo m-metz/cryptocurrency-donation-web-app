@@ -1,6 +1,16 @@
 <template>
   <mdbRow class="non-profit">
-    <mdbCol v-if="loading" class="loading"></mdbCol>
+    <mdbCol v-if="loading" class="loading">
+      <div class="d-flex justify-content-center align-items-center mt-5">
+        <div
+          class="spinner-border text-primary"
+          style="width: 3rem; height: 3rem"
+          role="status"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </mdbCol>
 
     <mdbCol v-if="error" class="error">{{ error }}</mdbCol>
 
