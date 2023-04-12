@@ -19,6 +19,14 @@
             <mdbNavItem :to="{ name: 'cryptocurrency-donations' }">
               Cryptocurrency Donations History
             </mdbNavItem>
+            <mdbNavItem
+              :to="{
+                name: 'non-profits',
+                query: { user: 'TestUserCA' },
+              }"
+            >
+              TestUserCA Demo
+            </mdbNavItem>
           </mdbNavbarNav>
         </mdbNavbarToggler>
       </mdbNavbar>
