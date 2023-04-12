@@ -66,18 +66,39 @@
         :class="displayModalClass"
         @close="modal = false"
       >
-        <form id="cwa-donation-form">
-          <mdbModalHeader class="text-center">
-            <mdbModalTitle tag="h4" bold class="w-100"
-              >Make a Donation</mdbModalTitle
-            >
-          </mdbModalHeader>
+        <mdbModalHeader class="text-center">
+          <mdbModalTitle tag="h4" bold class="w-100"
+            >Make a Donation</mdbModalTitle
+          >
+        </mdbModalHeader>
+        <mdbAlert
+          color="success"
+          v-if="cryptocurrencyDonation"
+          @closeAlert="cryptocurrencyDonation = null"
+          leaveAnimation="fadeOut"
+        >
+          <strong>Cryptocurrency Donation Registered.</strong> Now send the
+          donation in Metamask to:<br />
+          <br />
+          {{ cryptocurrencyDonation.toCryptoAddress }}
+        </mdbAlert>
+        <mdbAlert
+          color="warning"
+          v-if="cryptocurrencyDonationError"
+          @closeAlert="cryptocurrencyDonationError = null"
+          leaveAnimation="fadeOut"
+          dismiss
+        >
+          <strong>Cryptocurrency Donation could not be registered.</strong>
+          {{ cryptocurrencyDonationError }}.
+        </mdbAlert>
+        <form id="cwa-donation-form" @submit.prevent="submitForm">
           <mdbModalBody
             :class="displayModalPageClass(1)"
             class="d-none mx-3 grey-text"
           >
             <mdbInput
-              name="given-names"
+              name="givenNames"
               label="Given names"
               icon="user"
               iconClass="fa-fw"
@@ -86,7 +107,7 @@
               maxlength="100"
             />
             <mdbInput
-              name="last-name"
+              name="lastName"
               label="Last name"
               icon="blank"
               iconClass="fa-fw"
@@ -105,7 +126,8 @@
               maxlength="30"
             />
             <mdbInput
-              name="address-line1"
+              name="address1"
+              autocomplete="address-line1"
               label="Street Address"
               icon="map-marker-alt"
               iconClass="fa-fw"
@@ -114,7 +136,8 @@
               maxlength="100"
             ></mdbInput>
             <mdbInput
-              name="address-line2"
+              name="address2"
+              autocomplete="address-line2"
               label="Apt, Suite, Unit, Additional Address Information (optional)"
               icon="blank"
               iconClass="fa-fw"
@@ -131,7 +154,8 @@
               maxlength="85"
             ></mdbInput>
             <mdbInput
-              name="state-province-region"
+              name="stateProvinceRegion"
+              autocomplete="address-level1"
               label="State, Province, Region"
               icon="blank"
               iconClass="fa-fw"
@@ -149,7 +173,8 @@
               maxlength="10"
             ></mdbInput>
             <mdbInput
-              name="zip-postal-code"
+              name="zipPostalCode"
+              autocomplete="postal-code"
               label="Zip, Postal Code"
               icon="blank"
               iconClass="fa-fw"
@@ -163,7 +188,7 @@
             class="d-none mx-3 grey-text"
           >
             <mdbInput
-              name="from-crypto-address"
+              name="fromCryptoAddress"
               autocomplete="from-crypto-address"
               label="Your Ethereum Account Address"
               icon="ethereum"
@@ -174,7 +199,7 @@
               maxlength="50"
             />
             <mdbInput
-              name="initial-crypto-amount"
+              name="initialCryptoAmount"
               autocomplete="do-not-autofill"
               label="ETH Amount"
               icon="ethereum"
@@ -212,7 +237,9 @@
 
 <script>
 import benevityApi from "@/apis/benevity-api";
+import cryptocurrencyDonationWebAppApi from "@/apis/cryptocurrency-donation-web-app-api";
 import {
+  mdbAlert,
   mdbCol,
   mdbRow,
   mdbBtn,
@@ -229,6 +256,7 @@ import {
 
 export default {
   components: {
+    mdbAlert,
     mdbCol,
     mdbRow,
     mdbInput,
@@ -254,6 +282,9 @@ export default {
 
       modal: false,
       modalPage: 1,
+
+      cryptocurrencyDonation: null,
+      cryptocurrencyDonationError: null,
     };
   },
 
@@ -277,6 +308,13 @@ export default {
   },
 
   methods: {
+    displayModalPageClass(page) {
+      if (this.modalPage === page) {
+        return "d-block";
+      } else {
+        return "";
+      }
+    },
     fetchData() {
       this.error = this.cause = null;
       this.loading = true;
@@ -292,11 +330,26 @@ export default {
         }
       );
     },
-    displayModalPageClass(page) {
-      if (this.modalPage === page) {
-        return "d-block";
-      } else {
-        return "";
+    submitForm(event) {
+      if (!this.cryptocurrencyDonation) {
+        const formData = new FormData(event.target);
+
+        cryptocurrencyDonationWebAppApi
+          .cryptocurrencyDonationCreateDonation({
+            nonProfitId: this.$route.params.id,
+            cryptocurrencyTxId: null,
+            formData: formData,
+          })
+          .then(
+            (cryptocurrencyDonation) => {
+              this.cryptocurrencyDonation = cryptocurrencyDonation;
+              event.submitter.setAttribute("disabled", "");
+            },
+            (error) => {
+              console.error(error);
+              this.cryptocurrencyDonationError = error.toString();
+            }
+          );
       }
     },
     valdiateBeforeNavigatingForm({ forward = true }) {
