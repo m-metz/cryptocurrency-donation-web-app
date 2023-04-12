@@ -61,17 +61,21 @@
       -->
       <mdbModal
         size="xl"
-        show="true"
+        :show="true"
+        class="d-none"
         :class="displayModalClass"
         @close="modal = false"
       >
-        <form>
+        <form id="cwa-donation-form">
           <mdbModalHeader class="text-center">
             <mdbModalTitle tag="h4" bold class="w-100"
               >Make a Donation</mdbModalTitle
             >
           </mdbModalHeader>
-          <mdbModalBody class="mx-3 grey-text">
+          <mdbModalBody
+            :class="displayModalPageClass(1)"
+            class="d-none mx-3 grey-text"
+          >
             <mdbInput
               name="given-names"
               label="Given names"
@@ -153,6 +157,11 @@
               required
               maxlength="7"
             ></mdbInput>
+          </mdbModalBody>
+          <mdbModalBody
+            :class="displayModalPageClass(2)"
+            class="d-none mx-3 grey-text"
+          >
             <mdbInput
               name="from-crypto-address"
               autocomplete="from-crypto-address"
@@ -174,13 +183,26 @@
               type="number"
               class="mb-4"
               required
-              min="1"
-              step="0.001"
+              :min="0.001"
+              :step="0.001"
             />
           </mdbModalBody>
           <mdbModalFooter center>
-            <mdbBtn outline="primary" @click="modal = false">Close</mdbBtn>
-            <mdbBtn color="primary" type="submit">Save changes</mdbBtn>
+            <mdbBtn
+              v-if="modalPage > 1"
+              outline="primary"
+              @click="valdiateBeforeNavigatingForm({ forward: false })"
+              >Previous</mdbBtn
+            >
+            <mdbBtn
+              v-if="modalPage < 2"
+              color="primary"
+              @click="valdiateBeforeNavigatingForm({ forward: true })"
+              >Next</mdbBtn
+            >
+            <mdbBtn v-if="modalPage === 2" color="primary" type="submit"
+              >Submit</mdbBtn
+            >
           </mdbModalFooter>
         </form>
       </mdbModal>
@@ -231,6 +253,7 @@ export default {
       error: null,
 
       modal: false,
+      modalPage: 1,
     };
   },
 
@@ -246,9 +269,9 @@ export default {
   computed: {
     displayModalClass() {
       if (this.modal) {
-        return "";
+        return "d-block";
       } else {
-        return "d-none";
+        return "";
       }
     },
   },
@@ -268,6 +291,35 @@ export default {
           this.error = error.toString();
         }
       );
+    },
+    displayModalPageClass(page) {
+      if (this.modalPage === page) {
+        return "d-block";
+      } else {
+        return "";
+      }
+    },
+    valdiateBeforeNavigatingForm({ forward = true }) {
+      let allowNavigation = false;
+
+      const inputs = document
+        .querySelectorAll("#cwa-donation-form .modal-body")
+        [this.modalPage - 1].querySelectorAll(":scope input");
+
+      for (const input of inputs) {
+        if (!input.reportValidity()) {
+          allowNavigation = false;
+          break;
+        } else {
+          allowNavigation = true;
+        }
+      }
+
+      if (forward === true && allowNavigation === true) {
+        this.modalPage++;
+      } else if (forward === false) {
+        this.modalPage--;
+      }
     },
   },
 };
