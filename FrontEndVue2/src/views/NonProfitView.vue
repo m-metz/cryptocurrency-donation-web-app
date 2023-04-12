@@ -16,7 +16,7 @@
 
     <mdbCol v-if="cause" class="content">
       <mdbRow
-        v-if="cause.data.attributes.logos"
+        v-if="cause.data.attributes.logos.length"
         class="justify-content-center my-5"
       >
         <mdbCol col="auto">
@@ -26,7 +26,7 @@
           >
             <img
               class="col-auto"
-              :src="cause.data.attributes.logos[2].url"
+              :src="cause.data.attributes.logos[0].url"
               alt="Sample image"
             />
             <mdbMask overlay="white-slight" waves />
@@ -259,7 +259,6 @@
 <script>
 import benevityApi from "@/apis/benevity-api";
 import cryptocurrencyDonationWebAppApi from "@/apis/cryptocurrency-donation-web-app-api";
-import { isEmptyObject } from "@/helpers";
 import {
   mdbAlert,
   mdbCol,
