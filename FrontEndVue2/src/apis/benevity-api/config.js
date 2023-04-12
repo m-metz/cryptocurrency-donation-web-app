@@ -1,7 +1,3 @@
-/*
-Copy config.template.js to config.js and fill in the required configuration parameters.
-*/
-
 /**
  * @typedef {Object} config
  * @property {string} baseUrl The url to connect to our Benevity API Proxy.

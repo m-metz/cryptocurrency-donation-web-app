@@ -95,6 +95,7 @@ export default class BenevityApi {
           "searchCause is mocked but the parameters don't match the mock. " +
             `user=${user}, expectedUser=${expectedUser}`
         );
+        return "";
       }
       return adapterGeneralGetUserProfileQueryUserTestUserCA;
     } else {
@@ -123,6 +124,7 @@ export default class BenevityApi {
           "searchCause is mocked but the parameters don't match the mock. " +
             `query=${query}, expectedQuery=${expectedQuery}`
         );
+        return "";
       }
       return searchCausesQueryQStar;
     } else {

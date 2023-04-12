@@ -1,12 +1,22 @@
 <template>
   <mdbRow class="non-profit">
-    <mdbCol v-if="loading" class="loading"></mdbCol>
+    <mdbCol v-if="loading" class="loading">
+      <div class="d-flex justify-content-center align-items-center mt-5">
+        <div
+          class="spinner-border text-primary"
+          style="width: 3rem; height: 3rem"
+          role="status"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </mdbCol>
 
     <mdbCol v-if="error" class="error">{{ error }}</mdbCol>
 
     <mdbCol v-if="cause" class="content">
       <mdbRow
-        v-if="cause.data.attributes.logos"
+        v-if="cause.data.attributes.logos.length"
         class="justify-content-center my-5"
       >
         <mdbCol col="auto">
@@ -29,7 +39,7 @@
             {{ cause.data.attributes.name }}
           </h2>
           <p class="text-center my-4">
-            <mdbBtn size="lg" color="primary" @click.native="modal = true"
+            <mdbBtn size="lg" color="primary" @click="modal = true"
               >Donate</mdbBtn
             >
           </p>
@@ -49,43 +59,196 @@
       </mdbRow>
       <mdbRow class="mb-4 justify-content-center">
         <mdbCol col="auto">
-          <mdbBtn size="lg" color="primary" @click.native="modal = true"
+          <mdbBtn size="lg" color="primary" @click="modal = true"
             >Donate</mdbBtn
           >
         </mdbCol>
       </mdbRow>
-      <mdbModal size="xl" :show="modal" @close="modal = false">
-        <form>
-          <mdbModalHeader class="text-center">
-            <mdbModalTitle tag="h4" bold class="w-100">Sign up</mdbModalTitle>
-          </mdbModalHeader>
-          <mdbModalBody class="mx-3 grey-text">
+      <!--
+        We want show to always be true and then just hide the modal. This is
+        so we don't lose the form data if the user accidentally clicks outside
+        the modal.
+      -->
+      <mdbModal
+        size="xl"
+        :show="true"
+        class="d-none"
+        :class="displayModalClass"
+        @close="modal = false"
+      >
+        <mdbModalHeader class="text-center">
+          <mdbModalTitle tag="h4" bold class="w-100"
+            >Make a Donation</mdbModalTitle
+          >
+        </mdbModalHeader>
+        <mdbAlert
+          color="success"
+          v-if="cryptocurrencyDonation"
+          @closeAlert="cryptocurrencyDonation = null"
+          leaveAnimation="fadeOut"
+        >
+          <strong>Cryptocurrency Donation Registered.</strong> Now send the
+          donation in Metamask to:<br />
+          <br />
+          {{ cryptocurrencyDonation.toCryptoAddress }}
+        </mdbAlert>
+        <mdbAlert
+          color="warning"
+          v-if="cryptocurrencyDonationError"
+          @closeAlert="cryptocurrencyDonationError = null"
+          leaveAnimation="fadeOut"
+          dismiss
+        >
+          <strong>Cryptocurrency Donation could not be registered.</strong>
+          {{ cryptocurrencyDonationError }}.
+        </mdbAlert>
+        <form id="cwa-donation-form" @submit.prevent="submitForm">
+          <mdbModalBody
+            :class="displayModalPageClass(1)"
+            class="d-none mx-3 grey-text"
+          >
             <mdbInput
-              name="first-name"
-              label="First name"
+              name="givenNames"
+              label="Given names"
               icon="user"
+              iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="100"
+              :value="
+                getPropIfExist(user, '@_firstname') +
+                getPropIfExist(user, '@_initials')
+              "
             />
             <mdbInput
-              name="last-name"
+              name="lastName"
               label="Last name"
-              icon="user"
-              iconClass="fa-blank"
+              icon="blank"
+              iconClass="fa-fw"
               class="mb-4"
+              required
+              maxlength="100"
+              :value="getPropIfExist(user, '@_lastname')"
             ></mdbInput>
             <mdbInput
               name="email"
               label="Email"
               icon="envelope"
+              iconClass="fa-fw"
               type="email"
               class="mb-4"
+              required
+              maxlength="30"
+              :value="getPropIfExist(user, '@_email')"
+            />
+            <mdbInput
+              name="address1"
+              autocomplete="address-line1"
+              label="Street Address"
+              icon="map-marker-alt"
+              iconClass="fa-fw"
+              class="mb-4"
+              required
+              maxlength="100"
+              :value="getPropIfExist(user, '@_address-street')"
+            ></mdbInput>
+            <mdbInput
+              name="address2"
+              autocomplete="address-line2"
+              label="Apt, Suite, Unit, Additional Address Information (optional)"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+              maxlength="100"
+            ></mdbInput>
+            <mdbInput
+              name="city"
+              label="City"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+              required
+              maxlength="85"
+              :value="getPropIfExist(user, '@_address-city')"
+            ></mdbInput>
+            <mdbInput
+              name="stateProvinceRegion"
+              autocomplete="address-level1"
+              label="State, Province, Region"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+              required
+              maxlength="60"
+              :value="getPropIfExist(user, '@_address-state')"
+            ></mdbInput>
+            <mdbInput
+              name="country"
+              label="Country"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+              required
+              maxlength="10"
+              :value="getPropIfExist(user, '@_address-country')"
+            ></mdbInput>
+            <mdbInput
+              name="zipPostalCode"
+              autocomplete="postal-code"
+              label="Zip, Postal Code"
+              icon="blank"
+              iconClass="fa-fw"
+              class="mb-4"
+              required
+              maxlength="7"
+              :value="getPropIfExist(user, '@_address-postcode')"
+            ></mdbInput>
+          </mdbModalBody>
+          <mdbModalBody
+            :class="displayModalPageClass(2)"
+            class="d-none mx-3 grey-text"
+          >
+            <mdbInput
+              name="fromCryptoAddress"
+              autocomplete="from-crypto-address"
+              label="Your Ethereum Account Address"
+              icon="ethereum"
+              iconClass="fa-fw"
+              fab
+              class="mb-4"
+              required
+              maxlength="50"
+            />
+            <mdbInput
+              name="initialCryptoAmount"
+              autocomplete="do-not-autofill"
+              label="ETH Amount"
+              icon="ethereum"
+              iconClass="fa-fw"
+              fab
+              type="number"
+              class="mb-4"
+              required
+              :min="0.001"
+              :step="0.001"
             />
           </mdbModalBody>
           <mdbModalFooter center>
-            <mdbBtn outline="primary" @click.native="modal = false"
-              >Close</mdbBtn
+            <mdbBtn
+              v-if="modalPage > 1"
+              outline="primary"
+              @click="valdiateBeforeNavigatingForm({ forward: false })"
+              >Previous</mdbBtn
             >
-            <mdbBtn color="primary">Save changes</mdbBtn>
+            <mdbBtn
+              v-if="modalPage < 2"
+              color="primary"
+              @click="valdiateBeforeNavigatingForm({ forward: true })"
+              >Next</mdbBtn
+            >
+            <mdbBtn v-if="modalPage === 2" color="primary" type="submit"
+              >Submit</mdbBtn
+            >
           </mdbModalFooter>
         </form>
       </mdbModal>
@@ -95,7 +258,9 @@
 
 <script>
 import benevityApi from "@/apis/benevity-api";
+import cryptocurrencyDonationWebAppApi from "@/apis/cryptocurrency-donation-web-app-api";
 import {
+  mdbAlert,
   mdbCol,
   mdbRow,
   mdbBtn,
@@ -112,6 +277,7 @@ import {
 
 export default {
   components: {
+    mdbAlert,
     mdbCol,
     mdbRow,
     mdbInput,
@@ -135,7 +301,13 @@ export default {
       cause: null,
       error: null,
 
+      user: null,
+
       modal: false,
+      modalPage: 1,
+
+      cryptocurrencyDonation: null,
+      cryptocurrencyDonationError: null,
     };
   },
 
@@ -148,7 +320,25 @@ export default {
     },
   },
 
+  computed: {
+    displayModalClass() {
+      if (this.modal) {
+        return "d-block";
+      } else {
+        return "";
+      }
+    },
+  },
+
   methods: {
+    displayModalPageClass(page) {
+      if (this.modalPage === page) {
+        return "d-block";
+      } else {
+        return "";
+      }
+    },
+
     fetchData() {
       this.error = this.cause = null;
       this.loading = true;
@@ -163,6 +353,69 @@ export default {
           this.error = error.toString();
         }
       );
+
+      if (this.$route.query.user) {
+        benevityApi
+          .adapterGeneralGetUserProfile(this.$route.query.user)
+          .then((getUserProfile) => {
+            this.user = getUserProfile.response.content.user;
+          });
+      }
+    },
+
+    getPropIfExist(object, prop) {
+      if (typeof object === "object" && object !== null) {
+        if (prop in object) {
+          return object[prop];
+        }
+      }
+      return "";
+    },
+
+    submitForm(event) {
+      if (!this.cryptocurrencyDonation) {
+        const formData = new FormData(event.target);
+
+        cryptocurrencyDonationWebAppApi
+          .cryptocurrencyDonationCreateDonation({
+            nonProfitId: this.$route.params.id,
+            cryptocurrencyTxId: null,
+            formData: formData,
+          })
+          .then(
+            (cryptocurrencyDonation) => {
+              this.cryptocurrencyDonation = cryptocurrencyDonation;
+              event.submitter.setAttribute("disabled", "");
+            },
+            (error) => {
+              console.error(error);
+              this.cryptocurrencyDonationError = error.toString();
+            }
+          );
+      }
+    },
+
+    valdiateBeforeNavigatingForm({ forward = true }) {
+      let allowNavigation = false;
+
+      const inputs = document
+        .querySelectorAll("#cwa-donation-form .modal-body")
+        [this.modalPage - 1].querySelectorAll(":scope input");
+
+      for (const input of inputs) {
+        if (!input.reportValidity()) {
+          allowNavigation = false;
+          break;
+        } else {
+          allowNavigation = true;
+        }
+      }
+
+      if (forward === true && allowNavigation === true) {
+        this.modalPage++;
+      } else if (forward === false) {
+        this.modalPage--;
+      }
     },
   },
 };
