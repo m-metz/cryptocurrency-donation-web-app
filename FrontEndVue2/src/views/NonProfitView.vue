@@ -29,7 +29,7 @@
             {{ cause.data.attributes.name }}
           </h2>
           <p class="text-center my-4">
-            <mdbBtn size="lg" color="primary" @click.native="modal = true"
+            <mdbBtn size="lg" color="primary" @click="modal = true"
               >Donate</mdbBtn
             >
           </p>
@@ -49,12 +49,22 @@
       </mdbRow>
       <mdbRow class="mb-4 justify-content-center">
         <mdbCol col="auto">
-          <mdbBtn size="lg" color="primary" @click.native="modal = true"
+          <mdbBtn size="lg" color="primary" @click="modal = true"
             >Donate</mdbBtn
           >
         </mdbCol>
       </mdbRow>
-      <mdbModal size="xl" :show="modal" @close="modal = false">
+      <!--
+        We want show to always be true and then just hide the modal. This is
+        so we don't lose the form data if the user accidentally clicks outside
+        the modal.
+      -->
+      <mdbModal
+        size="xl"
+        show="true"
+        :class="displayModalClass"
+        @close="modal = false"
+      >
         <form>
           <mdbModalHeader class="text-center">
             <mdbModalTitle tag="h4" bold class="w-100"
@@ -169,9 +179,7 @@
             />
           </mdbModalBody>
           <mdbModalFooter center>
-            <mdbBtn outline="primary" @click.native="modal = false"
-              >Close</mdbBtn
-            >
+            <mdbBtn outline="primary" @click="modal = false">Close</mdbBtn>
             <mdbBtn color="primary" type="submit">Save changes</mdbBtn>
           </mdbModalFooter>
         </form>
@@ -232,6 +240,16 @@ export default {
       handler: "fetchData",
       // the callback will be called immediately after the start of the observation
       immediate: true,
+    },
+  },
+
+  computed: {
+    displayModalClass() {
+      if (this.modal) {
+        return "";
+      } else {
+        return "d-none";
+      }
     },
   },
 
