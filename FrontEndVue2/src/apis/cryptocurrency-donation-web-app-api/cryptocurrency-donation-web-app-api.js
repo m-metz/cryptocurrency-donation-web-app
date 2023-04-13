@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import "isomorphic-fetch";
 
 import { isEmptyObject } from "@/helpers/index.js";
@@ -76,28 +77,42 @@ export default class CryptocurrencyDonationWebAppApi {
    * @param {string} [params.cryptocurrencyTxId = null] - We look up
    *  cryptocurrency by From address for now, but we may make the TxID the new
    *  mandatory way to look up transactions. Nullable field.
+   * @param {TransactionResponse} txResponse
    * @param {FormData} params.formData - Form data from src/views/NonProfitView.vue
    * @returns {Promise}
    */
   async cryptocurrencyDonationCreateDonation({
     nonProfitId,
     donorUserId = "",
-    cryptocurrencyTxId = null,
+    txResponse = null,
     formData,
   }) {
+    if (txResponse.to !== this.#toCryptoAddress) {
+      throw Error(
+        `You did not send to the correct address. Expected ${
+          this.#toCryptoAddress
+        }, you sent to ${txResponse.to}`
+      );
+    }
     //Create an object from the form data entries
     const formDataObject = Object.fromEntries(formData.entries());
 
-    const { fromCryptoAddress, initialCryptoAmount, ...taxReceipt } =
-      formDataObject;
+    /*
+    initialCryptoAmount is not used, but needs to be destructured so that
+    taxReceipt holds the correct properties and doesn't have extra.
+
+    That being said, the backend might ignore the extra properties.
+    */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { initialCryptoAmount, ...taxReceipt } = formDataObject;
 
     const cryptocurrencyDonation = {
       nonProfitId,
       donorUserId,
-      cryptocurrencyTxId,
-      fromCryptoAddress,
-      toCryptoAddress: this.#toCryptoAddress,
-      initialCryptoAmount,
+      cryptocurrencyTxId: txResponse.hash,
+      fromCryptoAddress: txResponse.from,
+      toCryptoAddress: txResponse.to,
+      initialCryptoAmount: ethers.formatEther(txResponse.value),
       receipted: true,
       taxReceipt,
     };

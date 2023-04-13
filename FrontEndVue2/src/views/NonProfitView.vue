@@ -107,10 +107,11 @@
           @closeAlert="cryptocurrencyDonation = null"
           leaveAnimation="fadeOut"
         >
-          <strong>Cryptocurrency Donation Registered.</strong> Now send the
-          donation in Metamask to:<br />
-          <br />
-          {{ cryptocurrencyDonation.toCryptoAddress }}
+          <strong>Cryptocurrency Donation Registered.</strong>
+          You sent {{ cryptocurrencyDonation.initialCryptoAmount }} to
+          {{ cryptocurrencyDonation.toCryptoAddress }}. You can monitor this
+          transaction on
+          <a :href="etherScanUrl">{{ etherScanDomain }}</a>
         </mdbAlert>
         <mdbAlert
           color="warning"
@@ -229,17 +230,6 @@
             class="d-none mx-3 grey-text"
           >
             <mdbInput
-              name="fromCryptoAddress"
-              autocomplete="from-crypto-address"
-              label="Your Ethereum Account Address"
-              icon="ethereum"
-              iconClass="fa-fw"
-              fab
-              class="mb-4"
-              required
-              maxlength="50"
-            />
-            <mdbInput
               name="initialCryptoAmount"
               autocomplete="do-not-autofill"
               label="ETH Amount"
@@ -266,17 +256,13 @@
               @click="valdiateBeforeNavigatingForm({ forward: true })"
               >Next</mdbBtn
             >
-            <CdwuMetaMaskOnboardConnectButton
-              v-if="modalPage === 2"
-              class="py-1"
-              iconHeight="1.78rem"
-              size=""
-            ></CdwuMetaMaskOnboardConnectButton>
             <mdbBtn
               v-if="modalPage === 2 && metaMaskInstalled"
               color="primary"
               type="submit"
-              :disabled="cryptocurrencyDonation !== null"
+              :disabled="
+                cryptocurrencyDonation !== null || transactionSubmitting
+              "
               >Submit</mdbBtn
             >
           </mdbModalFooter>
@@ -354,8 +340,8 @@ export default {
       MetaMask needs a page refresh after installation (handled by Onboarding).
       */
       metaMaskInstalled: MetaMaskOnboarding.isMetaMaskInstalled(),
-      // metaMaskInstalled: false,
       metaMaskInstallMessage: "Metamask is required to donate cryptocurrency.",
+      transactionSubmitting: false,
     };
   },
 
@@ -375,6 +361,26 @@ export default {
       } else {
         return "";
       }
+    },
+    etherScanUrl() {
+      let networkSubDomain = "";
+      if (ETHEREUM_NETWORK !== "homestead") {
+        networkSubDomain = ETHEREUM_NETWORK + ".";
+      }
+      return (
+        "https://" +
+        networkSubDomain +
+        "etherscan.io/tx/" +
+        this.cryptocurrencyDonation?.cryptocurrencyTxId
+      );
+    },
+
+    etherScanDomain() {
+      let networkSubDomain = "";
+      if (ETHEREUM_NETWORK !== "homestead") {
+        networkSubDomain = ETHEREUM_NETWORK + ".";
+      }
+      return networkSubDomain + "etherscan.io";
     },
   },
 
@@ -422,8 +428,9 @@ export default {
 
     submitForm(event) {
       if (!this.cryptocurrencyDonation && this.metaMaskInstalled) {
+        this.transactionSubmitting = true;
+
         const formData = new FormData(event.target);
-        window.formData = formData;
         const formDataObject = Object.fromEntries(formData.entries());
 
         // parseInt(ETHAmountValue) converts to a Wei int (10**18)
@@ -455,12 +462,11 @@ export default {
             }
             return signer.sendTransaction(transactionRequest);
           })
-          .then((receipt) => {
-            window.receipt = receipt;
+          .then((txResponse) => {
             return cryptocurrencyDonationWebAppApi.cryptocurrencyDonationCreateDonation(
               {
                 nonProfitId: this.$route.params.id,
-                cryptocurrencyTxId: null,
+                txResponse: txResponse,
                 formData: formData,
               }
             );
@@ -468,8 +474,10 @@ export default {
           .then(
             (cryptocurrencyDonation) => {
               this.cryptocurrencyDonation = cryptocurrencyDonation;
+              this.transactionSubmitting = false;
             },
             (error) => {
+              this.transactionSubmitting = false;
               console.error(error);
               this.cryptocurrencyDonationError = error;
             }
