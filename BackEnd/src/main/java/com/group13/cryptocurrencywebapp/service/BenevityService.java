@@ -23,8 +23,7 @@ import reactor.core.publisher.Mono;
  * Company: Benevity
  * </pre>
  * 
- * <p>Service class that is defined with all of teh functionality necessary
- * to create and process a cryptocurrency donation
+ * <p>Service class that is defined with all of the functionality necessary to interact with Benevity's API
  * 
  * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
  * 
@@ -39,7 +38,11 @@ public class BenevityService {
     @Qualifier("benevityClient")
     private WebClient webclient = WebClient.create();
 
-    // Create a new donation
+    /**
+     * Create a benevity donation, calling Benevity's API
+     * @param benevityDonationStr A string containing the JSON body required to post to the Benevity API to create a Benevity donation 
+     * @return BenevityDonation object containing the values sent in the JSON body response after creating a Benevity donation with the benevityDonationStr param
+     */
     public BenevityDonation createDonation(String benevityDonationStr) {
 
         BenevityDonation response = webclient.post()
@@ -52,7 +55,12 @@ public class BenevityService {
         return response;
     }
 
-    // Get the status of an existing donation
+    
+    /**
+     * Get the JSON body returned from retrieving a Benevity donation from their API
+     * @param id A string containing the id of the Benevity donation
+     * @return BenevityDonation object containing the values set in the JSON body contained in benevityDonationStr String parameter
+     */
     public BenevityDonation getDonationStatus(String id) {
         ResponseEntity<BenevityDonation> response = webclient.get()
                 .uri("/donations/" + id)
@@ -65,6 +73,11 @@ public class BenevityService {
         return donation;
     }
 
+    /**
+     * Send an email containing the tax receipt. Information is retrieved from the specified Benevity donation
+     * @param receiptId A string containing the id of the Benevity donation's receipt id
+     * @param email A string containing the email address you would like to send the donation to
+     */
     public void sendReceiptEmail(String receiptId, String email){
 
         JSONObject payload = new JSONObject();
@@ -95,6 +108,11 @@ public class BenevityService {
         }
     }
 
+    /**
+     *  Retrieve a single cause from Benevity's cause database
+     * @param id A string containing the id of the Benevity cause
+     * @return Cause object containing the information returned regarding that cause
+     */
     public Cause getOneCause(String id) {
         String uri = "/search/causes?q=id:" + id;
         ResponseEntity<Cause> response = webclient.get()
@@ -113,6 +131,11 @@ public class BenevityService {
         }
     }
 
+    /**
+     * Get the JSON body returned from retrieving a Benevity cause's information
+     * @param id A string containing the id of the Benevity cause
+     * @return CauseDetail object containing the values returned from Benevity when requesting information regarding the specified cause
+     */
     public CauseDetail getCauseDetails(String id) {
         String uri = "/causes/" + id;
         ResponseEntity<CauseDetail> response = webclient.get()
