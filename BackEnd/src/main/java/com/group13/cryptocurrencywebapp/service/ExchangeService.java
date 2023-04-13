@@ -11,6 +11,21 @@ import com.group13.cryptocurrencywebapp.config.Signature;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 
+/** 
+ * <pre>
+ * Class Name: ExchangeService
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Service class that is defined with all of the functionality necessary to interact with the Binance exchange
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Service
 public class ExchangeService {
 
