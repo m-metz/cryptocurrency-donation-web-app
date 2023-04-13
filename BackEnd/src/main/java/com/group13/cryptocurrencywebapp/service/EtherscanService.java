@@ -16,6 +16,21 @@ import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.EthTransactionList;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
 
+/** 
+ * <pre>
+ * Class Name: EtherscanService
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Service class that is defined with all of the functionality necessary to interact with etherscan
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Service
 public class EtherscanService {
 
@@ -25,6 +40,12 @@ public class EtherscanService {
 
     @Value("${etherscan.api.key}")
     String apiKey;
+
+    /**
+     * Check that an address is valid
+     * @param address String holding the address to check
+     * @return A string containing the result of the validation
+     */
 
     public String validateAddress(String address) {
         String uri = "?module=account&action=balance&address=" + address + "&tag=latest&apikey=" + apiKey;
@@ -49,11 +70,21 @@ public class EtherscanService {
 
     }
 
+    /**
+     * Check that a message is OK
+     * @param message String holding the message to check
+     * @return A boolean containing if the message is okay or not
+     */
     public boolean checkMessage(String message) {
 
         return message.equals("OK");
     }
 
+
+    /**
+     * Get the price of ethereum right now
+     * @return A Price object containing the price of ethereum 
+     */
     public Price getEthPrice() {
         String uri = "?module=stats&action=ethprice&apikey=" + apiKey;
 
@@ -75,7 +106,11 @@ public class EtherscanService {
         }
 
     }
-
+    /**
+     * Get all the transactions created by one address
+     * @param message String holding the address of the wallet in question
+     * @return A list of Result objects holding the transactions created
+     */
     public List<Result> getTransactions(String address) {
 
         String uri = "?module=account&action=txlist&address=" + address
