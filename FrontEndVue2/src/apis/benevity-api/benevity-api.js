@@ -72,7 +72,6 @@ export default class BenevityApi {
       async function (response) {
         if (!response.ok) {
           const responseText = await response.text();
-          console.log(responseText);
           throw new Error(
             `Could not get cause details by id=${id}. ${responseText}`
           );
