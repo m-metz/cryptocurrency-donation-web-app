@@ -43,6 +43,9 @@
               >Donate</mdbBtn
             >
           </p>
+          <p class="text-center my-4">
+            <CdwuMetamaskOnboardButton></CdwuMetamaskOnboardButton>
+          </p>
           <h3 class="font-weight-normal mb-3 text-primary">Who we are?</h3>
           <p>
             {{ cause.data.attributes.caption }}
@@ -258,6 +261,7 @@
 
 <script>
 import benevityApi from "@/apis/benevity-api";
+import CdwuMetamaskOnboardButton from "@/components/CdwuMetamaskOnboardButton.vue";
 import cryptocurrencyDonationWebAppApi from "@/apis/cryptocurrency-donation-web-app-api";
 import {
   mdbAlert,
@@ -277,6 +281,7 @@ import {
 
 export default {
   components: {
+    CdwuMetamaskOnboardButton,
     mdbAlert,
     mdbCol,
     mdbRow,
