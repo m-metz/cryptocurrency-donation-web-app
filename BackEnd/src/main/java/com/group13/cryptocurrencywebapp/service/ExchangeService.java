@@ -11,6 +11,21 @@ import com.group13.cryptocurrencywebapp.config.Signature;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeAccount;
 import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTradeResponse;
 
+/** 
+ * <pre>
+ * Class Name: ExchangeService
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Service class that is defined with all of the functionality necessary to interact with the Binance exchange
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Service
 public class ExchangeService {
 
@@ -23,6 +38,10 @@ public class ExchangeService {
     @Qualifier("binanceClient")
     private WebClient webclient = WebClient.create();
 
+    /**
+     * Get information about the account
+     * @return An ExchangeAccount object containing the information about the account
+     */
     public ExchangeAccount getAccountInfo() throws Exception {
         String apiEndpoint = "/v3/account?";
         String queryParams = "timestamp=" + System.currentTimeMillis();
@@ -35,6 +54,11 @@ public class ExchangeService {
         return response.getBody();
     }
 
+    /**
+     * Executes a trade of the specified ETH amount to ETHBUSD
+     * @param value Float holding the amount of ETH to trade
+     * @return 
+     */
     public ExchangeTradeResponse executeNewTrade(float value) throws InterruptedException {
         String apiEndpoint = "/v3/order?";
         String queryParams = "symbol=ETHBUSD" + "&side=SELL" + "&type=MARKET" + "&quantity=" + value
@@ -76,6 +100,10 @@ public class ExchangeService {
         }
     }
 
+    /**
+     * Get the status of a trade
+     
+     */
     public ExchangeTradeResponse queryTrade(String clientOrderId) {
         String apiEndpoint = "/v3/order?";
         String queryParams = "symbol=ETHBUSD&origClientOrderId=" + clientOrderId + "&timestamp="
@@ -94,6 +122,11 @@ public class ExchangeService {
         }
     }
 
+    /**
+     * Cancel and existing trade
+     * @param clientOrderId String holding the order id of the trade
+     * @return An ExchangeTradeResponse object containing the response from the exchange
+     */
     public ExchangeTradeResponse cancelTrade(String clientOrderId) {
         String apiEndpoint = "/v3/order?";
         String queryParams = "symbol=ETHBUSD&origClientOrderId=" + clientOrderId + "&timestamp="
