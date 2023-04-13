@@ -28,6 +28,21 @@ import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
 import net.minidev.json.JSONObject;
 
+/** 
+ * <pre>
+ * Class Name: CryptoCurrencyDonationService
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Service class that is defined with all of the functionality necessary to create a donation. Full flow of a donation is contained here.
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 
 @Configuration
 @EnableScheduling
@@ -57,6 +72,11 @@ public class CryptoCurrencyDonationService {
         this.exchangeService = exchangeService;
     }
 
+    /**
+     * Create a new donation. Donation objects contain all the fields necessary to process a donation. Intended to work with the /createDonation endpoint
+     * @param cryptoDonation A CryptoCurrencyDonation object containing the fields for the new donation
+     * @return A CryptoCurrencyDonation object that has been saved to the database and contains the converted donation amount in USD
+     */
     public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
         if (cryptoDonation != null) {
@@ -84,15 +104,29 @@ public class CryptoCurrencyDonationService {
 
     }
 
+    /**
+     * Retrieve a list of all CryptoCurrencyDonation objects stored in the database. Intended to work with the /getDonation/all endpoint
+     * @return A list of all CryptoCurrencyDonation objects that have been saved to the database
+     */
     public List<CryptoCurrencyDonation> getAllDonations() {
         return cryptoCurrencyDonationRepository.findAll();
     }
 
-
+     /**
+     * Retrieve a list of all CryptoTransfer objects stored in the database. Intended to work with the /getDeposit/all endpoint
+     * @return A list of all CryptoTransfer objects that have been saved to the database
+     */
     public List<CryptoTransfer> getAllDeposits() {
-        return cryptoTransferRepository.findAll();
+        return
+         cryptoTransferRepository.findAll();
     }
 
+    /**
+     * Retrieve the latest transaction from the give address that is likely the donation transaction.
+     * @param toAddress The address the transaction is sent to (Our address)
+     * @param fromAddress The address the transaction was sent from (donor address)
+     * @return Result object holding the most recent transaction retrieved from etherscan.
+     */
     public Result filterTransactions(String toAddress, String fromAddress) {
         List<Result> allTransactions = etherscanService.getTransactions(toAddress);
 
@@ -108,14 +142,26 @@ public class CryptoCurrencyDonationService {
         return latest;
     }
 
+    /**
+     * Retrieve a list of all Fee objects stored in the database. Intended to work with the /getFee/all endpoint
+     * @return A list of all Fee objects that have been saved to the database
+     */
     public List<Fee> getAllFees() {
         return feeRepository.findAll();
     }
 
+    /**
+     * Retrieve a list of all Trade objects stored in the database. Intended to work with the /getTrade/all endpoint
+     * @return A list of all Trade objects that have been saved to the database
+     */
     public List<Trade> getAllTrades() {
         return tradeRepository.findAll();
     }
 
+    /**
+     * Retrieve a list of all donation objects stored in the database created by a specific user. Intended to work with the /getdonations/userid={userid} endpoint
+     * @return A list of all donation objects created by a certain user that have been saved to the database
+     */
     public List<CryptoCurrencyDonation> getAllDonationsForUser(String userid) {
         if (userid == null || userid.equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -134,7 +180,10 @@ public class CryptoCurrencyDonationService {
         
     }
 
-    // Transaction Flow methods
+    /**
+     * Create a new deposit for use within the flow. This is the first stage of the donation pipeline and will call the second stage, trade
+     * @param id An integer of the donation id this deposit should be attached to
+     */
     public void createFlowNewDeposit(int id) {
         CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(id).get();
 
@@ -184,6 +233,12 @@ public class CryptoCurrencyDonationService {
             System.out.println("Trade creation Failed");
         }
     }
+
+    /**
+     * Create a new trade for use within the flow. This is the second stage of the donation pipeline and will call the third stage, createBenevityDonation
+     * @param donationId An integer of the donation id this deposit should be attached to
+     * @param amount A float containing the amount of eth that needs to be traded
+     */
 
     public void createFlowTrade(int donationId, float amount) throws InterruptedException {
         CryptoCurrencyDonation donation =
@@ -242,6 +297,11 @@ public class CryptoCurrencyDonationService {
 
     }
 
+    /**
+     * Create a new Benevity donation for use within the flow. This is the third and final stage of the donation pipelin. The donation is complete after this stage.
+     * @param donation The donation object to retrieve the information from
+     * @param currency String containing the currency code you wish to report the amount in
+     */
     public void createBenevityDonation(CryptoCurrencyDonation donation, String currency,
             int timesTried) {
 
@@ -352,6 +412,9 @@ public class CryptoCurrencyDonationService {
 
     }
 
+    /**
+     * A helper function that will periodically search for transactions that are in a bad state and attempt to resolve them.
+     */
     @Transactional
     @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}",
             initialDelayString = "${initialDelay.in.milliseconds}")
