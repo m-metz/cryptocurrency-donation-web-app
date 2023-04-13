@@ -296,6 +296,9 @@ import {
 
 /**
  * Configure the expected ethereum network.
+ *
+ * See network names here
+ * https://docs.ethers.org/v5/api/providers/api-providers/#EtherscanProvider.
  */
 const ETHEREUM_NETWORK = "sepolia";
 
