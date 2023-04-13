@@ -130,7 +130,7 @@ CREATE TABLE CURRENCY_DONATION (
     tax_receipt_id				integer,
     non_profit_id				varchar(30)	not null,
     donor_user_id				varchar(30)	not null,
-	cryptocurrency_tx_id		varchar(30),
+	cryptocurrency_tx_id		varchar(100),
     crypto_transfer_id			integer,
     trade_id					integer,
     exchange_bank_transfer_id	integer,
