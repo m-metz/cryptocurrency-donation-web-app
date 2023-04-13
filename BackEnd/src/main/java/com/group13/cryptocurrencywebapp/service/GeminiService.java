@@ -21,7 +21,7 @@ import net.minidev.json.JSONObject;
 
 /**
  * <pre>
- * Class Name: EtherscanService
+ * Class Name: GeminiService
  * 
  * Date Created: March 10, 2023
  * Company: Benevity

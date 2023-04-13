@@ -4,7 +4,22 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
+/** 
+ * <pre>
+ * Class Name: Trade
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Entity class created to hold information about a trade from cryptocurrency to fiat currency or stable coin.
+ * Extends Transaction
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Entity
 @Table(name = "trade")
 public class Trade extends Transaction {

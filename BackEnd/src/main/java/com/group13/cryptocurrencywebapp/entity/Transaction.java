@@ -13,7 +13,21 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+/** 
+ * <pre>
+ * Class Name: Transaction
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Entity class created to hold information about any kind of transfer that occurs during the donation process
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "transaction")

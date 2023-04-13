@@ -9,7 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-
+/** 
+ * <pre>
+ * Class Name: CryptoCurrencyDonation
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Entity class created to hold all the information and methods related to a cryptocurrency donation. 
+ * Includes fields for amounts, addresses, tax receipt, associated transactions, etc.
+ * 
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Entity
 @Table(name = "currency_donation")
 public class CryptoCurrencyDonation {
