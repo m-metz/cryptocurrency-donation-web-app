@@ -132,15 +132,14 @@ export default {
     onboarding), so we don't need reactivity for installation status.
     */
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      console.log("Adding accountsChanged listener");
+      console.debug("Adding accountsChanged listener");
       window.ethereum.on("accountsChanged", this.handleNewAccounts);
     }
   },
 
   destroyed() {
-    console.log(MetaMaskOnboarding.isMetaMaskInstalled());
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      console.log("Removing accountsChanged listener");
+      console.debug("Removing accountsChanged listener");
       window.ethereum.removeListener("accountsChanged", this.handleNewAccounts);
     }
   },

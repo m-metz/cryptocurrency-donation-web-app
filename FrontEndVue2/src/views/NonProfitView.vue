@@ -272,7 +272,11 @@
               iconHeight="1.78rem"
               size=""
             ></CdwuMetaMaskOnboardConnectButton>
-            <mdbBtn v-if="modalPage === 2" color="primary" type="submit"
+            <mdbBtn
+              v-if="modalPage === 2 && metaMaskInstalled"
+              color="primary"
+              type="submit"
+              :disabled="cryptocurrencyDonation !== null"
               >Submit</mdbBtn
             >
           </mdbModalFooter>
@@ -283,6 +287,7 @@
 </template>
 
 <script>
+import { ethers } from "ethers";
 import MetaMaskOnboarding from "@metamask/onboarding";
 import benevityApi from "@/apis/benevity-api";
 import CdwuMetaMaskOnboardConnectButton from "@/components/CdwuMetaMaskOnboardConnectButton.vue";
@@ -302,6 +307,11 @@ import {
   mdbView,
   mdbWaves,
 } from "mdbvue";
+
+/**
+ * Configure the expected ethereum network.
+ */
+const ETHEREUM_NETWORK = "sepolia";
 
 export default {
   components: {
@@ -411,19 +421,53 @@ export default {
     },
 
     submitForm(event) {
-      if (!this.cryptocurrencyDonation) {
+      if (!this.cryptocurrencyDonation && this.metaMaskInstalled) {
         const formData = new FormData(event.target);
+        window.formData = formData;
+        const formDataObject = Object.fromEntries(formData.entries());
 
-        cryptocurrencyDonationWebAppApi
-          .cryptocurrencyDonationCreateDonation({
-            nonProfitId: this.$route.params.id,
-            cryptocurrencyTxId: null,
-            formData: formData,
+        // parseInt(ETHAmountValue) converts to a Wei int (10**18)
+        const weiAmount = ethers.parseEther(formDataObject.initialCryptoAmount);
+
+        const transactionRequest = {
+          to: cryptocurrencyDonationWebAppApi.toCryptoAddress,
+          value: weiAmount.toString(),
+        };
+
+        /*
+        TODO I get a new provider every time because if MetaMask changes networks, the old provider
+        doesn't seem to pick up this change.
+
+        Maybe look into this in the future, as it may be spam creating objects every submit.
+         */
+        const ethereumProvider = new ethers.BrowserProvider(
+          window.ethereum,
+          ETHEREUM_NETWORK
+        );
+
+        ethereumProvider
+          .getSigner()
+          .then((signer) => {
+            if (signer.provider._network.name !== ETHEREUM_NETWORK) {
+              throw Error(
+                `Your selected network ${signer.provider._network.name} does not match ${ETHEREUM_NETWORK}`
+              );
+            }
+            return signer.sendTransaction(transactionRequest);
+          })
+          .then((receipt) => {
+            window.receipt = receipt;
+            return cryptocurrencyDonationWebAppApi.cryptocurrencyDonationCreateDonation(
+              {
+                nonProfitId: this.$route.params.id,
+                cryptocurrencyTxId: null,
+                formData: formData,
+              }
+            );
           })
           .then(
             (cryptocurrencyDonation) => {
               this.cryptocurrencyDonation = cryptocurrencyDonation;
-              event.submitter.setAttribute("disabled", "");
             },
             (error) => {
               console.error(error);
