@@ -10,6 +10,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/** 
+ * <pre>
+ * Class Name: Fee
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Entity class created to hold information about anykind of fee that may be applied to the donation
+ * during the donation process
+ * 
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Entity
 @Table(name = "fee")
 public class Fee {

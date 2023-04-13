@@ -5,6 +5,23 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+/** 
+ * <pre>
+ * Class Name: CryptoTransfer
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Entity class created to hold information about a deposit into our wallet from a donor
+ * Extends Transaction object
+ * 
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Entity
 @Table(name = "crypto_transfer")
 public class CryptoTransfer extends Transaction {

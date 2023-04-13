@@ -28,7 +28,7 @@ import com.group13.cryptocurrencywebapp.repository.TradeRepository;
 
 import net.minidev.json.JSONObject;
 
-/** 
+/**
  * <pre>
  * Class Name: CryptoCurrencyDonationService
  * 
@@ -36,7 +36,9 @@ import net.minidev.json.JSONObject;
  * Company: Benevity
  * </pre>
  * 
- * <p>Service class that is defined with all of the functionality necessary to create a donation. Full flow of a donation is contained here.
+ * <p>
+ * Service class that is defined with all of the functionality necessary to
+ * create a donation. Full flow of a donation is contained here.
  * 
  * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
  * 
@@ -73,9 +75,13 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Create a new donation. Donation objects contain all the fields necessary to process a donation. Intended to work with the /createDonation endpoint
-     * @param cryptoDonation A CryptoCurrencyDonation object containing the fields for the new donation
-     * @return A CryptoCurrencyDonation object that has been saved to the database and contains the converted donation amount in USD
+     * Create a new donation. Donation objects contain all the fields necessary to
+     * process a donation. Intended to work with the /createDonation endpoint
+     * 
+     * @param cryptoDonation A CryptoCurrencyDonation object containing the fields
+     *                       for the new donation
+     * @return A CryptoCurrencyDonation object that has been saved to the database
+     *         and contains the converted donation amount in USD
      */
     public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
@@ -85,8 +91,7 @@ public class CryptoCurrencyDonationService {
             if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
 
                 System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                float ethPrice =
-                        Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
+                float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
                 cryptoDonation.getTaxReceipt()
                         .setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
                 System.out.println(cryptoDonation.getTaxReceipt().getAmount());
@@ -105,27 +110,35 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Retrieve a list of all CryptoCurrencyDonation objects stored in the database. Intended to work with the /getDonation/all endpoint
-     * @return A list of all CryptoCurrencyDonation objects that have been saved to the database
+     * Retrieve a list of all CryptoCurrencyDonation objects stored in the database.
+     * Intended to work with the /getDonation/all endpoint
+     * 
+     * @return A list of all CryptoCurrencyDonation objects that have been saved to
+     *         the database
      */
     public List<CryptoCurrencyDonation> getAllDonations() {
         return cryptoCurrencyDonationRepository.findAll();
     }
 
-     /**
-     * Retrieve a list of all CryptoTransfer objects stored in the database. Intended to work with the /getDeposit/all endpoint
-     * @return A list of all CryptoTransfer objects that have been saved to the database
+    /**
+     * Retrieve a list of all CryptoTransfer objects stored in the database.
+     * Intended to work with the /getDeposit/all endpoint
+     * 
+     * @return A list of all CryptoTransfer objects that have been saved to the
+     *         database
      */
     public List<CryptoTransfer> getAllDeposits() {
-        return
-         cryptoTransferRepository.findAll();
+        return cryptoTransferRepository.findAll();
     }
 
     /**
-     * Retrieve the latest transaction from the give address that is likely the donation transaction.
-     * @param toAddress The address the transaction is sent to (Our address)
+     * Retrieve the latest transaction from the give address that is likely the
+     * donation transaction.
+     * 
+     * @param toAddress   The address the transaction is sent to (Our address)
      * @param fromAddress The address the transaction was sent from (donor address)
-     * @return Result object holding the most recent transaction retrieved from etherscan.
+     * @return Result object holding the most recent transaction retrieved from
+     *         etherscan.
      */
     public Result filterTransactions(String toAddress, String fromAddress) {
         List<Result> allTransactions = etherscanService.getTransactions(toAddress);
@@ -143,7 +156,9 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Retrieve a list of all Fee objects stored in the database. Intended to work with the /getFee/all endpoint
+     * Retrieve a list of all Fee objects stored in the database. Intended to work
+     * with the /getFee/all endpoint
+     * 
      * @return A list of all Fee objects that have been saved to the database
      */
     public List<Fee> getAllFees() {
@@ -151,7 +166,9 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Retrieve a list of all Trade objects stored in the database. Intended to work with the /getTrade/all endpoint
+     * Retrieve a list of all Trade objects stored in the database. Intended to work
+     * with the /getTrade/all endpoint
+     * 
      * @return A list of all Trade objects that have been saved to the database
      */
     public List<Trade> getAllTrades() {
@@ -159,16 +176,19 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Retrieve a list of all donation objects stored in the database created by a specific user. Intended to work with the /getdonations/userid={userid} endpoint
-     * @return A list of all donation objects created by a certain user that have been saved to the database
+     * Retrieve a list of all donation objects stored in the database created by a
+     * specific user. Intended to work with the /getdonations/userid={userid}
+     * endpoint
+     * 
+     * @return A list of all donation objects created by a certain user that have
+     *         been saved to the database
      */
     public List<CryptoCurrencyDonation> getAllDonationsForUser(String userid) {
         if (userid == null || userid.equals("")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Please inform a valid userid");
         }
-        List<CryptoCurrencyDonation> donations =
-                cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
+        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findAllByDonorUserId(userid);
 
         if (donations == null || donations.isEmpty() == true) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -177,11 +197,13 @@ public class CryptoCurrencyDonationService {
             return donations;
 
         }
-        
+
     }
 
     /**
-     * Create a new deposit for use within the flow. This is the first stage of the donation pipeline and will call the second stage, trade
+     * Create a new deposit for use within the flow. This is the first stage of the
+     * donation pipeline and will call the second stage, trade
+     * 
      * @param id An integer of the donation id this deposit should be attached to
      */
     public void createFlowNewDeposit(int id) {
@@ -205,8 +227,7 @@ public class CryptoCurrencyDonationService {
 
         deposit.setTime(java.time.LocalDateTime.now());
 
-        Result latest =
-                filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
         deposit.setExchangeReferenceId(latest.getHash());
         deposit = cryptoTransferRepository.save(deposit);
 
@@ -219,8 +240,7 @@ public class CryptoCurrencyDonationService {
         deposit.setFinal_amount(deposit.getAmount()
                 - Float.parseFloat(latest.getGasUsed()) / (float) 1000000000000000000.0);
 
-        CryptoTransfer deposit1 =
-                cryptoTransferRepository.findById(deposit.getTransactionId()).get();
+        CryptoTransfer deposit1 = cryptoTransferRepository.findById(deposit.getTransactionId()).get();
 
         donation.setCryptoTransfer(deposit1);
         donation = cryptoCurrencyDonationRepository.save(donation);
@@ -235,14 +255,17 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Create a new trade for use within the flow. This is the second stage of the donation pipeline and will call the third stage, createBenevityDonation
-     * @param donationId An integer of the donation id this deposit should be attached to
-     * @param amount A float containing the amount of eth that needs to be traded
+     * Create a new trade for use within the flow. This is the second stage of the
+     * donation pipeline and will call the third stage, createBenevityDonation
+     * 
+     * @param donationId An integer of the donation id this deposit should be
+     *                   attached to
+     * @param amount     A float containing the amount of eth that needs to be
+     *                   traded
      */
 
     public void createFlowTrade(int donationId, float amount) throws InterruptedException {
-        CryptoCurrencyDonation donation =
-                cryptoCurrencyDonationRepository.findById(donationId).get();
+        CryptoCurrencyDonation donation = cryptoCurrencyDonationRepository.findById(donationId).get();
         Trade newTrade = new Trade();
 
         if (donation.getStatus().equals("D-INPROGRESS")) {
@@ -298,9 +321,13 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Create a new Benevity donation for use within the flow. This is the third and final stage of the donation pipelin. The donation is complete after this stage.
+     * Create a new Benevity donation for use within the flow. This is the third and
+     * final stage of the donation pipelin. The donation is complete after this
+     * stage.
+     * 
      * @param donation The donation object to retrieve the information from
-     * @param currency String containing the currency code you wish to report the amount in
+     * @param currency String containing the currency code you wish to report the
+     *                 amount in
      */
     public void createBenevityDonation(CryptoCurrencyDonation donation, String currency,
             int timesTried) {
@@ -361,8 +388,7 @@ public class CryptoCurrencyDonationService {
         System.out.println("Donation body created: \n" + payload.toJSONString());
         BenevityDonation benevityResponse = benevityService.createDonation(payload.toJSONString());
 
-        BenevityDonation status =
-                benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
+        BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         int retryCount = 1;
         while (status.retrieveStatus().equals("ACCEPTED")) {
@@ -371,7 +397,6 @@ public class CryptoCurrencyDonationService {
             try {
                 Thread.sleep(60000 * retryCount);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -413,14 +438,13 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * A helper function that will periodically search for transactions that are in a bad state and attempt to resolve them.
+     * A helper function that will periodically search for transactions that are in
+     * a bad state and attempt to resolve them.
      */
     @Transactional
-    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}",
-            initialDelayString = "${initialDelay.in.milliseconds}")
+    @Scheduled(fixedDelayString = "${fixedDelay.in.milliseconds}", initialDelayString = "${initialDelay.in.milliseconds}")
     public void retryTimedoutCryptoDonations() throws InterruptedException {
-        List<CryptoCurrencyDonation> donations =
-                cryptoCurrencyDonationRepository.findByStatusContaining("TIMEDOUT");
+        List<CryptoCurrencyDonation> donations = cryptoCurrencyDonationRepository.findByStatusContaining("TIMEDOUT");
         if (donations.isEmpty()) {
             System.out.println("No Timedout donations found");
             return;
@@ -482,6 +506,5 @@ public class CryptoCurrencyDonationService {
             }
         }
     }
-
 
 }

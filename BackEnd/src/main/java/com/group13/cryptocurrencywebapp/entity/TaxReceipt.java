@@ -6,7 +6,22 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
+/** 
+ * <pre>
+ * Class Name: TaxReceipt
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Entity class created to hold information used for the creation of a tax receipt
+ * 
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Entity
 @Table(name = "tax_receipt")
 public class TaxReceipt {
