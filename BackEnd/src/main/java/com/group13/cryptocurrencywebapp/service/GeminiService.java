@@ -19,6 +19,21 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.gemini.Quote;
 
 import net.minidev.json.JSONObject;
 
+/** 
+ * <pre>
+ * Class Name: EtherscanService
+ * 
+ * Date Created: March 10, 2023
+ * Company: Benevity
+ * </pre>
+ * 
+ * <p>Service class that is defined with all of the functionality necessary to interact with the Gemini exchange
+ * 
+ * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
+ * 
+ * @Since April 09, 2023
+ * 
+ */
 @Service
 public class GeminiService {
 
@@ -31,6 +46,10 @@ public class GeminiService {
     @Qualifier("geminiClient")
     private WebClient webclient = WebClient.create();
 
+    /**
+     * Returns the balances
+     * @return A list of Balance objects holding the current balances
+     */
     public List<Balance> getBalancesInfo() throws UnsupportedEncodingException {
         String apiEndpoint = "/v1/balances";
         // Has to be Unix Epoch time (needs to be in seconds)
@@ -56,6 +75,11 @@ public class GeminiService {
         return response.getBody();
     }
 
+    /**
+     * Create a new trade order
+     * @param amount Integer holding the amount ETH (in Wei) you would like to convert to ETHUSD
+     * @return An Order object holding the inofrmation about the newly created order
+     */
     public Order createNewOrder(int amount) throws UnsupportedEncodingException {
         String apiEndpoint = "/v1/order/new";
 
@@ -92,6 +116,11 @@ public class GeminiService {
 
     }
 
+    /**
+     * Gets the exchange rate of the specified currency pair
+     * @param pair String holding the pair of currencies that the exchange will occur between
+     * @return String holding the exchange rate
+     */
     public String getEthPrice(String pair) {
 
         String apiEndpoint = "https://api.sandbox.gemini.com/v1/pricefeed";
@@ -112,7 +141,11 @@ public class GeminiService {
 
     }
 
-    // Instant Order Services
+    /**
+     * Creates a new instant order of the specified amount from ETH to USD
+     * @param amount The amount of ETH to convert to USD
+     * @return An InstantOrder object holding the information about the instant order created
+     */
     public InstantOrder createNewInstantOrder(float amount) throws UnsupportedEncodingException {
         String apiEndpoint = "/v1/instant/execute";
 
@@ -145,6 +178,12 @@ public class GeminiService {
         return response.getBody();
     }
 
+    /**
+     * Gets a quote of a trade of teh specified currency symbol
+     * @param symbol String holding the currency symbol of the proposed trade
+     * @param amount Float holding the amount you wish to convert
+     * @return Quote object holding the result of the quote
+     */
     public Quote getQuote(String symbol, float amount) throws UnsupportedEncodingException {
 
         String apiEndpoint = "/v1/instant/quote";
