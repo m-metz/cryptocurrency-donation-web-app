@@ -108,15 +108,24 @@ export default class CryptocurrencyDonationWebAppApi {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(cryptocurrencyDonation),
-    }).then(async function (response) {
-      if (!response.ok) {
-        const responseProcessed = await response.text();
-        throw new Error(
-          `Could not create cryptocurrencydonation. ${responseProcessed}`
-        );
+    }).then(
+      async function (response) {
+        if (!response.ok) {
+          const responseText = await response.text();
+          throw new Error(
+            `Could not create cryptocurrencydonation. ${responseText}`
+          );
+        }
+        return response.json();
+      },
+      function (err) {
+        /*
+       Log full error object to console for debugging purposes.
+       */
+        console.error(err);
+        throw new Error(`Could not create cryptocurrencydonation. (${err})`);
       }
-      return response.json();
-    });
+    );
   }
 
   get toCryptoAddress() {

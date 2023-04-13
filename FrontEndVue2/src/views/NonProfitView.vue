@@ -350,7 +350,7 @@ export default {
         (error) => {
           this.loading = false;
           console.error(error);
-          this.error = error.toString();
+          this.error = error;
         }
       );
 
@@ -389,7 +389,7 @@ export default {
             },
             (error) => {
               console.error(error);
-              this.cryptocurrencyDonationError = error.toString();
+              this.cryptocurrencyDonationError = error;
             }
           );
       }

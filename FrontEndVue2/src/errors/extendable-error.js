@@ -1,6 +1,6 @@
 export default class ExtendableError extends Error {
   /**
-   * Creates an instance of NotImplementedError.
+   * Contructs the abstract part of ExtendableError.
    * @constructor
    * @abstract
    * @param {string} [notImplementedName=""] Used in default error message if

@@ -68,13 +68,33 @@ export default class BenevityApi {
    * @returns {Promise}
    */
   async causes(id) {
-    return fetch(this.#baseUrl + "/causes/" + id).then(function (response) {
-      if (!response.ok) {
-        console.log(response.text());
-        throw new Error(`Could not get cause details by id=${id}`);
+    return fetch(this.#baseUrl + "/causes/" + id).then(
+      async function (response) {
+        if (!response.ok) {
+          const responseText = await response.text();
+          throw new Error(
+            `Could not get cause details by id=${id}. ${responseText}`
+          );
+        }
+        return response.json();
+      },
+      function (err) {
+        /*
+         Log full error object to console for debugging purposes.
+         */
+        console.error(err);
+
+        /*
+        Don't just append to the err.message. This doesn't update the err.stack
+        information. Wrap ther error message in a new object so that all of the
+        error properties show the new message.
+
+        Users can look at the console, if they need the error stack from
+        earlier.
+        */
+        throw new Error(`Could not get cause details from server. (${err})`);
       }
-      return response.json();
-    });
+    );
   }
 
   /**
