@@ -38,14 +38,21 @@
           <h2 class="h1 font-weight-normal text-center my-4">
             {{ cause.data.attributes.name }}
           </h2>
-          <p class="text-center my-4">
+          <p v-if="metaMaskInstalled" class="text-center my-4">
             <mdbBtn size="lg" color="primary" @click="modal = true"
               >Donate</mdbBtn
             >
           </p>
-          <p class="text-center my-4">
-            <CdwuMetamaskOnboardButton></CdwuMetamaskOnboardButton>
-          </p>
+          <div v-if="!metaMaskInstalled" class="text-center my-4">
+            <p>
+              {{ metaMaskInstallMessage }}
+            </p>
+            <p>
+              <CdwuMetaMaskOnboardConnectButton
+                size="lg"
+              ></CdwuMetaMaskOnboardConnectButton>
+            </p>
+          </div>
           <h3 class="font-weight-normal mb-3 text-primary">Who we are?</h3>
           <p>
             {{ cause.data.attributes.caption }}
@@ -61,10 +68,20 @@
         </mdbCol>
       </mdbRow>
       <mdbRow class="mb-4 justify-content-center">
-        <mdbCol col="auto">
+        <mdbCol v-if="metaMaskInstalled" col="auto">
           <mdbBtn size="lg" color="primary" @click="modal = true"
             >Donate</mdbBtn
           >
+        </mdbCol>
+        <mdbCol v-if="!metaMaskInstalled" col="auto" class="text-center">
+          <p>
+            {{ metaMaskInstallMessage }}
+          </p>
+          <p>
+            <CdwuMetaMaskOnboardConnectButton
+              size="lg"
+            ></CdwuMetaMaskOnboardConnectButton>
+          </p>
         </mdbCol>
       </mdbRow>
       <!--
@@ -249,6 +266,12 @@
               @click="valdiateBeforeNavigatingForm({ forward: true })"
               >Next</mdbBtn
             >
+            <CdwuMetaMaskOnboardConnectButton
+              v-if="modalPage === 2"
+              class="py-1"
+              iconHeight="1.78rem"
+              size=""
+            ></CdwuMetaMaskOnboardConnectButton>
             <mdbBtn v-if="modalPage === 2" color="primary" type="submit"
               >Submit</mdbBtn
             >
@@ -260,8 +283,9 @@
 </template>
 
 <script>
+import MetaMaskOnboarding from "@metamask/onboarding";
 import benevityApi from "@/apis/benevity-api";
-import CdwuMetamaskOnboardButton from "@/components/CdwuMetamaskOnboardButton.vue";
+import CdwuMetaMaskOnboardConnectButton from "@/components/CdwuMetaMaskOnboardConnectButton.vue";
 import cryptocurrencyDonationWebAppApi from "@/apis/cryptocurrency-donation-web-app-api";
 import {
   mdbAlert,
@@ -281,7 +305,7 @@ import {
 
 export default {
   components: {
-    CdwuMetamaskOnboardButton,
+    CdwuMetaMaskOnboardConnectButton,
     mdbAlert,
     mdbCol,
     mdbRow,
@@ -313,6 +337,15 @@ export default {
 
       cryptocurrencyDonation: null,
       cryptocurrencyDonationError: null,
+
+      /*
+      This property doesn't change dynamically because just a true or false is
+      returned once. That being said, nothing needs to watch this method because
+      MetaMask needs a page refresh after installation (handled by Onboarding).
+      */
+      metaMaskInstalled: MetaMaskOnboarding.isMetaMaskInstalled(),
+      // metaMaskInstalled: false,
+      metaMaskInstallMessage: "Metamask is required to donate cryptocurrency.",
     };
   },
 
