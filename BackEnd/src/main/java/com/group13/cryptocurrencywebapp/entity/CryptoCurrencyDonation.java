@@ -11,13 +11,15 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 /** 
  * <pre>
- * Class Name: EtherscanService
+ * Class Name: CryptoCurrencyDonation
  * 
  * Date Created: March 10, 2023
  * Company: Benevity
  * </pre>
  * 
- * <p>Service class that is defined with all of the functionality necessary to interact with the Gemini exchange
+ * <p>Entity class created to hold all the information and methods related to a cryptocurrency donation. 
+ * Includes fields for amounts, addresses, tax receipt, associated transactions, etc.
+ * 
  * 
  * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
  * 
