@@ -115,9 +115,11 @@ public class CryptoCurrencyDonationService {
                 cryptoDonation.getFromCryptoAddress());
 
                 if (validTxResult == null) { 
+                    cryptoDonation.setStatus("D-TIMEOUT"); //In the future, creating a different state (ex: C-TIMEOUT) might be useful here
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                             "Donation Creation Failed! CryptoCurrencyDonation tx_id: " + cryptocurrency_tx_id
                                     + "not found for donor's address: " + cryptoDonation.getFromCryptoAddress() + " !");
+                    
                 } else {
                     cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
                     createFlowNewDeposit(cryptoDonation.getDonationId());
@@ -166,15 +168,38 @@ public class CryptoCurrencyDonationService {
      *         etherscan.
      */
     public Result filterTransactions(String txHash, String fromAddress) {
+
+        
         List<Result> allTransactions = etherscanService.getTransactions(fromAddress);
 
         Result match = null;
 
-        for (int i = 0; i < allTransactions.size(); i++) {
-            if (allTransactions.get(i).getHash().equals(txHash)) {
-                match = allTransactions.get(i);
+
+        int retryCount = 1;
+        while (match == null) {
+            System.out.println("Transaction not processed. Waiting " + 15*retryCount + " seconds to retry");
+
+            try {
+                Thread.sleep(15000 * retryCount);
+
+                allTransactions = etherscanService.getTransactions(fromAddress);
+                for (int i = 0; i < allTransactions.size(); i++) {
+                    if (allTransactions.get(i).getHash().equals(txHash)) {
+                        match = allTransactions.get(i);
+                        break;
+                    }
+                }
+
+                retryCount++;
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (retryCount == 5) {
                 break;
             }
+
         }
 
         return match;
