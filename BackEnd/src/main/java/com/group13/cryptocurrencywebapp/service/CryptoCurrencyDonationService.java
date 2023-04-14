@@ -470,9 +470,9 @@ public class CryptoCurrencyDonationService {
             }
 
             status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
-
+            retryCount++;
         }
-        
+
         if(retryCount>=5){
             System.out.println(
                         "Donation is stalled in the ACCEPTED state! Contact a system administrator.");
