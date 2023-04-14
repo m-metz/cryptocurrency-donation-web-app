@@ -460,7 +460,7 @@ public class CryptoCurrencyDonationService {
         BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         int retryCount = 1;
-        while (status.retrieveStatus().equals("ACCEPTED")||retryCount >=5) {
+        while (status.retrieveStatus().equals("ACCEPTED")&&retryCount <5) {
             System.out.println("Benevity donation is not yet approved. status = "
                     + status.retrieveStatus() + ". Waiting 1 min to retry....");
             try {
