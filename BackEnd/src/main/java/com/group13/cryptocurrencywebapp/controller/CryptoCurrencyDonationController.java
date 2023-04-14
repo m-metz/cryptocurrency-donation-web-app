@@ -4,6 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +53,8 @@ import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.txcheck
  * @Since April 09, 2023
  * 
  */
+@Configuration
+@EnableAsync
 @RestController
 @RequestMapping(path = "api/v1/cryptocurrencydonation")
 public class CryptoCurrencyDonationController {
@@ -156,6 +161,7 @@ public class CryptoCurrencyDonationController {
      * @param cryptoDonation String body with parameters to create new Benevity
      *                       donation
      */
+    @Async
     @PostMapping("/createDonation")
     public void addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
         cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
