@@ -6,5 +6,5 @@
 
 export default {
   baseUrl: "http://localhost:8080/api/v1",
-  toCryptoAddress: null,
+  toCryptoAddress: "0x675CC2aB18271B44cE64Fe4B2197c68E9995Af2b",
 };
