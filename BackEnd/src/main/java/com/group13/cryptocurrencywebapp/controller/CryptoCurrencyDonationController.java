@@ -29,6 +29,7 @@ import com.group13.cryptocurrencywebapp.web_entity.benevity.BenevityDonation;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.Cause;
 import com.group13.cryptocurrencywebapp.web_entity.benevity.causes.detail.CauseDetail;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.txcheck.CheckResult;
 
 /**
  * <pre>
