@@ -101,7 +101,7 @@ public class CryptoCurrencyDonationService {
 
                 cryptoDonation.setStatus("NEW");
 
-                if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
+                if (cryptoDonation.getTaxReceipt().getAmount() == 0.000) {
 
                     System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
                     float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
@@ -111,10 +111,10 @@ public class CryptoCurrencyDonationService {
                     System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
                 }
                 // Check if donor's wallet address is valid
-                Result validTxResult = filterTransactions(cryptoDonation.getFromCryptoAddress(),
-                        cryptoDonation.getCryptocurrencyTxId());
+                Result validTxResult = filterTransactions(cryptoDonation.getCryptocurrencyTxId(),
+                cryptoDonation.getFromCryptoAddress());
 
-                if (validTxResult == null) {
+                if (validTxResult == null) { 
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                             "Donation Creation Failed! CryptoCurrencyDonation tx_id: " + cryptocurrency_tx_id
                                     + "not found for donor's address: " + cryptoDonation.getFromCryptoAddress() + " !");
@@ -243,6 +243,7 @@ public class CryptoCurrencyDonationService {
         }
 
         CryptoTransfer deposit = new CryptoTransfer();
+        deposit.setTransactionType("Deposit");
 
         deposit.setAmount(donation.getInitialCryptoAmount());
         deposit.setCurrency("ETH"); // This is hardcoded. In the future, for other coins,
