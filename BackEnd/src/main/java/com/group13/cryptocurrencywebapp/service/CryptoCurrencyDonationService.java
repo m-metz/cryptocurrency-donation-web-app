@@ -3,7 +3,7 @@ package com.group13.cryptocurrencywebapp.service;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.bouncycastle.jcajce.provider.asymmetric.rsa.X931SignatureSpi.WhirlpoolWithRSAEncryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -222,7 +222,7 @@ public class CryptoCurrencyDonationService {
 
     }
 
-    
+
     /**
      * Create a new deposit for use within the flow. This is the first stage of the
      * donation pipeline and will call the second stage, trade
@@ -250,7 +250,26 @@ public class CryptoCurrencyDonationService {
 
         deposit.setTime(java.time.LocalDateTime.now());
 
-        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        
+        int retryCount = 1;
+        while(etherscanService.checkTransactionStatus(donation.getCryptocurrencyTxId())== 0){
+            System.out.println("Transaction not processed. Waiting "+ retryCount +" minutes to retry");
+             
+            try {
+                Thread.sleep(60000 * retryCount);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if(retryCount == 5){
+                donation.setStatus("D-TIMEOUT");
+                return;
+                
+            }
+
+        }
+
+        Result latest = filterTransactions(donation.getCryptocurrencyTxId(), donation.getFromCryptoAddress());
         deposit.setExchangeReferenceId(latest.getHash());
         deposit = cryptoTransferRepository.save(deposit);
 
@@ -271,7 +290,6 @@ public class CryptoCurrencyDonationService {
         try {
             createFlowTrade(donation.getDonationId(), deposit.getFinal_amount());
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             System.out.println("Trade creation Failed");
         }
