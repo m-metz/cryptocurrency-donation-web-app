@@ -3,7 +3,7 @@ package com.group13.cryptocurrencywebapp.service;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.bouncycastle.jcajce.provider.asymmetric.rsa.X931SignatureSpi.WhirlpoolWithRSAEncryption;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -86,12 +86,13 @@ public class CryptoCurrencyDonationService {
     public void createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 
         // Checking for duplicated donations
-        String cryptocurrency_tx_id = cryptoDonation.getCryptocurrencyTxId();
-
-        Optional<CryptoCurrencyDonation> dupDonation = cryptoCurrencyDonationRepository
-                .findByCryptocurrencyTxId(cryptocurrency_tx_id);
 
         if (cryptoDonation != null) {
+
+            String cryptocurrency_tx_id = cryptoDonation.getCryptocurrencyTxId();
+
+            Optional<CryptoCurrencyDonation> dupDonation = cryptoCurrencyDonationRepository
+                .findByCryptocurrencyTxId(cryptocurrency_tx_id);
 
             if (dupDonation.isEmpty() == false) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
