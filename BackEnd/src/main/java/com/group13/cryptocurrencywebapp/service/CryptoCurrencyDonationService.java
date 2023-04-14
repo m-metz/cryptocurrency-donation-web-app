@@ -83,25 +83,49 @@ public class CryptoCurrencyDonationService {
      * @return A CryptoCurrencyDonation object that has been saved to the database
      *         and contains the converted donation amount in USD
      */
-    public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
+    public void createNewDonation(CryptoCurrencyDonation cryptoDonation) {
+
+        // Checking for duplicated donations
+        String cryptocurrency_tx_id = cryptoDonation.getCryptocurrencyTxId();
+
+        CryptoCurrencyDonation dupDonation = cryptoCurrencyDonationRepository
+                .findByCryptocurrencyTxId(cryptocurrency_tx_id).get();
 
         if (cryptoDonation != null) {
-            cryptoDonation.setStatus("NEW");
 
-            if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
+            if (dupDonation != null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Donation Creation Failed! CryptoCurrencyDonation with tx_Id: " + cryptocurrency_tx_id
+                                + " already exists in the database");
+            } else {
 
-                System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
-                cryptoDonation.getTaxReceipt()
-                        .setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
-                System.out.println(cryptoDonation.getTaxReceipt().getAmount());
-                System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                cryptoDonation.setStatus("NEW");
+
+                if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
+
+                    System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                    float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
+                    cryptoDonation.getTaxReceipt()
+                            .setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
+                    System.out.println(cryptoDonation.getTaxReceipt().getAmount());
+                    System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                }
+                // Check if donor's wallet address is valid
+                Result validTxResult = filterTransactions(cryptoDonation.getFromCryptoAddress(),
+                        cryptoDonation.getCryptocurrencyTxId());
+
+                if (validTxResult == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Donation Creation Failed! CryptoCurrencyDonation tx_id: " + cryptocurrency_tx_id
+                                    + "not found for donor's address: " + cryptoDonation.getFromCryptoAddress() + " !");
+                } else {
+                    cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
+                    createFlowNewDeposit(cryptoDonation.getDonationId());
+
+                }
+
             }
-            // TODO Create a catch for if etherscan is down
 
-            cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
-
-            return cryptoDonation;
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Donation Creation Failed! Invalid information sent.");
