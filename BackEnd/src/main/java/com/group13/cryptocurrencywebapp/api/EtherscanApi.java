@@ -31,9 +31,9 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
 public class EtherscanApi {
 
     /**
-     * API_ENDPOINT basic URL for Etherscan Goerli Network
+     * API_ENDPOINT basic URL for Etherscan Sepolia Network
      */
-    static String API_ENDPOINT = "https://api-goerli.etherscan.io/api";
+    static String API_ENDPOINT = "https://api-sepolia.etherscan.io/api";
 
     /**
      * Bean model that builds etherscanClient WebClient object to be used for the

@@ -52,10 +52,20 @@ public interface CryptoCurrencyDonationRepository extends JpaRepository<CryptoCu
      * Query for finding all CryptoCurrencyDonation objects containing a specific
      * status mask.
      * 
-     * @param string to be used as "like" search argument for status field
+     * @param status to be used as "like" search argument for status field
      * @return List of all CryptocurrencyDonation found related to status or empty
      *         list if not found
      */
-    List<CryptoCurrencyDonation> findByStatusContaining(String string);
+    List<CryptoCurrencyDonation> findByStatusContaining(String status);
+
+    /**
+     * Query for finding a CryptoCurrencyDonation object containing a specific
+     * cryptocurrency_tx_id.
+     * 
+     * @param status to be used as "like" search argument for status field
+     * @return CryptocurrencyDonation object, or null, wrapped in an Optional type
+     *         of object
+     */
+    Optional<CryptoCurrencyDonation> findByCryptocurrencyTxId(String cryptocurrency_tx_id);
 
 }

@@ -3,7 +3,7 @@ package com.group13.cryptocurrencywebapp.service;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.bouncycastle.jcajce.provider.asymmetric.rsa.X931SignatureSpi.WhirlpoolWithRSAEncryption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -75,33 +75,56 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Create a new donation. Donation objects contain all the fields necessary to
+     * Create a new donation and start transaction flow. Donation objects contain
+     * all the fields necessary to
      * process a donation. Intended to work with the /createDonation endpoint
      * 
      * @param cryptoDonation A CryptoCurrencyDonation object containing the fields
      *                       for the new donation
-     * @return A CryptoCurrencyDonation object that has been saved to the database
-     *         and contains the converted donation amount in USD
      */
-    public CryptoCurrencyDonation createNewDonation(CryptoCurrencyDonation cryptoDonation) {
+    public void createNewDonation(CryptoCurrencyDonation cryptoDonation) {
+
+        // Checking for duplicated donations
+        String cryptocurrency_tx_id = cryptoDonation.getCryptocurrencyTxId();
+
+        CryptoCurrencyDonation dupDonation = cryptoCurrencyDonationRepository
+                .findByCryptocurrencyTxId(cryptocurrency_tx_id).get();
 
         if (cryptoDonation != null) {
-            cryptoDonation.setStatus("NEW");
 
-            if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
+            if (dupDonation != null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Donation Creation Failed! CryptoCurrencyDonation with tx_Id: " + cryptocurrency_tx_id
+                                + " already exists in the database");
+            } else {
 
-                System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
-                float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
-                cryptoDonation.getTaxReceipt()
-                        .setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
-                System.out.println(cryptoDonation.getTaxReceipt().getAmount());
-                System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                cryptoDonation.setStatus("NEW");
+
+                if (cryptoDonation.getTaxReceipt().getAmount() == -999) {
+
+                    System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                    float ethPrice = Float.parseFloat(etherscanService.getEthPrice().getResult().getEthusd());
+                    cryptoDonation.getTaxReceipt()
+                            .setAmount(cryptoDonation.getInitialCryptoAmount() * ethPrice);
+                    System.out.println(cryptoDonation.getTaxReceipt().getAmount());
+                    System.out.println("CHANGING VALUE~~~~~~~~~~~~~~~~~~\n\n");
+                }
+                // Check if donor's wallet address is valid
+                Result validTxResult = filterTransactions(cryptoDonation.getFromCryptoAddress(),
+                        cryptoDonation.getCryptocurrencyTxId());
+
+                if (validTxResult == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Donation Creation Failed! CryptoCurrencyDonation tx_id: " + cryptocurrency_tx_id
+                                    + "not found for donor's address: " + cryptoDonation.getFromCryptoAddress() + " !");
+                } else {
+                    cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
+                    createFlowNewDeposit(cryptoDonation.getDonationId());
+
+                }
+
             }
-            // TODO Create a catch for if etherscan is down
 
-            cryptoDonation = cryptoCurrencyDonationRepository.save(cryptoDonation);
-
-            return cryptoDonation;
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Donation Creation Failed! Invalid information sent.");
@@ -132,27 +155,26 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Retrieve the latest transaction from the give address that is likely the
-     * donation transaction.
+     * Search the recent transactions made to our wallet for a transaction with a specific hash. 
+     * If the hash is present, it will be returned. If not, null is returned.
      * 
      * @param toAddress   The address the transaction is sent to (Our address)
      * @param fromAddress The address the transaction was sent from (donor address)
-     * @return Result object holding the most recent transaction retrieved from
-     *         etherscan.
+     * @return Result object holding the most matching transaction retrieved from etherscan.
      */
-    public Result filterTransactions(String toAddress, String fromAddress) {
-        List<Result> allTransactions = etherscanService.getTransactions(toAddress);
+    public Result filterTransactions(String txHash, String fromAddress) {
+        List<Result> allTransactions = etherscanService.getTransactions(fromAddress);
 
-        Result latest = null;
+        Result match = null;
 
         for (int i = 0; i < allTransactions.size(); i++) {
-            if (allTransactions.get(i).getFrom().equals(fromAddress.toLowerCase())) {
-                latest = allTransactions.get(i);
+            if (allTransactions.get(i).getHash().equals(txHash)) {
+                match = allTransactions.get(i);
                 break;
             }
         }
 
-        return latest;
+        return match;
     }
 
     /**
@@ -200,6 +222,7 @@ public class CryptoCurrencyDonationService {
 
     }
 
+
     /**
      * Create a new deposit for use within the flow. This is the first stage of the
      * donation pipeline and will call the second stage, trade
@@ -227,7 +250,26 @@ public class CryptoCurrencyDonationService {
 
         deposit.setTime(java.time.LocalDateTime.now());
 
-        Result latest = filterTransactions(donation.getToCryptoAddress(), donation.getFromCryptoAddress());
+        
+        int retryCount = 1;
+        while(etherscanService.checkTransactionStatus(donation.getCryptocurrencyTxId())== 0){
+            System.out.println("Transaction not processed. Waiting "+ retryCount +" minutes to retry");
+             
+            try {
+                Thread.sleep(60000 * retryCount);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if(retryCount == 5){
+                donation.setStatus("D-TIMEOUT");
+                return;
+                
+            }
+
+        }
+
+        Result latest = filterTransactions(donation.getCryptocurrencyTxId(), donation.getFromCryptoAddress());
         deposit.setExchangeReferenceId(latest.getHash());
         deposit = cryptoTransferRepository.save(deposit);
 
@@ -248,7 +290,6 @@ public class CryptoCurrencyDonationService {
         try {
             createFlowTrade(donation.getDonationId(), deposit.getFinal_amount());
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             System.out.println("Trade creation Failed");
         }
