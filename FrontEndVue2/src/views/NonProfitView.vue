@@ -108,8 +108,8 @@
           leaveAnimation="fadeOut"
         >
           <strong>Cryptocurrency Donation Registered.</strong>
-          You sent {{ ethers.formatEther(txResponse.value) }} to
-          {{ txResponse.to }}. You can monitor this transaction on
+          You sent {{ txResponseFormatEtherValue }} to {{ txResponse.to }}. You
+          can monitor this transaction on
           <a :href="etherScanUrl">{{ etherScanDomain }}</a>
         </mdbAlert>
         <mdbAlert
@@ -175,7 +175,7 @@
             <mdbInput
               name="address2"
               autocomplete="address-line2"
-              label="Apt, Suite, Unit, Additional Address Information (optional)"
+              label="Apt, Suite, Unit, Additional Address Inion (optional)"
               icon="blank"
               iconClass="fa-fw"
               class="mb-4"
@@ -381,6 +381,10 @@ export default {
         networkSubDomain = ETHEREUM_NETWORK + ".";
       }
       return networkSubDomain + "etherscan.io";
+    },
+
+    txResponseFormatEtherValue() {
+      return ethers.formatEther(this.txResponse.value);
     },
   },
 
