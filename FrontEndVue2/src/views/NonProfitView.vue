@@ -103,14 +103,13 @@
         </mdbModalHeader>
         <mdbAlert
           color="success"
-          v-if="cryptocurrencyDonation"
-          @closeAlert="cryptocurrencyDonation = null"
+          v-if="txResponse"
+          @closeAlert="txResponse = null"
           leaveAnimation="fadeOut"
         >
           <strong>Cryptocurrency Donation Registered.</strong>
-          You sent {{ cryptocurrencyDonation.initialCryptoAmount }} to
-          {{ cryptocurrencyDonation.toCryptoAddress }}. You can monitor this
-          transaction on
+          You sent {{ ethers.formatEther(txResponse.value) }} to
+          {{ txResponse.to }}. You can monitor this transaction on
           <a :href="etherScanUrl">{{ etherScanDomain }}</a>
         </mdbAlert>
         <mdbAlert
@@ -260,9 +259,7 @@
               v-if="modalPage === 2 && metaMaskInstalled"
               color="primary"
               type="submit"
-              :disabled="
-                cryptocurrencyDonation !== null || transactionSubmitting
-              "
+              :disabled="txResponse !== null || transactionSubmitting"
               >Submit</mdbBtn
             >
           </mdbModalFooter>
@@ -334,7 +331,7 @@ export default {
       modal: false,
       modalPage: 1,
 
-      cryptocurrencyDonation: null,
+      txResponse: null,
       cryptocurrencyDonationError: null,
 
       /*
@@ -374,7 +371,7 @@ export default {
         "https://" +
         networkSubDomain +
         "etherscan.io/tx/" +
-        this.cryptocurrencyDonation?.cryptocurrencyTxId
+        this.txResponse?.hash
       );
     },
 
@@ -430,7 +427,7 @@ export default {
     },
 
     submitForm(event) {
-      if (!this.cryptocurrencyDonation && this.metaMaskInstalled) {
+      if (!this.txResponse && this.metaMaskInstalled) {
         this.transactionSubmitting = true;
 
         const formData = new FormData(event.target);
@@ -466,17 +463,23 @@ export default {
             return signer.sendTransaction(transactionRequest);
           })
           .then((txResponse) => {
-            return cryptocurrencyDonationWebAppApi.cryptocurrencyDonationCreateDonation(
+            cryptocurrencyDonationWebAppApi.cryptocurrencyDonationCreateDonation(
               {
                 nonProfitId: this.$route.params.id,
                 txResponse: txResponse,
                 formData: formData,
               }
             );
+
+            /*
+             Don't return the success response from the API because it is now
+             blank (an asynchronous operation runs, so no JSON is returned).
+             */
+            return txResponse;
           })
           .then(
-            (cryptocurrencyDonation) => {
-              this.cryptocurrencyDonation = cryptocurrencyDonation;
+            (txResponse) => {
+              this.txResponse = txResponse;
               this.transactionSubmitting = false;
             },
             (error) => {

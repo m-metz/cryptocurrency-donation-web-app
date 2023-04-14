@@ -131,7 +131,7 @@ export default class CryptocurrencyDonationWebAppApi {
             `Could not create cryptocurrencydonation. ${responseText}`
           );
         }
-        return response.json();
+        return response.text();
       },
       function (err) {
         /*
