@@ -75,13 +75,12 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Create a new donation. Donation objects contain all the fields necessary to
+     * Create a new donation and start transaction flow. Donation objects contain
+     * all the fields necessary to
      * process a donation. Intended to work with the /createDonation endpoint
      * 
      * @param cryptoDonation A CryptoCurrencyDonation object containing the fields
      *                       for the new donation
-     * @return A CryptoCurrencyDonation object that has been saved to the database
-     *         and contains the converted donation amount in USD
      */
     public void createNewDonation(CryptoCurrencyDonation cryptoDonation) {
 

@@ -13,10 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.EthAddress;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.Price;
-import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.EthTransactionList;
 import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.txcheck.CheckResult;
+import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.EthTransactionList;
 
-/** 
+/**
  * <pre>
  * Class Name: EtherscanService
  * 
@@ -24,7 +25,9 @@ import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.Result;
  * Company: Benevity
  * </pre>
  * 
- * <p>Service class that is defined with all of the functionality necessary to interact with etherscan
+ * <p>
+ * Service class that is defined with all of the functionality necessary to
+ * interact with etherscan
  * 
  * @author U of C ENSF609 Capstone 2023 (Alex K, Felipe G, Mike, M)
  * 
@@ -43,6 +46,7 @@ public class EtherscanService {
 
     /**
      * Check that an address is valid
+     * 
      * @param address String holding the address to check
      * @return A string containing the result of the validation
      */
@@ -72,6 +76,7 @@ public class EtherscanService {
 
     /**
      * Check that a message is OK
+     * 
      * @param message String holding the message to check
      * @return A boolean containing if the message is okay or not
      */
@@ -80,10 +85,10 @@ public class EtherscanService {
         return message.equals("OK");
     }
 
-
     /**
      * Get the price of ethereum right now
-     * @return A Price object containing the price of ethereum 
+     * 
+     * @return A Price object containing the price of ethereum
      */
     public Price getEthPrice() {
         String uri = "?module=stats&action=ethprice&apikey=" + apiKey;
@@ -106,8 +111,10 @@ public class EtherscanService {
         }
 
     }
+
     /**
      * Get all the transactions created by one address
+     * 
      * @param message String holding the address of the wallet in question
      * @return A list of Result objects holding the transactions created
      */
@@ -130,6 +137,24 @@ public class EtherscanService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Failed");
             }
 
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Failed");
+        }
+
+    }
+
+    public int checkTransactionStatus(String hash) {
+        String uri = "?module=transaction&action=gettxreceiptstatus&txhash=" + hash + "&apikey=" + apiKey;
+
+        ResponseEntity<CheckResult> response = webclient.get()
+                .uri(uri)
+                .retrieve()
+                .toEntity(CheckResult.class)
+                .block();
+
+        CheckResult respTx = response.getBody();
+        if (respTx != null) {
+            return Integer.parseInt(respTx.getStatus());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Failed");
         }
