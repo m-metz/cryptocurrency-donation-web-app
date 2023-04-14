@@ -60,9 +60,10 @@ public class GeminiApi {
                 .defaultHeader("Content-Type", "text/plain")
                 .defaultHeader("Content-Length", "0")
                 .defaultHeader("Cache-Control", "no-cache")
-                .clientConnector(new ReactorClientHttpConnector(
-                        HttpClient.create().wiretap("reactor.netty.http.client.HttpClient", LogLevel.DEBUG,
-                                AdvancedByteBufFormat.TEXTUAL)))
+                // .clientConnector(new ReactorClientHttpConnector(
+                // HttpClient.create().wiretap("reactor.netty.http.client.HttpClient",
+                // LogLevel.DEBUG,
+                // AdvancedByteBufFormat.TEXTUAL)))
                 .build();
     }
 
