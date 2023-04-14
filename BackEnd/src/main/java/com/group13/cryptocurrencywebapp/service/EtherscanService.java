@@ -143,6 +143,13 @@ public class EtherscanService {
 
     }
 
+    /**
+     * Check Transaction Status in the BlockChain
+     * 
+     * @param hash String transaction hash to be queried in the BlockChain
+     * @return 0 if the transaction is not processed and 1 if the transaction is
+     *         processed
+     */
     public int checkTransactionStatus(String hash) {
         String uri = "?module=transaction&action=gettxreceiptstatus&txhash=" + hash + "&apikey=" + apiKey;
 
