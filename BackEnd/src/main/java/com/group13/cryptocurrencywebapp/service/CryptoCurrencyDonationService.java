@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Optional;
 
 import com.group13.cryptocurrencywebapp.entity.CryptoCurrencyDonation;
 import com.group13.cryptocurrencywebapp.entity.CryptoTransfer;
@@ -87,12 +88,12 @@ public class CryptoCurrencyDonationService {
         // Checking for duplicated donations
         String cryptocurrency_tx_id = cryptoDonation.getCryptocurrencyTxId();
 
-        CryptoCurrencyDonation dupDonation = cryptoCurrencyDonationRepository
-                .findByCryptocurrencyTxId(cryptocurrency_tx_id).get();
+        Optional<CryptoCurrencyDonation> dupDonation = cryptoCurrencyDonationRepository
+                .findByCryptocurrencyTxId(cryptocurrency_tx_id);
 
         if (cryptoDonation != null) {
 
-            if (dupDonation != null) {
+            if (dupDonation.isEmpty() == false) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Donation Creation Failed! CryptoCurrencyDonation with tx_Id: " + cryptocurrency_tx_id
                                 + " already exists in the database");
@@ -155,12 +156,14 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Search the recent transactions made to our wallet for a transaction with a specific hash. 
+     * Search the recent transactions made to our wallet for a transaction with a
+     * specific hash.
      * If the hash is present, it will be returned. If not, null is returned.
      * 
      * @param toAddress   The address the transaction is sent to (Our address)
      * @param fromAddress The address the transaction was sent from (donor address)
-     * @return Result object holding the most matching transaction retrieved from etherscan.
+     * @return Result object holding the most matching transaction retrieved from
+     *         etherscan.
      */
     public Result filterTransactions(String txHash, String fromAddress) {
         List<Result> allTransactions = etherscanService.getTransactions(fromAddress);
@@ -222,7 +225,6 @@ public class CryptoCurrencyDonationService {
 
     }
 
-
     /**
      * Create a new deposit for use within the flow. This is the first stage of the
      * donation pipeline and will call the second stage, trade
@@ -250,21 +252,20 @@ public class CryptoCurrencyDonationService {
 
         deposit.setTime(java.time.LocalDateTime.now());
 
-        
         int retryCount = 1;
-        while(etherscanService.checkTransactionStatus(donation.getCryptocurrencyTxId())== 0){
-            System.out.println("Transaction not processed. Waiting "+ retryCount +" minutes to retry");
-             
+        while (etherscanService.checkTransactionStatus(donation.getCryptocurrencyTxId()) == 0) {
+            System.out.println("Transaction not processed. Waiting " + retryCount + " minutes to retry");
+
             try {
                 Thread.sleep(60000 * retryCount);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            if(retryCount == 5){
+            if (retryCount == 5) {
                 donation.setStatus("D-TIMEOUT");
                 return;
-                
+
             }
 
         }
