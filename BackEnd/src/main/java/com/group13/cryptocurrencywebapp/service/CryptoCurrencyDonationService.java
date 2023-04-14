@@ -252,7 +252,7 @@ public class CryptoCurrencyDonationService {
 
         
         int retryCount = 1;
-        while(checkTransactionStatus(donation.getCryptocurrencyTxId()).equals("0")){
+        while(etherscanService.checkTransactionStatus(donation.getCryptocurrencyTxId())== 0){
             System.out.println("Transaction not processed. Waiting "+ retryCount +" minutes to retry");
              
             try {
