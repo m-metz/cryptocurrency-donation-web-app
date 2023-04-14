@@ -53,10 +53,10 @@ public class BenevityApi {
                 return WebClient.builder() //
                                 .baseUrl(API_ENDPOINT) //
                                 .apply(oauth2.oauth2Configuration()) //
-                                .clientConnector(new ReactorClientHttpConnector(
-                                                HttpClient.create().wiretap("reactor.netty.http.client.HttpClient",
-                                                                LogLevel.DEBUG,
-                                                                AdvancedByteBufFormat.TEXTUAL)))
+                                // .clientConnector(new ReactorClientHttpConnector(
+                                // HttpClient.create().wiretap("reactor.netty.http.client.HttpClient",
+                                // LogLevel.DEBUG,
+                                // AdvancedByteBufFormat.TEXTUAL)))
                                 .build();
         }
 

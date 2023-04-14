@@ -45,9 +45,10 @@ public class EtherscanApi {
     WebClient etherscanClient() {
         return WebClient.builder()
                 .baseUrl(API_ENDPOINT)
-                .clientConnector(new ReactorClientHttpConnector(
-                        HttpClient.create().wiretap("reactor.netty.http.client.HttpClient", LogLevel.DEBUG,
-                                AdvancedByteBufFormat.TEXTUAL)))
+                // .clientConnector(new ReactorClientHttpConnector(
+                // HttpClient.create().wiretap("reactor.netty.http.client.HttpClient",
+                // LogLevel.DEBUG,
+                // AdvancedByteBufFormat.TEXTUAL)))
                 .build();
     }
 
