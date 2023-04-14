@@ -132,27 +132,26 @@ public class CryptoCurrencyDonationService {
     }
 
     /**
-     * Retrieve the latest transaction from the give address that is likely the
-     * donation transaction.
+     * Search the recent transactions made to our wallet for a transaction with a specific hash. 
+     * If the hash is present, it will be returned. If not, null is returned.
      * 
      * @param toAddress   The address the transaction is sent to (Our address)
      * @param fromAddress The address the transaction was sent from (donor address)
-     * @return Result object holding the most recent transaction retrieved from
-     *         etherscan.
+     * @return Result object holding the most matching transaction retrieved from etherscan.
      */
-    public Result filterTransactions(String toAddress, String fromAddress) {
-        List<Result> allTransactions = etherscanService.getTransactions(toAddress);
+    public Result filterTransactions(String txHash, String fromAddress) {
+        List<Result> allTransactions = etherscanService.getTransactions(fromAddress);
 
-        Result latest = null;
+        Result match = null;
 
         for (int i = 0; i < allTransactions.size(); i++) {
-            if (allTransactions.get(i).getFrom().equals(fromAddress.toLowerCase())) {
-                latest = allTransactions.get(i);
+            if (allTransactions.get(i).getHash().equals(txHash)) {
+                match = allTransactions.get(i);
                 break;
             }
         }
 
-        return latest;
+        return match;
     }
 
     /**
@@ -200,6 +199,7 @@ public class CryptoCurrencyDonationService {
 
     }
 
+    
     /**
      * Create a new deposit for use within the flow. This is the first stage of the
      * donation pipeline and will call the second stage, trade
