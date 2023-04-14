@@ -25,4 +25,15 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    /*
+    0.0.0.0 means listen on any network for all network interfaces.
+
+    For security, set to "localhost" if you see vite attaching to IP addresses
+    *other than* local-network IP address (192.168.x, 172.[16-255].x, 10.x).
+    Otherwise disabled port-forwarding on your local subnet (router) protects
+    you (on trusted home or work networks).
+    */
+    host: "0.0.0.0",
+  },
 });
