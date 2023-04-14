@@ -460,7 +460,7 @@ public class CryptoCurrencyDonationService {
         BenevityDonation status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
         int retryCount = 1;
-        while (status.retrieveStatus().equals("ACCEPTED")) {
+        while (status.retrieveStatus().equals("ACCEPTED")||retryCount >=5) {
             System.out.println("Benevity donation is not yet approved. status = "
                     + status.retrieveStatus() + ". Waiting 1 min to retry....");
             try {
@@ -471,6 +471,14 @@ public class CryptoCurrencyDonationService {
 
             status = benevityService.getDonationStatus(benevityResponse.retrieveDonationId());
 
+        }
+        
+        if(retryCount>=5){
+            System.out.println(
+                        "Donation is stalled in the ACCEPTED state! Contact a system administrator.");
+                donation.setStatus("BD-TIMEOUT");
+                donation = cryptoCurrencyDonationRepository.save(donation);
+                return;
         }
 
         if (status.retrieveStatus().equals("DECLINED")) {
