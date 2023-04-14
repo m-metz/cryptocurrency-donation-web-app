@@ -150,17 +150,14 @@ public class CryptoCurrencyDonationController {
     // Crypto Donation Endpoints
     /**
      * Post endpoint used to create a new CryptoCurrencyDonation in the Integration
-     * Database
+     * Database and start internal flow of transactions
      * 
      * @param cryptoDonation String body with parameters to create new Benevity
      *                       donation
-     * @return CryptoCurrencyDonation entity object with all JSON fields holding
-     *         CryptoCurrencyDonation detailed
-     *         information
      */
     @PostMapping("/createDonation")
-    public CryptoCurrencyDonation addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
-        return cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
+    public void addNewDonation(@RequestBody CryptoCurrencyDonation cryptoDonation) {
+        cryptoCurrencyDonationService.createNewDonation(cryptoDonation);
     }
 
     /**
