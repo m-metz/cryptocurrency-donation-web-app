@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,14 +35,22 @@ import com.group13.cryptocurrencywebapp.web_entity.etherscan.transaction.EthTran
  * 
  */
 @Service
+@ConfigurationProperties(prefix = "etherscan.api")
 public class EtherscanService {
 
     @Autowired
     @Qualifier("etherscanClient")
     private WebClient webclient = WebClient.create();
 
-    @Value("${etherscan.api.key}")
-    String apiKey;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     /**
      * Check that an address is valid
@@ -52,7 +60,7 @@ public class EtherscanService {
      */
 
     public String validateAddress(String address) {
-        String uri = "?module=account&action=balance&address=" + address + "&tag=latest&apikey=" + apiKey;
+        String uri = "?module=account&action=balance&address=" + address + "&tag=latest&apikey=" + key;
 
         ResponseEntity<EthAddress> response = webclient.get()
                 .uri(uri)
@@ -91,7 +99,7 @@ public class EtherscanService {
      * @return A Price object containing the price of ethereum
      */
     public Price getEthPrice() {
-        String uri = "?module=stats&action=ethprice&apikey=" + apiKey;
+        String uri = "?module=stats&action=ethprice&apikey=" + key;
 
         ResponseEntity<Price> response = webclient.get()
                 .uri(uri)
@@ -121,7 +129,7 @@ public class EtherscanService {
     public List<Result> getTransactions(String address) {
 
         String uri = "?module=account&action=txlist&address=" + address
-                + "&startblock=0&endblock=99999999&page=1&offset=1000&sort=desc&apikey=" + apiKey;
+                + "&startblock=0&endblock=99999999&page=1&offset=1000&sort=desc&apikey=" + key;
 
         ResponseEntity<EthTransactionList> response = webclient.get()
                 .uri(uri)
@@ -151,7 +159,7 @@ public class EtherscanService {
      *         processed
      */
     public int checkTransactionStatus(String hash) {
-        String uri = "?module=transaction&action=gettxreceiptstatus&txhash=" + hash + "&apikey=" + apiKey;
+        String uri = "?module=transaction&action=gettxreceiptstatus&txhash=" + hash + "&apikey=" + key;
 
         ResponseEntity<CheckResult> response = webclient.get()
                 .uri(uri)

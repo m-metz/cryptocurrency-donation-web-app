@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -37,16 +37,24 @@ import net.minidev.json.JSONObject;
  * 
  */
 @Service
+@ConfigurationProperties(prefix = "gemini.api")
 public class GeminiService {
 
     Signature sign = new Signature();
 
-    @Value("${gemini.api.secret}")
-    String geminiSecret;
+    private String secret;
 
     @Autowired
     @Qualifier("geminiClient")
     private WebClient webclient = WebClient.create();
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
     /**
      * Returns the balances
@@ -63,7 +71,7 @@ public class GeminiService {
         payload.appendField("nonce", nonce);
         payload.appendField("account", "primary");
         byte[] encondedPayload = sign.encodeBase64(payload.toJSONString());
-        String signature = sign.signHmacSha384(encondedPayload, geminiSecret);
+        String signature = sign.signHmacSha384(encondedPayload, secret);
 
         ResponseEntity<List<Balance>> response = webclient.post()
                 .uri(apiEndpoint)
@@ -105,7 +113,7 @@ public class GeminiService {
         payload.appendField("side", "sell");
         payload.appendField("type", "exchange limit");
         byte[] encondedPayload = sign.encodeBase64(payload.toJSONString());
-        String signature = sign.signHmacSha384(encondedPayload, geminiSecret);
+        String signature = sign.signHmacSha384(encondedPayload, secret);
 
         ResponseEntity<Order> response = webclient.post()
                 .uri(apiEndpoint)
@@ -172,7 +180,7 @@ public class GeminiService {
         payload.appendField("fee", quote.getFee());
         payload.appendField("quoteId", quote.getQuoteId());
         byte[] encondedPayload = sign.encodeBase64(payload.toJSONString());
-        String signature = sign.signHmacSha384(encondedPayload, geminiSecret);
+        String signature = sign.signHmacSha384(encondedPayload, secret);
 
         ResponseEntity<InstantOrder> response = webclient.post()
                 .uri(apiEndpoint)
@@ -205,7 +213,7 @@ public class GeminiService {
         payload.appendField("totalSpend", String.valueOf(amount));
         payload.appendField("side", "sell");
         byte[] encondedPayload = sign.encodeBase64(payload.toJSONString());
-        String signature = sign.signHmacSha384(encondedPayload, geminiSecret);
+        String signature = sign.signHmacSha384(encondedPayload, secret);
 
         ResponseEntity<Quote> response = webclient.post()
                 .uri(apiEndpoint)

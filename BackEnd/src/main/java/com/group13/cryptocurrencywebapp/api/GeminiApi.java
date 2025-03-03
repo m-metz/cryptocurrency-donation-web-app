@@ -1,6 +1,6 @@
 package com.group13.cryptocurrencywebapp.api;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,6 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  * 
  */
 @Configuration
+@ConfigurationProperties(prefix = "gemini.api")
 public class GeminiApi {
 
     /**
@@ -36,8 +37,15 @@ public class GeminiApi {
      * Value is retrieved from Spring Boot Memory under gemini.api.key key.
      * gemini.api.key configured in the application.properties env file
      */
-    @Value("${gemini.api.key}")
-    String apiKey;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     /**
      * Bean model that builds geminiClient WebClient object to be used for the
@@ -51,7 +59,7 @@ public class GeminiApi {
     WebClient geminiClient() {
         return WebClient.builder()
                 .baseUrl(API_ENDPOINT)
-                .defaultHeader("X-GEMINI-APIKEY", apiKey)
+                .defaultHeader("X-GEMINI-APIKEY", key)
                 .defaultHeader("Content-Type", "text/plain")
                 .defaultHeader("Content-Length", "0")
                 .defaultHeader("Cache-Control", "no-cache")

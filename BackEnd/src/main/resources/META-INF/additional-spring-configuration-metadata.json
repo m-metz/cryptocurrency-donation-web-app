@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "initialDelay.in.milliseconds",
+      "type": "java.lang.String",
+      "description": "Initial Delay in milliseconds before the first CryptoCurrencyDonationService.retryTimedoutCryptoDonations invocation."
+    },
+    {
+      "name": "fixedDelay.in.milliseconds",
+      "type": "java.lang.String",
+      "description": "Delay in milliseconds between the end of the last CryptoCurrencyDonationService.retryTimedoutCryptoDonations invocation and the start of the next."
+    }
+  ]
+}

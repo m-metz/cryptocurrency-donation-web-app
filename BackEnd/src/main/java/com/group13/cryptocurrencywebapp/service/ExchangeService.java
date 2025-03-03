@@ -2,7 +2,7 @@ package com.group13.cryptocurrencywebapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,12 +27,20 @@ import com.group13.cryptocurrencywebapp.web_entity.exchange.binance.ExchangeTrad
  * 
  */
 @Service
+@ConfigurationProperties(prefix = "binance.api")
 public class ExchangeService {
 
     private Signature sign = new Signature();
 
-    @Value("${binance.api.secret}")
-    String secret;
+    private String secret;
+
+    public String getSecret() {
+        return secret;
+    }
+    
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
     @Autowired
     @Qualifier("binanceClient")
