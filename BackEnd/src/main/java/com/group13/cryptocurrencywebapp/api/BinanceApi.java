@@ -1,6 +1,7 @@
 package com.group13.cryptocurrencywebapp.api;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -29,6 +30,7 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
  * 
  */
 @Configuration
+@ConfigurationProperties(prefix = "binance.api")
 public class BinanceApi {
 
     /**
@@ -41,8 +43,15 @@ public class BinanceApi {
      * Value is retrieved from Spring Boot Memory under binance.api.key key.
      * binance.api.key configured in the application.properties env file
      */
-    @Value("${binance.api.key}")
-    String apiKey;
+    String key = "";
+
+    public String getKey() {
+        return key;
+    }
+    
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     /**
      * Bean model that builds binanceClient WebClient object to be used for the
@@ -55,7 +64,7 @@ public class BinanceApi {
     WebClient binanceClient() {
         return WebClient.builder()
                 .baseUrl(API_ENDPOINT)
-                .defaultHeader("X-MBX-APIKEY", apiKey)
+                .defaultHeader("X-MBX-APIKEY", key)
                 // .clientConnector(new ReactorClientHttpConnector(
                 // HttpClient.create().wiretap("reactor.netty.http.client.HttpClient",
                 // LogLevel.DEBUG,
