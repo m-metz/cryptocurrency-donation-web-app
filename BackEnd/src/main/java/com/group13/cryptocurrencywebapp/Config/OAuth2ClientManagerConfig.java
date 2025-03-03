@@ -32,27 +32,27 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 @Configuration
 public class OAuth2ClientManagerConfig {
 
-        /**
-         * Bean model configuration used by Spring Boot to configure general oauth2
-         * configuration.
-         * An OAuth2AuthorizedClientManager type of object is utilized to intialize
-         * ClientRegistrationRepository and OAuth2AuthorizedClientService
-         * An OAuth2AuthorizedClientProvider type of object is utilized to build
-         * parameters for client configuration Strategy. Refresh token is informe to
-         * automatically refresh token after it is expired.
-         * An AuthorizedClientServiceOAuth2AuthorizedClientManager is used to allow
-         * oauth2 usage by automatic processes and user requests.
-         * 
-         * @param clientRegistrationRepository object that holds all client
+    /**
+     * Bean model configuration used by Spring Boot to configure general oauth2
+     * configuration.
+     * An OAuth2AuthorizedClientManager type of object is utilized to intialize
+     * ClientRegistrationRepository and OAuth2AuthorizedClientService
+     * An OAuth2AuthorizedClientProvider type of object is utilized to build
+     * parameters for client configuration Strategy. Refresh token is informe to
+     * automatically refresh token after it is expired.
+     * An AuthorizedClientServiceOAuth2AuthorizedClientManager is used to allow
+     * oauth2 usage by automatic processes and user requests.
+     * 
+     * @param clientRegistrationRepository object that holds all client
          *                                     registrations definided in the
          *                                     application.properties env file
-         * @param clientService                interface object allows client connectios
+     * @param clientService                interface object allows client connectios
          *                                     to use ouath2
-         * @return OAuth2AuthorizedClientManager object with full oauth2 configuration
+     * @return OAuth2AuthorizedClientManager object with full oauth2 configuration
          *         to be injected by Spring Boot
-         */
-        @Bean
-        public OAuth2AuthorizedClientManager clientManager(
+     */
+    @Bean
+    OAuth2AuthorizedClientManager clientManager(
                         ClientRegistrationRepository clientRegistrationRepository,
                         OAuth2AuthorizedClientService clientService) {
 

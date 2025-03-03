@@ -32,7 +32,7 @@ public class EndpointNoSecurity {
      *         configurations and injected by Spring Boot during startup
      */
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
+    WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers("/**");
     }

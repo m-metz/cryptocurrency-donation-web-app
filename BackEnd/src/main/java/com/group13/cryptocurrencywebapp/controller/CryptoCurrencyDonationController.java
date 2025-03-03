@@ -3,7 +3,6 @@ package com.group13.cryptocurrencywebapp.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -87,7 +86,6 @@ public class CryptoCurrencyDonationController {
     /**
      * Constructor class that aggregates all service objects used by the endpoints
      */
-    @Autowired
     public CryptoCurrencyDonationController(CryptoCurrencyDonationService cryptoCurrencyDonationService,
             BenevityService benevityService, ExchangeService exchangeService, GeminiService geminiService,
             EtherscanService etherscanService) {

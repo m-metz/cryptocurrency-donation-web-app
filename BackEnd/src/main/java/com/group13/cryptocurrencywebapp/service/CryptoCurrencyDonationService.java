@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -59,7 +58,6 @@ public class CryptoCurrencyDonationService {
     private final ExchangeService exchangeService;
     private final BenevityService benevityService;
 
-    @Autowired
     public CryptoCurrencyDonationService(
             CryptoCurrencyDonationRepository cryptoCurrencyDonationRepository,
             CryptoTransferRepository cryptoTransferRepository, FeeRepository feeRepository,
